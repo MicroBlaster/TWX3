@@ -8,5 +8,6 @@ namespace TWXP.Encryption
 {
     class decode
     {
+
     }
 }
