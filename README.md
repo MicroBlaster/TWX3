@@ -12,10 +12,10 @@ Originally written by Remco Mulder, [TWXProxy](https://github.com/erikh/twxproxy
 
 ## TWX3 Projects
 
-* [TWXP](https://github.com/MicroBlaster/TWXProxy/tree/master/Source/TWXProxy-MB) is the main executalbe.
+* [TWXP](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXP) is the main executalbe.
 
-* [TWXC](https://bitbucket.org/mrdon/pytwx/src) Compile your code for distriburion.
-* [TWXC](https://bitbucket.org/mrdon/pytwx/src) De-Compile your code, including older versions.
+* [TWXC](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXC) Compile your code for distriburion.
+* [TWXD](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXD) De-Compile your code, including older versions.
 
 ## Other Versions:
 * [TWXProxy 2.06](https://github.com/MicroBlaster/TWXProxy/tree/master/Source/TWXProxy-MB) is an updated version of TWXProxy released by MicroBlaster.
@@ -29,7 +29,6 @@ Originally written by Remco Mulder, [TWXProxy](https://github.com/erikh/twxproxy
 ## Active Contributers:
 
 * David McCartney (aka MicroBlaster)
-* Steven Ruzicka (aka Mind Dagger)
-* Shawn Redman (aka LoneStar)
+* Shadow
 
 If you would like to contribute to this project, please email DMC@IT1.BIZ for further information.
