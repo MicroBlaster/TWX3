@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TWXP
+namespace TWXP.Terminal
 {
-    public class Class1
+    class Proxy
     {
     }
 }

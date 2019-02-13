@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,28 +11,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TWXP
+namespace TWXP.Windows
 {
     /// <summary>
-    /// Interaction logic for Main.xaml
+    /// Interaction logic for License.xaml
     /// </summary>
-    public partial class Main : Window
+    public partial class About : Window
     {
-        public Main()
+        public About()
         {
             InitializeComponent();
+        }
 
-            this.Hide();
+        private void LicenseLinkClick(object sender, MouseButtonEventArgs e)
+        {
+            Window license = new Windows.License();
+            license.ShowDialog();
+        }
 
-            //Window welcome = new Windows.Welcome();
-            //welcome.ShowDialog();
-
-            Window setup = new Windows.Setup();
-            setup.ShowDialog();
-
+        private void OkButtonClick(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }
