@@ -27,8 +27,12 @@ namespace TWXP.Windows
 
         private void LicenseLinkClick(object sender, MouseButtonEventArgs e)
         {
+            this.Hide();
+
             Window license = new Windows.License();
             license.ShowDialog();
+
+            this.Close();
         }
 
         private void OkButtonClick(object sender, RoutedEventArgs e)

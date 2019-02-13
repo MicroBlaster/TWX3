@@ -7,8 +7,8 @@
     <ProjectGuid>{7467BCC2-B86C-4807-BFE1-2E2DB76B76C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TWXP</RootNamespace>
-    <AssemblyName>TWXP</AssemblyName>
+    <RootNamespace>TWX</RootNamespace>
+    <AssemblyName>TWX</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

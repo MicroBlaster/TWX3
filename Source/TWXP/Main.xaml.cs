@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TWX.Terminal;
 
 namespace TWXP
 {
@@ -29,10 +30,13 @@ namespace TWXP
             //Window welcome = new Windows.Welcome();
             //welcome.ShowDialog();
 
-            Window setup = new Windows.Setup();
-            setup.ShowDialog();
+            //Window setup = new Windows.Setup();
+            //setup.ShowDialog();
 
-            this.Close();
+            Proxy proxy = new Proxy();
+            proxy.StartAsync();
+
+            //this.Close();
         }
     }
 }

@@ -125,5 +125,11 @@
   <ItemGroup>
     <Resource Include="Images\Logo.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\TWXP\TWX.csproj">
+      <Project>{7467bcc2-b86c-4807-bfe1-2e2db76b76c7}</Project>
+      <Name>TWX</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
