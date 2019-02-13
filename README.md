@@ -4,7 +4,7 @@
 
 **TWX Proxy 3** is a [TradeWars 2002 (TW2002)](http://www.eisonline.com) helper ported from Deplhi to C# by Microblaster and Shadow.
 
-Originally written by Remco Mulder, [TWXProxy](https://github.com/erikh/twxproxy) has been passed on to various developers over the years. 
+Originally written by Remco Mulder, [TWXProxy](https://github.com/erikh/twxproxy) has been passed on to various developers over the years. We are proud you finally bring this to a modern platform so that development can continue.
 
 ## TWX3 Installer
 
