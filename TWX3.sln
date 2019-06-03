@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.182
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TWX30", "TWX30", "{524EB5C0-9054-4075-ABBE-A6BF4F494FD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{88022F0F-EFA8-4BB7-9E75-8779BBD8384A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TWX31", "TWX31", "{719C15D3-8F22-4AA1-A80B-E5C43DF2992D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{890DC1A2-416E-4D4C-AC27-F44345D4F256}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TWXP", "TWXP", "{2B86D871-323C-4A70-B3EB-B1A76A872F3B}"
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{88022F0F-EFA8-4BB7-9E75-8779BBD8384A} = {524EB5C0-9054-4075-ABBE-A6BF4F494FD3}
+		{890DC1A2-416E-4D4C-AC27-F44345D4F256} = {719C15D3-8F22-4AA1-A80B-E5C43DF2992D}
+		{2B86D871-323C-4A70-B3EB-B1A76A872F3B} = {719C15D3-8F22-4AA1-A80B-E5C43DF2992D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CDABC317-D1E0-4190-A964-CC2411B349A9}
+	EndGlobalSection
+EndGlobal
