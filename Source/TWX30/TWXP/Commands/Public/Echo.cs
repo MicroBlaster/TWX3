@@ -14,7 +14,7 @@ namespace TWXP
         /// Echo Args[] to all connected clients.
         /// </summary>
         /// <param args[]>Values to be echoed.</param>
-        public static void Echo(string[] args)
+        public static void Echo(Script script, Parameters parameters)
         {
 
         }

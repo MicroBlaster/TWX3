@@ -15,9 +15,9 @@ namespace TWXP
         /// </summary>
         /// <param var>Variable to be modified.</param>
         /// <param value>Value to be set to var.</param>        
-        public static void setVar(string[] args)
+        public static void setVar(Script script, Parameters parameters)
         {
-            args[0] = args[1];
+            parameters[0] = parameters[1];
 
         }
     }

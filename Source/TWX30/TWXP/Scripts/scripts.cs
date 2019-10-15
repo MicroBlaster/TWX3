@@ -10,9 +10,8 @@ namespace TWXP
     //public enum CommandType { Internal, Operator, Public, System };
 
 
-    public class Scripts : List<Script>
+    public partial class Scripts : List<Script>
     {
-        //public delegate void voidDeligate(string[] args);
 
 
         /// <summary>
@@ -51,6 +50,9 @@ namespace TWXP
 
     public class Script
     {
+        public ScriptCommands Commands { get; private set; }
+        public Labels Labels { get; private set; }
+
         // Public Read-only Properties
         public string Name { get; private set; }
         public bool Silent { get; private set; }
@@ -62,8 +64,20 @@ namespace TWXP
         /// <param name="silent">Run script in silent mode.</param>
         public Script(String name, bool silent)
         {
+            Commands = new ScriptCommands();
+            Labels = new Labels();
+
             Name = name;
             Silent = silent;
+        }
+
+        public void Exec()
+        {
+            foreach(ScriptCommand c in Commands)
+            {
+                CommandReferences CmdRef = new CommandReferences();
+                CmdRef.Invoke(this, c.Parameters);
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace TWXP
         /// </summary>
         /// <param var>Variable to be modified.</param>
         /// <param value>Value to be set to var.</param>        
-        public static void AddMenu(string[] args)
+        public static void AddMenu(Script script, Parameters parameters)
         {
 
         }

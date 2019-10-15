@@ -21,7 +21,7 @@ namespace TWXP
     public partial class Main : Window
     {
         private Scripts scripts;
-        private Commands commands;
+        private CommandReferences cmdref;
 
         public Main()
         {
@@ -47,31 +47,24 @@ namespace TWXP
         private void Initialize()
         {
             scripts = new Scripts();
-            commands = new Commands();
-
-            foreach (Command c in commands)
-            {
-                string Name = c.Name;
-            }
+            //cmdref = new CommandReferences();
 
 
-            //commands.Exec(new string[] { "setVar", "$var", "7" });
-            //commands.Exec(new string[] { "add", "$var", "3" });
-            //commands.Exec(new string[] { "echo", "Hello World ", "$var" });
+
+            //cmdref.Exec(new string[] { "setVar", "$var", "7" });
+            //cmdref.Exec(new string[] { "add", "$var", "3" });
+            //cmdref.Exec(new string[] { "echo", "Hello World ", "$var" });
 
             //string s = commands.Exec(new string[] { "CURRENTLINE" });
 
-            string ts = "setVar $var 7 *" +
-                        "add $var 3 *" +
-                        "echo \"7 plus 3 equals\" $var *";
+            List<string> ts = new List<string>();
+            ts.Add("setVar $var 7");
+            ts.Add("add $var 3 *");
+            ts.Add("echo \"7 plus 3 equals\" $var *");
 
-            scripts.Compile(ts);
+            scripts.CompileFromStrings(new Script("test.ts", true), ts);
 
-            string vb = "$var = 7 *" +
-                        "$var += 3 *" +
-                        "echo \"7 plus 3 equals\" $var *";
 
-            //scripts.Compile(ts);
         }
     }
 }

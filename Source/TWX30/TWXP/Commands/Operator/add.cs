@@ -15,14 +15,14 @@ namespace TWXP
         /// </summary>
         /// <param var>Variable to be modified.</param>
         /// <param value>Value to add to var.</param>        
-        public static void Add(string[] args)
+        public static void Add(Script script, Parameters parameters)
         {
             double var, value;
 
-            double.TryParse(args[0], out var);
-            double.TryParse(args[1], out value);
+            //double.TryParse(parameters[0], out var);
+            //double.TryParse(parameters[1], out value);
 
-            args[0] = ((double)(var + value)).ToString();
+            //parameters[0] = ((double)(var + value)).ToString();
             // TODO: add percision to calculation.
         }
     }
