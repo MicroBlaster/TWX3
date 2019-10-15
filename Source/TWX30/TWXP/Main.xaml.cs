@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TWX.Terminal;
 
 namespace TWXP
 {
@@ -21,11 +20,17 @@ namespace TWXP
     /// </summary>
     public partial class Main : Window
     {
+        private Scripts scripts;
+        private Commands commands;
+
         public Main()
         {
             InitializeComponent();
 
-            this.Hide();
+            Initialize();
+
+
+            //this.Hide();
 
             //Window welcome = new Windows.Welcome();
             //welcome.ShowDialog();
@@ -33,10 +38,40 @@ namespace TWXP
             //Window setup = new Windows.Setup();
             //setup.ShowDialog();
 
-            Proxy proxy = new Proxy();
-            proxy.StartAsync();
+            //Proxy proxy = new Proxy();
+            //proxy.StartAsync();
 
             //this.Close();
+        }
+
+        private void Initialize()
+        {
+            scripts = new Scripts();
+            commands = new Commands();
+
+            foreach (Command c in commands)
+            {
+                string Name = c.Name;
+            }
+
+
+            //commands.Exec(new string[] { "setVar", "$var", "7" });
+            //commands.Exec(new string[] { "add", "$var", "3" });
+            //commands.Exec(new string[] { "echo", "Hello World ", "$var" });
+
+            //string s = commands.Exec(new string[] { "CURRENTLINE" });
+
+            string ts = "setVar $var 7 *" +
+                        "add $var 3 *" +
+                        "echo \"7 plus 3 equals\" $var *";
+
+            scripts.Compile(ts);
+
+            string vb = "$var = 7 *" +
+                        "$var += 3 *" +
+                        "echo \"7 plus 3 equals\" $var *";
+
+            //scripts.Compile(ts);
         }
     }
 }

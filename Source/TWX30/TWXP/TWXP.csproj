@@ -55,7 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Menu\addMenu.cs" />
+    <Compile Include="Commands\Operator\setVar.cs" />
+    <Compile Include="Commands\Operator\add.cs" />
+    <Compile Include="Commands\Public\Echo.cs" />
     <Compile Include="Commands\Commands.cs" />
+    <Compile Include="Commands\System\CURRENTLINE.cs" />
+    <Compile Include="Scripts\Scripts.cs" />
     <Compile Include="Windows\Setup.xaml.cs">
       <DependentUpon>Setup.xaml</DependentUpon>
     </Compile>
@@ -127,15 +133,7 @@
     <Resource Include="Images\Logo.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared\TWXP\TWX.csproj">
-      <Project>{7467bcc2-b86c-4807-bfe1-2e2db76b76c7}</Project>
-      <Name>TWX</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\CMD\" />
-    <Folder Include="Commands\SYS\" />
-    <Folder Include="Script\" />
+    <Folder Include="Commands\Internal\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
