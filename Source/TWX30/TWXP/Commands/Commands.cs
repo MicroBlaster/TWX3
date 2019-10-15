@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TWX.Database
+namespace TWXP.Commands
 {
-    class Ships
+    class Commands
     {
     }
 }

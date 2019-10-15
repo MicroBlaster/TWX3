@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\Commands.cs" />
     <Compile Include="Windows\Setup.xaml.cs">
       <DependentUpon>Setup.xaml</DependentUpon>
     </Compile>
@@ -130,6 +131,11 @@
       <Project>{7467bcc2-b86c-4807-bfe1-2e2db76b76c7}</Project>
       <Name>TWX</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\CMD\" />
+    <Folder Include="Commands\SYS\" />
+    <Folder Include="Script\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
