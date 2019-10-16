@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace TWXP
 {
-    //public enum ScriptCommandType { Internal, Operator, Public, System };
+    //public enum ScriptCmdType { Internal, Operator, Public, System };
 
 
-    public partial class ScriptCommands : List<ScriptCommand>
+    public partial class ScriptCmds : List<ScriptCmd>
     {
         //public delegate void voidDeligate(string[] args);
 
@@ -18,13 +18,13 @@ namespace TWXP
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public ScriptCommands()
+        public ScriptCmds()
         {
 
         }
     }
 
-    public class ScriptCommand
+    public class ScriptCmd
     {
         public Parameters Parameters { get; private set; }
 
@@ -32,11 +32,11 @@ namespace TWXP
         public Script Script { get; private set; }
 
         /// <summary>
-        /// Creates a new ScriptCommand.
+        /// Creates a new ScriptCmd.
         /// </summary>
-        /// <param name="name">The name of the ScriptCommand.</param>
-        /// <param name="silent">Run ScriptCommand in silent mode.</param>
-        public ScriptCommand(Script script, Parameters parameters)
+        /// <param name="name">The name of the ScriptCmd.</param>
+        /// <param name="silent">Run ScriptCmd in silent mode.</param>
+        public ScriptCmd(Script script, Parameters parameters)
         {
             Script = script;
             Parameters = parameters;

@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="TWX Proxy 3" Height="450" Width="800">
     <Grid>
-        
+        <TextBox Name="input" HorizontalAlignment="Left" Height="272" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="772"/>
+        <TextBox Name="output" HorizontalAlignment="Left" Height="122" Margin="10,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="661"/>
+        <Button Name="Execute" Content="Execute" HorizontalAlignment="Left" Margin="707,389,0,0" VerticalAlignment="Top" Width="75" Click="Execute_Click"/>
+
     </Grid>
 </Window>

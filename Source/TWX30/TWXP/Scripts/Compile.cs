@@ -9,19 +9,8 @@ namespace TWXP
     public partial class Scripts
     {
 
-        public void CompileFromStrings(Script Script, List<string> ScriptText)
+        public void CompileFromArray(Script Script, string[] ScriptText)
         {
-            //byte ScriptID;
-            //int Line;
-            //int I;
-            //string ParamStr;
-            //string LineText;
-            //char Last;
-            //bool Linked;
-            //bool InQuote;
-            //List<string> ParamLine = new List<string>();
-            
-
             int Line = 1;
             try
             {
@@ -41,6 +30,27 @@ namespace TWXP
             Script.Exec();
         }
 
+        //public void CompileFromStrings(Script Script, List<string> ScriptText)
+        //{
+        //    int Line = 1;
+        //    try
+        //    {
+        //        foreach (string TextLine in ScriptText)
+        //        {
+        //            CompileLine(Script, Line, TextLine);
+
+        //            Line++;
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        //throw;
+        //    }
+
+        //    Script.Exec();
+        //}
+
         private void CompileLine(Script script, int line, string textline)
         {
             if (textline.Substring(0, 1) == ":")
@@ -52,7 +62,7 @@ namespace TWXP
                 //TODO: Macros
                 Parameters param = ParseParameters(textline);
 
-                script.Commands.Add(new ScriptCommand(script, param));
+                script.Commands.Add(new ScriptCmd(script, param));
             }
         }
 

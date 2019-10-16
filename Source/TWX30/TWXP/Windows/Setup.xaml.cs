@@ -67,5 +67,49 @@ namespace TWXP.Windows
             this.Close();
         }
 
+        private void onTreviewChange(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            DatabaseGrid.Visibility = Visibility.Hidden;
+            LoginGrid.Visibility = Visibility.Hidden;
+            CorpGrid.Visibility = Visibility.Hidden;
+            TerminalGrid.Visibility = Visibility.Hidden;
+            LoggingGrid.Visibility = Visibility.Hidden;
+
+
+            switch (((TreeViewItem)((TreeView)sender).SelectedItem).Header)
+            {
+                case "Session":
+                    
+                    TreeViewItem Item1 = (TreeViewItem)((TreeViewItem)((TreeView)sender).SelectedItem).Items[0];
+                    if (Item1 != null) Item1.IsSelected = true;
+                    break;
+
+                case "Database/Server":
+                    DatabaseGrid.Visibility = Visibility.Visible;
+                    break;
+
+                case "Login/Identity":
+                    LoginGrid.Visibility = Visibility.Visible;
+                    break;
+
+                case "Corp/Options":
+                    CorpGrid.Visibility = Visibility.Visible;
+                    break;
+
+                case "Global":
+                    TreeViewItem Item2 = (TreeViewItem)((TreeViewItem)((TreeView)sender).SelectedItem).Items[0];
+                    if (Item2 != null) Item2.IsSelected = true;
+                    break;
+
+                case "Terminal/Remote":
+                    TerminalGrid.Visibility = Visibility.Visible;
+                    break;
+
+                case "Logging/AutoRun":
+                    LoggingGrid.Visibility = Visibility.Visible;
+                    break;
+
+            }
+        }
     }
 }

@@ -16,7 +16,12 @@ namespace TWXP
         /// <param args[]>Values to be echoed.</param>
         public static void Echo(Script script, Parameters parameters)
         {
-
+            string s = "";
+            foreach (Parameter p in parameters)
+            {
+                s += p.Value;
+            }
+            script.Echo(s);
         }
     }
 }

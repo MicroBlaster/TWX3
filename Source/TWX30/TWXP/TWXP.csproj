@@ -55,18 +55,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\Menu\addMenu.cs" />
-    <Compile Include="Commands\Operator\setVar.cs" />
-    <Compile Include="Commands\Operator\add.cs" />
-    <Compile Include="Commands\Public\Echo.cs" />
-    <Compile Include="Commands\CommandReferences.cs" />
-    <Compile Include="Commands\System\CURRENTLINE.cs" />
-    <Compile Include="Scripts\Commands\ScriptCommands.cs" />
+    <Compile Include="Commands\Menus\addMenu.cs" />
+    <Compile Include="Commands\Operators\setVar.cs" />
+    <Compile Include="Commands\Operators\add.cs" />
+    <Compile Include="Commands\Functions\Echo.cs" />
+    <Compile Include="Commands\Commands.cs" />
+    <Compile Include="SystemVars\CURRENTLINE.cs" />
+    <Compile Include="Scripts\Arrays.cs" />
+    <Compile Include="Scripts\ScriptCmds.cs" />
     <Compile Include="Scripts\Compile.cs" />
-    <Compile Include="Scripts\Labels\Labels.cs" />
+    <Compile Include="Scripts\Labels.cs" />
     <Compile Include="Scripts\Load.cs" />
-    <Compile Include="Scripts\Paramaters\Parameters.cs" />
+    <Compile Include="Scripts\Parameters.cs" />
     <Compile Include="Scripts\Scripts.cs" />
+    <Compile Include="Scripts\Varables.cs" />
+    <Compile Include="SystemVars\SystemVars.cs" />
     <Compile Include="Windows\Setup.xaml.cs">
       <DependentUpon>Setup.xaml</DependentUpon>
     </Compile>
@@ -135,10 +138,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Logo.jpg" />
+    <Folder Include="Commands\Internals\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\Internal\" />
+    <Resource Include="Images\lightning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\newlogo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

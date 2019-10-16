@@ -11,6 +11,8 @@
         BorderThickness="2"
         AllowsTransparency="True">
     <Grid>
+        <Image Source="/TWXP;component/Images/lightning.png" VerticalAlignment="Top" Stretch="UniformToFill" Opacity=".4" />
+        <Image Source="/TWXP;component/Images/newlogo.png" VerticalAlignment="Bottom" Opacity=".6" Width="450" Margin="0,0,0,210" />
         <Grid>
             <Image Source="C:\Projects\TWX3\Source\TWXP\Images\Logo.jpg" VerticalAlignment="Top" Height="100" Width="502"  />
             <TextBlock Name="WelcomeTextBlock" Margin="15,100,15,10" VerticalAlignment="Top" HorizontalAlignment="left" Foreground="cyan" TextWrapping="Wrap" FontSize="10pt" Opacity=".7">

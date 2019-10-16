@@ -16,7 +16,7 @@ namespace TWXP
             public int CodeSize;
         }
 
-        public void LoadFromFile(string Filename)
+        public void LoadCompiled(string Filename)
         {
             ScriptHeader Hdr;
 
