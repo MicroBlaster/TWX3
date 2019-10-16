@@ -10,7 +10,7 @@
         BorderBrush="Black"
         BorderThickness="2"
         AllowsTransparency="True">
-    <Grid>
+    <Grid  MouseDown="GridMouseDown">
         <Image Source="/TWXP;component/Images/lightning.png" VerticalAlignment="Top" Stretch="UniformToFill" Opacity=".4" />
         <Image Source="/TWXP;component/Images/newlogo.png" VerticalAlignment="Bottom" Opacity=".6" Width="450" Margin="0,0,0,210" />
         <Grid>

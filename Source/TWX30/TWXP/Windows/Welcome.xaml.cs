@@ -34,5 +34,14 @@ namespace TWXP.Windows
         {
             this.Close();
         }
+
+        private void GridMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                DragMove();
+            }
+            catch { }
+        }
     }
 }

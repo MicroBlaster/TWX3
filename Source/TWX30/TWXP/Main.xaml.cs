@@ -18,13 +18,13 @@ namespace TWXP
             Initialize();
 
 
-            this.Hide();
+            //this.Hide();
 
-            Window welcome = new Windows.Welcome();
-            welcome.ShowDialog();
+            //Window welcome = new Windows.Welcome();
+            //welcome.ShowDialog();
 
-            Window setup = new Windows.Setup();
-            setup.ShowDialog();
+            //Window setup = new Windows.Setup();
+            //setup.ShowDialog();
 
             //Proxy proxy = new Proxy();
             //proxy.StartAsync();

@@ -79,7 +79,7 @@ namespace TWXP.Windows
             switch (((TreeViewItem)((TreeView)sender).SelectedItem).Header)
             {
                 case "Session":
-                    
+
                     TreeViewItem Item1 = (TreeViewItem)((TreeViewItem)((TreeView)sender).SelectedItem).Items[0];
                     if (Item1 != null) Item1.IsSelected = true;
                     break;
@@ -110,6 +110,14 @@ namespace TWXP.Windows
                     break;
 
             }
+        }
+        private void GridMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                DragMove();
+            }
+            catch { }
         }
     }
 }

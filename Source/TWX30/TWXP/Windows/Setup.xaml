@@ -14,11 +14,11 @@
             <GradientStop Color="#FF2F2F6F" Offset="1" />
         </LinearGradientBrush>
     </Window.Resources>
-    <Grid  >
-        <Grid Background="{StaticResource backgroundBrush}">
+    <Grid  MouseDown="GridMouseDown">
+        <Grid Background="{StaticResource backgroundBrush}" >
         <Label Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10">Database</Label>
             <ComboBox Name="DatabaseComboBix" Margin="70,10,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="25" Width="250" Opacity=".5" SelectionChanged="DabaseComBoxSelectionChanged"/>
-            <TreeView Name="MainTreeView" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="400" Width="195" Opacity=".5" Foreground="White" FontSize="12pt" SelectedItemChanged="onTreviewChange"  >
+            <TreeView Name="MainTreeView" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="400" Width="200" Opacity=".5" Foreground="White" FontSize="12pt" SelectedItemChanged="onTreviewChange"  >
                 <TreeViewItem Header="Session" IsExpanded="True" >
                     <TreeViewItem Header="Database/Server" />
                     <TreeViewItem Header="Login/Identity" />
@@ -173,7 +173,7 @@
             <Button Name="CancelButton" Margin="0,0,180,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="CancelButtonClick">Cancel</Button>
             <Button Name="ApplyButton" Margin="0,0,95,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="ApplyButtonClick">Apply</Button>
             <Button Name="OkButton" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="OkButtonClick">Ok</Button>
-        </Grid>
-        <Border Name="innerBorder" BorderThickness="1" BorderBrush="#FF222222" Visibility="Hidden" />
+        </Grid >
+        <Border Name="innerBorder" BorderThickness="1" BorderBrush="#FF222222" Visibility="Visible" />
     </Grid>
 </Window>

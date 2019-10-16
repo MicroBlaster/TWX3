@@ -146,5 +146,8 @@
   <ItemGroup>
     <Resource Include="Images\newlogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\proxy.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

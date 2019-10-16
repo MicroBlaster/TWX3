@@ -9,11 +9,11 @@
         WindowStyle="None"
         BorderBrush="Black"
         BorderThickness="2"
-        AllowsTransparency="True">
-    <Grid>
+        AllowsTransparency="True" >
+    <Grid MouseDown="GridMouseDown">
         <Image Source="/TWXP;component/Images/lightning.png" VerticalAlignment="Top" Stretch="UniformToFill" Opacity=".4" />
         <Image Source="/TWXP;component/Images/newlogo.png" VerticalAlignment="Bottom" Opacity=".6" Width="450" Margin="0,0,0,210" />
-        <Grid>
+        <Grid >
             <TextBlock x:Name="WelcomeTextBlock" Margin="15,100,15,10" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="cyan" TextWrapping="Wrap" FontSize="14" Opacity=".7">
                 <TextBlock.Text>Welcome to TWX Proxy! This helper is designed to work in conjunction with your favorite Tradewars Helper or Telnet Terminal. It does not provide a terminal window, so you should read the Getting Started section of the wiki before continuing:</TextBlock.Text>
             </TextBlock>
