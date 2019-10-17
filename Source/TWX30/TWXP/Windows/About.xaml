@@ -16,12 +16,13 @@
         <Grid>
             <Image Source="C:\Projects\TWX3\Source\TWXP\Images\Logo.jpg" VerticalAlignment="Top" Height="100" Width="502"  />
             <TextBlock Name="WelcomeTextBlock" Margin="15,100,15,10" VerticalAlignment="Top" HorizontalAlignment="left" Foreground="cyan" TextWrapping="Wrap" FontSize="10pt" Opacity=".7">
-                TWX Proxy 3 - Version 1909a - Alpha Release<LineBreak />
-                Copyright © 2019 MicroBlaster and Shadow<LineBreak /><LineBreak />
-                Based on TWX Proxy by eXide and ElderProphit<LineBreak /><LineBreak />
+                TWX Proxy 3 - Version 1942a - Alpha Release<LineBreak /><LineBreak />
+                The Veteran's TradeWars Helper has now been ported to the C#/WPF platform.<LineBreak />
+                Get ready to feel the power of the .Net framework at your fingertips.<LineBreak /><LineBreak />
+                Based on TWX Proxy by Xide and ElderProphit<LineBreak /><LineBreak />
                 Distributed under the 
             </TextBlock>
-            <Label Name="LicenseLink" HorizontalAlignment="Left" Margin="140,184,0,0" VerticalAlignment="Top" Foreground="Magenta" MouseDown="LicenseLinkClick" Opacity=".7">
+            <Label Name="LicenseLink" HorizontalAlignment="Left" Margin="140,219,0,0" VerticalAlignment="Top" Foreground="Magenta" MouseDown="LicenseLinkClick" Opacity=".7">
                 <TextBlock TextDecorations="Underline" FontSize="10pt">MIT License</TextBlock>
             </Label>
             <Button Name="OkButton" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="OkButtonClick">Ok</Button>

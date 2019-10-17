@@ -26,7 +26,7 @@ namespace TWXP
 
     public class ScriptCmd
     {
-        public Parameters Parameters { get; private set; }
+        public Params Param { get; private set; }
 
         // Public Read-only Properties
         public Script Script { get; private set; }
@@ -36,10 +36,10 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of the ScriptCmd.</param>
         /// <param name="silent">Run ScriptCmd in silent mode.</param>
-        public ScriptCmd(Script script, Parameters parameters)
+        public ScriptCmd(Script script, Params param)
         {
             Script = script;
-            Parameters = parameters;
+            Param = param;
         }
     }
 }

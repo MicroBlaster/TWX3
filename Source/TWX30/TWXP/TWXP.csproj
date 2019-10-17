@@ -7,16 +7,31 @@
     <ProjectGuid>{D58985B2-70AD-436D-8FE1-28247D6BE463}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>TWXP</RootNamespace>
-    <AssemblyName>TWXP</AssemblyName>
+    <AssemblyName>TWX3</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>3.19.42.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -33,6 +48,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -55,10 +74,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\Menus\addMenu.cs" />
-    <Compile Include="Commands\Operators\setVar.cs" />
-    <Compile Include="Commands\Operators\add.cs" />
-    <Compile Include="Commands\Functions\Echo.cs" />
+    <Compile Include="Commands\Functions.cs" />
+    <Compile Include="Commands\Operators.cs" />
     <Compile Include="Commands\Commands.cs" />
     <Compile Include="SystemVars\CURRENTLINE.cs" />
     <Compile Include="Scripts\Arrays.cs" />
@@ -66,7 +83,7 @@
     <Compile Include="Scripts\Compile.cs" />
     <Compile Include="Scripts\Labels.cs" />
     <Compile Include="Scripts\Load.cs" />
-    <Compile Include="Scripts\Parameters.cs" />
+    <Compile Include="Scripts\Params.cs" />
     <Compile Include="Scripts\Scripts.cs" />
     <Compile Include="Scripts\Varables.cs" />
     <Compile Include="SystemVars\SystemVars.cs" />
@@ -138,13 +155,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\Internals\" />
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\lightning.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\newlogo.png" />
+    <Resource Include="Images\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\proxy.ico" />

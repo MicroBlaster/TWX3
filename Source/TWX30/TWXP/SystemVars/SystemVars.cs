@@ -32,29 +32,17 @@ namespace TWXP
         /// Executes a SystemVar.
         /// </summary>
         /// <param name="SystemVar"></param>
-        public string Invoke(Script script, Parameters parameters)
+        public string Invoke(Script script, Params param)
         {
-            SystemVar v = this.Where(n => n.Name == parameters[0].Value).Single();
+            SystemVar v = this.Where(n => n.Name == param[0].Value).Single();
 
-            return ((SystemVar.SystemReference)v.CmdRef)();
+            return ((SystemVar.VarRef)v.CmdRef)();
         }
     }
 
     public class SystemVar
     {
-        public delegate string SystemReference();
-
-        // The is the way we used to do it, but you never see it done this way in modern code.
-        private ReferenceType type;
-        public ReferenceType Type
-        {
-            get
-            {
-                return type;
-            }
-        }
-
-
+        public delegate string VarRef();
 
         // Public Read-only Properties
         public string Name { get; private set; }
@@ -68,9 +56,8 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of the SystemVar.</param>
         /// <param name="cmdref">SystemVar handler reference for the SystemVar.</param>
-        public SystemVar(String name, SystemReference cmdref)
+        public SystemVar(String name, VarRef cmdref)
         {
-            this.type = ReferenceType.System;
             Name = name;
             MinArgs = 0;
             MaxArgs = 0;

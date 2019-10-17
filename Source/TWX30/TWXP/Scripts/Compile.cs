@@ -60,15 +60,15 @@ namespace TWXP
             else
             {
                 //TODO: Macros
-                Parameters param = ParseParameters(textline);
+                Params param = ParseParameters(script, textline);
 
-                script.Commands.Add(new ScriptCmd(script, param));
+                script.scrcmds.Add(new ScriptCmd(script, param));
             }
         }
 
-        private Parameters ParseParameters(string textline)
+        private Params ParseParameters(Script script, string textline)
         {
-            Parameters param = new Parameters();
+            Params param = new Params();
 
             bool InQuotes = false;
 
@@ -76,14 +76,14 @@ namespace TWXP
             {
                 if (InQuotes)
                 {
-                    param.Add(new Parameter(s));
+                    param.Add(new Param(script, s));
                     InQuotes = false;
                 }
                 else
                 {
                     foreach (string p in s.Split(' '))
                         if (p.Length > 0)
-                            param.Add(new Parameter(p));
+                            param.Add(new Param(script, p));
                     InQuotes = true;
                 }
 

@@ -12,14 +12,12 @@ namespace TWXP
 
     public partial class Scripts : List<Script>
     {
-
-
+    
         /// <summary>
         /// Default Constructor.
         /// </summary>
         public Scripts()
         {
-
         }
 
         /// <summary>
@@ -44,8 +42,9 @@ namespace TWXP
 
     public class Script
     {
-        public ScriptCmds Commands { get; private set; }
+        public ScriptCmds scrcmds { get; private set; }
         public Labels Labels { get; private set; }
+        public Varables Vars { get; private set; }
 
         // Public Read-only Properties
         public string Name { get; private set; }
@@ -59,8 +58,9 @@ namespace TWXP
         /// <param name="silent">Run script in silent mode.</param>
         public Script(string name, bool silent, System.Windows.Controls.TextBox console)
         {
-            Commands = new ScriptCmds();
+            scrcmds = new ScriptCmds();
             Labels = new Labels();
+            Vars = new Varables();
 
             Name = name;
             Silent = silent;
@@ -69,10 +69,12 @@ namespace TWXP
 
         public void Exec()
         {
-            foreach(ScriptCmd c in Commands)
+            // Loop through each command until the end is reached or Halt Is called.
+            foreach(ScriptCmd sc in scrcmds)
             {
-                Commands CmdRef = new Commands();
-                CmdRef.Invoke(this, c.Parameters);
+                // Invoke the referenced command.
+                //Commands CmdRef = new Commands();
+                Commands.Invoke(this, sc);
             }
         }
 

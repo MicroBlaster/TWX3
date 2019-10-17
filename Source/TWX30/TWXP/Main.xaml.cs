@@ -26,8 +26,8 @@ namespace TWXP
             //Window welcome = new Windows.Welcome();
             //welcome.ShowDialog();
 
-            Window setup = new Windows.Setup();
-            setup.ShowDialog();
+            //Window setup = new Windows.Setup();
+            //setup.ShowDialog();
 
             //Proxy proxy = new Proxy();
             //proxy.StartAsync();
@@ -38,6 +38,8 @@ namespace TWXP
         private void Initialize()
         {
             scripts = new Scripts();
+
+            Commands.CreateCommands();
 
             //System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
             //Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/YourReferencedAssembly;component/YourPossibleSubFolder/YourResourceFile.ico")).Stream;
@@ -50,7 +52,7 @@ namespace TWXP
         private void Execute_Click(object sender, RoutedEventArgs e)
         {
             List<string> ts = new List<string>();
-            input.Text = "setVar $var 7\nadd $var 3 *\necho \"7 plus 3 equals\" $var *";
+            input.Text = "setVar $var 7\nadd $var 3\necho \"7 plus 3 equals\" $var *";
         
 
             scripts.Compile(input.Text, output);

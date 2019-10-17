@@ -96,7 +96,6 @@ namespace TWXP.Windows
             switch (((TreeViewItem)((TreeView)sender).SelectedItem).Header)
             {
                 case "Session":
-
                     TreeViewItem Item1 = (TreeViewItem)((TreeViewItem)((TreeView)sender).SelectedItem).Items[0];
                     if (Item1 != null) Item1.IsSelected = true;
                     break;
@@ -125,7 +124,6 @@ namespace TWXP.Windows
                 case "Logging/AutoRun":
                     LoggingGrid.Visibility = Visibility.Visible;
                     break;
-
             }
         }
         private void GridMouseDown(object sender, MouseButtonEventArgs e)
@@ -197,11 +195,23 @@ namespace TWXP.Windows
             DestroyIcon(smallIcons[0]);
         }
 
+        private void ChooseButtonClick(object sender, RoutedEventArgs e)
+        {
+            TrayIconList.Visibility = Visibility.Visible;
+            ChooseIcon.Visibility = Visibility.Hidden;
+            BrowseIcon.Visibility = Visibility.Hidden;
+        }
+
         private void TraIconListSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
            ListItem SelectedItem = (ListItem)((ListView)sender).SelectedItems[0];
 
            int Index = TrayIconList.Items.IndexOf(SelectedItem);
+
+           TrayIconList.Visibility = Visibility.Hidden;
+            ChooseIcon.Visibility = Visibility.Visible;
+            BrowseIcon.Visibility = Visibility.Visible;
         }
+
     }
 }

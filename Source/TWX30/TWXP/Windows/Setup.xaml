@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TWXP.Windows"
         mc:Ignorable="d"
-        Title="Proxy 3" Height="494.864" Width="650" Background="Black" Foreground="White"
+        Title="Proxy 3" Height="494.864" Width="600" Background="Black" Foreground="White"
         WindowStyle="None" BorderBrush="Black" BorderThickness="2" AllowsTransparency="True">
     <Window.Resources>
         <LinearGradientBrush x:Key="backgroundBrush" StartPoint="1,1" EndPoint=".5,.3" >
@@ -13,52 +13,66 @@
             <GradientStop Color="#FF282858" Offset=".7" />
             <GradientStop Color="#FF2F2F6F" Offset="1" />
         </LinearGradientBrush>
+        <LinearGradientBrush x:Key="BbackgroundBrush2" StartPoint="1,1" EndPoint=".5,.3" >
+            <GradientStop Color="#FF505080" Offset="0" />
+            <GradientStop Color="#FF505080" Offset=".7" />
+            <GradientStop Color="#FF505080" Offset="1" />
+        </LinearGradientBrush>
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
     </Window.Resources>
     <Grid  MouseDown="GridMouseDown">
         <Grid Background="{StaticResource backgroundBrush}" >
             <Label Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10">Database</Label>
             <ComboBox Name="DatabaseComboBix" Margin="70,10,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="25" Width="250" Opacity=".5" SelectionChanged="DabaseComBoxSelectionChanged"/>
-            <TreeView Name="MainTreeView" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="400" Width="200" Opacity=".5" Foreground="White" FontSize="12pt" SelectedItemChanged="onTreviewChange"  >
-                <TreeViewItem Header="Session" IsExpanded="True" >
-                    <TreeViewItem Header="Database/Server" />
-                    <TreeViewItem Header="Login/Identity" />
-                    <TreeViewItem Header="Corp/Options" />
-                </TreeViewItem>
-                <TreeViewItem Header="Global" IsExpanded="True">
-                    <TreeViewItem Header="Terminal/Remote" />
-                    <TreeViewItem Header="Logging/AutoRun" />
-                </TreeViewItem>
-            </TreeView>
+            <GroupBox Header="Settings" Margin="10,50,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="200" Width="150" Foreground="White" Opacity='.7'>
+                <TreeView Name="MainTreeView" Background="Transparent"  Margin="-20,0,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Width="160" SelectedItemChanged="onTreviewChange" BorderThickness="0" >
+                    <TreeView.Resources>
+                        <!-- Style the inactive selection the same as active -->
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                     Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                     Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}"/>
+                    </TreeView.Resources>
+                    <TreeViewItem Header="Session" IsExpanded="True" Foreground="White" FontSize="12" FontWeight="Bold" >
+                        <TreeViewItem Header="Database/Server" Foreground="White" FontSize="14" FontWeight="Bold" />
+                        <TreeViewItem Header="Login/Identity" Foreground="White" FontSize="14" FontWeight="Bold" />
+                        <TreeViewItem Header="Corp/Options" Foreground="White" FontSize="14" FontWeight="Bold" />
+                    </TreeViewItem>
+                    <TreeViewItem Header="Global" IsExpanded="True" Foreground="White" FontSize="12" FontWeight="Bold" >
+                        <TreeViewItem Header="Terminal/Remote" Foreground="White" FontSize="14" FontWeight="Bold" />
+                        <TreeViewItem Header="Logging/AutoRun" Foreground="White" FontSize="14" FontWeight="Bold" />
+                    </TreeViewItem>
+                </TreeView>
+            </GroupBox>
 
-            <Grid Visibility="Visible" Name="DatabaseGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Database" Margin="10,10,10,0" VerticalAlignment="Top" Height="96" Foreground="Black" BorderBrush="Black">
+            <Grid Visibility="Visible" Name="DatabaseGrid" Background="{StaticResource BbackgroundBrush2}" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".7"  >
+                <GroupBox Header="Database" Margin="10,10,10,0" VerticalAlignment="Top" Height="96" Foreground="White">
                     <Grid>
                         <Label Content="Name" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="Name" HorizontalAlignment="Left" Height="23" Margin="100,5,0,0" VerticalAlignment="Top" Width="200"/>
-                        <Label Content="Sectors" HorizontalAlignment="Left" Height="23" Margin="10,35,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="Sectors" HorizontalAlignment="Left" Height="23" Margin="100,35,0,0" VerticalAlignment="Top" Width="100"/>
+                        <TextBox Name="Name" HorizontalAlignment="Left" Height="23" Margin="100,5,0,0" VerticalAlignment="Top" Width="200" Opacity="1"/>
+                        <Label Content="Sectors" HorizontalAlignment="Left" Height="23" Margin="10,40,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="Sectors" HorizontalAlignment="Left" Height="23" Margin="100,40,0,0" VerticalAlignment="Top" Width="100" Opacity="1"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Server" Margin="10,106,10,0" VerticalAlignment="Top" Height="178" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Server" Margin="10,106,10,0" VerticalAlignment="Top" Height="284" Foreground="White" >
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="13*"/>
-                            <ColumnDefinition Width="370*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Address" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
-                        <TextBox Name="Address" HorizontalAlignment="Left" Height="23" Margin="87,5,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1"/>
-                        <Label Content="Port" HorizontalAlignment="Left" Height="23" Margin="10,35,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
-                        <TextBox Name="Port" HorizontalAlignment="Left" Height="23" Margin="87,35,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
-                        <Label Content="Game" HorizontalAlignment="Left" Height="23" Margin="10,65,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
-                        <TextBox Name="Game" HorizontalAlignment="Left" Height="23" Margin="87,65,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
-                        <Label Content="Listen for incoming connection on port" HorizontalAlignment="Left" Height="23" Margin="2,95,0,0" VerticalAlignment="Top" Width="220" HorizontalContentAlignment="Right" Grid.Column="1"  />
-                        <TextBox Name="ClentPort" HorizontalAlignment="Left" Height="23" Margin="227,95,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
-                        <CheckBox Name="Reconnect" Content="Automatically Reconnect if disconnected" HorizontalAlignment="Left" Height="23" Margin="7,125,0,0" VerticalAlignment="Top" Width="300" Grid.Column="1"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="Tray Icon" Margin="10,289,10,0" VerticalAlignment="Top" Height="93" Foreground="Black" BorderBrush="Black">
-                    <Grid>
-                        <ListView Name="TrayIconList" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" Height="60" Width="293" Opacity="1" SelectionChanged="TraIconListSelectionChanged"  >
+                        <Label Content="Address" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
+                        <TextBox Name="Address" HorizontalAlignment="Left" Height="23" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
+                        <Label Content="Port / Protocal" HorizontalAlignment="Left" Height="23" Margin="10,45,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="Port" HorizontalAlignment="Left" Height="23" Margin="100,45,0,0" VerticalAlignment="Top" Width="100"/>
+                        <ComboBox Name="Protocal" Margin="205,45,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="25" Width="95"/>
+                        <Label Content="Game" HorizontalAlignment="Left" Height="23" Margin="10,80,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="Game" HorizontalAlignment="Left" Height="23" Margin="100,80,0,0" VerticalAlignment="Top" Width="100"/>
+                        <Label Content="Listen for incoming connection on port" HorizontalAlignment="Left" Height="27" Margin="4,109,0,0" VerticalAlignment="Top" Width="220" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="ClentPort" HorizontalAlignment="Left" Height="25" Margin="227,108,0,0" VerticalAlignment="Top" Width="100"/>
+                        <CheckBox Name="Reconnect" Content="Automatically Reconnect if disconnected" HorizontalAlignment="Left" Height="23" Margin="12,140,0,0" VerticalAlignment="Top" Width="300"/>
+                        <ListView Name="TrayIconList" Visibility="Hidden" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Visible" Margin="83,174,0,0"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="60" Width="293" Opacity="1" SelectionChanged="TraIconListSelectionChanged"  >
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -72,13 +86,15 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ListView>
-                        <Button Name="ChooseIcon" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity="1" Click="BrowseButtonClick" Content="Browse"/>
+                        <Button Name="ChooseIcon" Margin="83,175,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="75" Opacity="1" Click="ChooseButtonClick" Content="Choose"/>
+                        <Button Name="BrowseIcon" Margin="83,202,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="20" Width="75" Opacity="1" Click="BrowseButtonClick" Content="Browse"/>
+                        <Image  Source="/TWX3;component/Images/proxy.ico"  Height="48" Width="48" Margin="23,174,312,39" ></Image>
                     </Grid>
                 </GroupBox>
             </Grid>
 
-            <Grid Visibility="Hidden" Name="LoginGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Login" Margin="10,10,10,0" VerticalAlignment="Top" Height="164" Foreground="Black" BorderBrush="Black">
+            <Grid Visibility="Hidden" Name="LoginGrid" Background="{StaticResource BbackgroundBrush2}" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".8"  >
+                <GroupBox Header="Login" Margin="10,10,10,0" VerticalAlignment="Top" Height="164" Foreground="White">
                     <Grid>
                         <CheckBox Name="UseLogin" Content="Use Login Script" HorizontalAlignment="Left" Height="23" Margin="20,10,0,0" VerticalAlignment="Top" Width="166"/>
                         <Label Content="Script" HorizontalAlignment="Left" Height="23" Margin="10,28,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
@@ -91,7 +107,7 @@
                         <Label Content="Game Starts in 1 hour and 15 minutes." HorizontalAlignment="Center" Height="23" Margin="0,113,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center"  />
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Identity" Margin="10,179,10,0" VerticalAlignment="Top" Height="211" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Identity" Margin="10,179,10,0" VerticalAlignment="Top" Height="211" Foreground="White" >
                     <Grid>
                         <Label Content="Lopgin Name" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="110" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Grid.Column="1"  />
                         <TextBox Name="LoginName" HorizontalAlignment="Left" Height="23" Margin="120,10,0,0" VerticalAlignment="Top" Width="150" Grid.ColumnSpan="2" Grid.Column="2"/>
@@ -109,8 +125,8 @@
 
 
 
-            <Grid Visibility="Hidden" Name="CorpGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Corporation" Margin="10,10,10,0" VerticalAlignment="Top" Height="114" Foreground="Black" BorderBrush="Black">
+            <Grid Visibility="Hidden" Name="CorpGrid" Background="{StaticResource BbackgroundBrush2}" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".8"  >
+                <GroupBox Header="Corporation" Margin="10,10,10,0" VerticalAlignment="Top" Height="114" Foreground="White" >
                     <Grid>
                         <CheckBox Name="CreatCorp" Content="Create Corporation (CEO)" HorizontalAlignment="Left" Height="23" Margin="20,10,0,0" VerticalAlignment="Top" Width="166"/>
                         <CheckBox Name="JoinCorp" Content="Join Corporation" HorizontalAlignment="Left" Height="23" Margin="191,10,0,0" VerticalAlignment="Top" Width="166"/>
@@ -120,7 +136,7 @@
                         <PasswordBox Name="Passsword"  HorizontalAlignment="Left" Height="23" Margin="100,58,0,0" VerticalAlignment="Top" Width="100"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="OPtions" Margin="10,129,10,0" VerticalAlignment="Top" Height="261" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Options" Margin="10,129,10,0" VerticalAlignment="Top" Height="261" Foreground="White" >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0*"/>
@@ -147,18 +163,18 @@
                 </GroupBox>
             </Grid>
 
-            <Grid Visibility="Hidden" Name="TerminalGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Terminal" Margin="10,10,10,0" VerticalAlignment="Top" Height="142" Foreground="Black" BorderBrush="Black">
+            <Grid Visibility="Hidden" Name="TerminalGrid" Background="{StaticResource BbackgroundBrush2}" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".8" >
+                <GroupBox Header="Terminal" Margin="10,10,10,0" VerticalAlignment="Top" Height="142" Foreground="White" >
                     <Grid>
-                        <Label Content="Terminal window activation key." HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="MenuKey" HorizontalAlignment="Left" Height="23" Margin="100,10,0,0" VerticalAlignment="Top" Width="200"/>
+                        <Label Content="Terminal window activation key." HorizontalAlignment="Left" Height="25" Margin="10,8,0,0" VerticalAlignment="Top" Width="190" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="MenuKey" HorizontalAlignment="Left" Height="23" Margin="200,10,0,0" VerticalAlignment="Top" Width="50"/>
                         <CheckBox Name="Broadcast" Content="Broadcast a message when a client connects." HorizontalAlignment="Left" Height="23" Margin="20,40,0,0" VerticalAlignment="Top" Width="300"/>
                         <CheckBox Name="LocalEcho" Content="Local echo of outgoing text." HorizontalAlignment="Left" Height="23" Margin="20,65,0,0" VerticalAlignment="Top" Width="300"/>
                         <Label Content="Maximum Bubble Size" HorizontalAlignment="Left" Height="23" Margin="14,85,0,0" VerticalAlignment="Top" Width="150" HorizontalContentAlignment="Right"  />
                         <TextBox Name="Bubble" HorizontalAlignment="Left" Height="23" Margin="168,85,0,0" VerticalAlignment="Top" Width="50"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Remote" Margin="10,157,10,0" VerticalAlignment="Top" Height="233" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Remote" Margin="10,157,10,0" VerticalAlignment="Top" Height="233" Foreground="White">
                     <Grid>
                         <CheckBox Name="Accept" Content="Accept external connections." HorizontalAlignment="Left" Height="23" Margin="20,10,0,0" VerticalAlignment="Top" Width="300"/>
                         <Label Content="Remote Address" HorizontalAlignment="Left" Height="23" Margin="1,35,0,0" VerticalAlignment="Top" Width="120" HorizontalContentAlignment="Right"  />
@@ -167,8 +183,8 @@
                 </GroupBox>
             </Grid>
 
-            <Grid Visibility="Hidden" Name="LoggingGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Terminal" Margin="10,10,10,0" VerticalAlignment="Top" Height="154" Foreground="Black" BorderBrush="Black">
+            <Grid Visibility="Hidden" Name="LoggingGrid" Background="{StaticResource BbackgroundBrush2}" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".8"  >
+                <GroupBox Header="Terminal" Margin="10,10,10,0" VerticalAlignment="Top" Height="154" Foreground="White" >
                     <Grid>
                         <CheckBox Name="LogData" Content="Log data according to the selected database." HorizontalAlignment="Left" Height="23" Margin="20,10,0,0" VerticalAlignment="Top" Width="300"/>
                         <CheckBox Name="LogAnsi" Content="Log ANSI codes." HorizontalAlignment="Left" Height="23" Margin="60,33,0,0" VerticalAlignment="Top" Width="300"/>
@@ -178,7 +194,7 @@
                         <CheckBox Name="NotifyDelay" Content="Local echo of outgoing text." HorizontalAlignment="Left" Height="23" Margin="20,106,0,0" VerticalAlignment="Top" Width="300"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="AutoRun" Margin="10,164,10,0" VerticalAlignment="Top" Height="226" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="AutoRun" Margin="10,164,10,0" VerticalAlignment="Top" Height="226" Foreground="White" >
                     <Grid>
                         <ListBox  Height="173" Margin="5,5,5,0" VerticalAlignment="Top" />
                         <Button Content="Add" HorizontalAlignment="Left" Margin="308,183,0,0" VerticalAlignment="Top" Width="75"/>
@@ -189,7 +205,7 @@
 
 
 
-            <CheckBox Name="Defaultcheckbox" Margin="0,0,270,8" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Foreground="White" FontSize="12pt">Default</CheckBox>
+            <CheckBox Name="Defaultcheckbox" Margin="0,0,260,7" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="133" Opacity=".5" Foreground="White" FontSize="12pt">Save as Default</CheckBox>
             <Button Name="NewButton" Margin="330,10,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="25" Width="75" Opacity=".5" Click="NewButtonClick">New</Button>
             <Button Name="DeleteButton" Margin="415,10,0,0" VerticalAlignment="top" HorizontalAlignment="Left" Height="25" Width="75" Opacity=".5" Click="DeleteButtonClick">Delete</Button>
             <Button Name="AboutButton" Margin="10,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="25" Width="75" Opacity=".5" Click="AboutButtonClick">About</Button>

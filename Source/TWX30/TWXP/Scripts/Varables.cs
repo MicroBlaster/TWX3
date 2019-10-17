@@ -29,7 +29,7 @@ namespace TWXP
         // Public Read-only Properties
         public string Name { get; private set; }
         public string Value { get; private set; }
-        public string DecValue { get; private set; }
+        public double DecValue { get; private set; }
         public bool IsNumeric { get; private set; }
 
         /// <summary>
@@ -37,9 +37,23 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of the command.</param>
         /// <param name="silent">Run Varable in silent mode.</param>
-        public Varable(String name)
+        public Varable(string name)
         {
             Name = name;
+        }
+
+        public void Update(string value)
+        {
+            Value = value;
+            DecValue = 0;
+            IsNumeric = false;
+        }
+
+        public void Update(Double decValue)
+        {
+            Value = decValue.ToString();
+            DecValue = decValue;
+            IsNumeric = true;
         }
     }
 }
