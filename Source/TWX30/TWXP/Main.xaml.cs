@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace TWXP
 {
@@ -9,7 +13,6 @@ namespace TWXP
     public partial class Main : Window
     {
         private Scripts scripts;
-        private Commands cmdref;
 
         public Main()
         {
@@ -23,8 +26,8 @@ namespace TWXP
             //Window welcome = new Windows.Welcome();
             //welcome.ShowDialog();
 
-            //Window setup = new Windows.Setup();
-            //setup.ShowDialog();
+            Window setup = new Windows.Setup();
+            setup.ShowDialog();
 
             //Proxy proxy = new Proxy();
             //proxy.StartAsync();
@@ -35,15 +38,10 @@ namespace TWXP
         private void Initialize()
         {
             scripts = new Scripts();
-            //cmdref = new CommandReferences();
 
-
-
-            //cmdref.Exec(new string[] { "setVar", "$var", "7" });
-            //cmdref.Exec(new string[] { "add", "$var", "3" });
-            //cmdref.Exec(new string[] { "echo", "Hello World ", "$var" });
-
-            //string s = commands.Exec(new string[] { "CURRENTLINE" });
+            //System.Windows.Forms.NotifyIcon icon = new System.Windows.Forms.NotifyIcon();
+            //Stream iconStream = Application.GetResourceStream(new Uri("pack://application:,,,/YourReferencedAssembly;component/YourPossibleSubFolder/YourResourceFile.ico")).Stream;
+            //icon.Icon = new System.Drawing.Icon(iconStream);
 
 
 

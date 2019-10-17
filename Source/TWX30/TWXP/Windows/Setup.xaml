@@ -16,7 +16,7 @@
     </Window.Resources>
     <Grid  MouseDown="GridMouseDown">
         <Grid Background="{StaticResource backgroundBrush}" >
-        <Label Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10">Database</Label>
+            <Label Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10">Database</Label>
             <ComboBox Name="DatabaseComboBix" Margin="70,10,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="25" Width="250" Opacity=".5" SelectionChanged="DabaseComBoxSelectionChanged"/>
             <TreeView Name="MainTreeView" Margin="10,45,0,0" VerticalAlignment="Top" HorizontalAlignment="left" Height="400" Width="200" Opacity=".5" Foreground="White" FontSize="12pt" SelectedItemChanged="onTreviewChange"  >
                 <TreeViewItem Header="Session" IsExpanded="True" >
@@ -31,7 +31,7 @@
             </TreeView>
 
             <Grid Visibility="Visible" Name="DatabaseGrid" Margin="0,45,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Height="400" Width="415" Opacity=".5" Background="White" >
-                <GroupBox Header="Database" Margin="10,10,10,0" VerticalAlignment="Top" Height="148" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Database" Margin="10,10,10,0" VerticalAlignment="Top" Height="96" Foreground="Black" BorderBrush="Black">
                     <Grid>
                         <Label Content="Name" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
                         <TextBox Name="Name" HorizontalAlignment="Left" Height="23" Margin="100,5,0,0" VerticalAlignment="Top" Width="200"/>
@@ -39,17 +39,40 @@
                         <TextBox Name="Sectors" HorizontalAlignment="Left" Height="23" Margin="100,35,0,0" VerticalAlignment="Top" Width="100"/>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Server" Margin="10,163,10,0" VerticalAlignment="Top" Height="227" Foreground="Black" BorderBrush="Black">
+                <GroupBox Header="Server" Margin="10,106,10,0" VerticalAlignment="Top" Height="178" Foreground="Black" BorderBrush="Black">
                     <Grid>
-                        <Label Content="Address" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="Address" HorizontalAlignment="Left" Height="23" Margin="100,5,0,0" VerticalAlignment="Top" Width="200"/>
-                        <Label Content="Port" HorizontalAlignment="Left" Height="23" Margin="10,35,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="Port" HorizontalAlignment="Left" Height="23" Margin="100,35,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Label Content="Game" HorizontalAlignment="Left" Height="23" Margin="10,65,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="Game" HorizontalAlignment="Left" Height="23" Margin="100,65,0,0" VerticalAlignment="Top" Width="100"/>
-                        <Label Content="Listen for incoming connection on port" HorizontalAlignment="Left" Height="23" Margin="15,95,0,0" VerticalAlignment="Top" Width="220" HorizontalContentAlignment="Right"  />
-                        <TextBox Name="ClentPort" HorizontalAlignment="Left" Height="23" Margin="240,95,0,0" VerticalAlignment="Top" Width="100"/>
-                        <CheckBox Name="Reconnect" Content="Automatically Reconnect if disconnected" HorizontalAlignment="Left" Height="23" Margin="20,125,0,0" VerticalAlignment="Top" Width="300"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="13*"/>
+                            <ColumnDefinition Width="370*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Address" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
+                        <TextBox Name="Address" HorizontalAlignment="Left" Height="23" Margin="87,5,0,0" VerticalAlignment="Top" Width="200" Grid.Column="1"/>
+                        <Label Content="Port" HorizontalAlignment="Left" Height="23" Margin="10,35,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
+                        <TextBox Name="Port" HorizontalAlignment="Left" Height="23" Margin="87,35,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+                        <Label Content="Game" HorizontalAlignment="Left" Height="23" Margin="10,65,0,0" VerticalAlignment="Top" Width="90" HorizontalContentAlignment="Right" Grid.ColumnSpan="2"  />
+                        <TextBox Name="Game" HorizontalAlignment="Left" Height="23" Margin="87,65,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+                        <Label Content="Listen for incoming connection on port" HorizontalAlignment="Left" Height="23" Margin="2,95,0,0" VerticalAlignment="Top" Width="220" HorizontalContentAlignment="Right" Grid.Column="1"  />
+                        <TextBox Name="ClentPort" HorizontalAlignment="Left" Height="23" Margin="227,95,0,0" VerticalAlignment="Top" Width="100" Grid.Column="1"/>
+                        <CheckBox Name="Reconnect" Content="Automatically Reconnect if disconnected" HorizontalAlignment="Left" Height="23" Margin="7,125,0,0" VerticalAlignment="Top" Width="300" Grid.Column="1"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Tray Icon" Margin="10,289,10,0" VerticalAlignment="Top" Height="93" Foreground="Black" BorderBrush="Black">
+                    <Grid>
+                        <ListView Name="TrayIconList" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" Height="60" Width="293" Opacity="1" SelectionChanged="TraIconListSelectionChanged"  >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Image Source="{Binding Path=Source}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ListView>
+                        <Button Name="ChooseIcon" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity="1" Click="BrowseButtonClick" Content="Browse"/>
                     </Grid>
                 </GroupBox>
             </Grid>
@@ -174,6 +197,6 @@
             <Button Name="ApplyButton" Margin="0,0,95,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="ApplyButtonClick">Apply</Button>
             <Button Name="OkButton" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="75" Opacity=".5" Click="OkButtonClick">Ok</Button>
         </Grid >
-        <Border Name="innerBorder" BorderThickness="1" BorderBrush="#FF222222" Visibility="Visible" />
+        <Border Name="innerBorder" BorderThickness="1" BorderBrush="#FF222222" Visibility="Hidden" />
     </Grid>
 </Window>
