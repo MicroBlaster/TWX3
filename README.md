@@ -15,14 +15,14 @@ Originally written by Remco Mulder, [TWXProxy](https://github.com/erikh/twxproxy
 * [TWXP](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXP) is the main executalbe.
 
 * [TWXC](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXC) Compile your code for distriburion.
-* [TWXD](https://github.com/MicroBlaster/TWX3/tree/master/Source/TWXD) De-Compile your code, including older versions.
+
 
 ## Other Versions:
 * [TWXProxy 2.06](https://github.com/MicroBlaster/TWXProxy/tree/master/Source/TWXProxy-MB) is an updated version of TWXProxy released by MicroBlaster.
-* [PYTWX](https://bitbucket.org/mrdon/pytwx/src) a server side port of TWX to Python by Mr. Don.
 * [TWXProxy 2.05](https://github.com/MicroBlaster/TWXProxy/tree/master/Source/TWXProxy-EP) The latest version of TWXProxy released by Elder Prophit.
 * [TWXProxy 2.04](https://github.com/erikh/twxproxy) Windows XP Version by Elder Prophit.
 * [TWXProxy 2.03](https://github.com/erikh/twxproxy) Mirror of an older version by Remco Mulder.
+* [PYTWX](https://bitbucket.org/mrdon/pytwx/src) a server side port of TWX to Python by Mr. Don.
 * [TWXProxy BBS](https://code.google.com/archive/p/twxproxy-ep/wikis/TwxBbsAdministrationGuide.wiki) A server-side proxy for TWGS based on TWXProxy 2.04.
 * [TWXProxy PRO](https://sourceforge.net/projects/twxproxy/) This fork of TWXProxy was maintained by The [TWX Proxy Group](http://twxproxy.sourceforge.net/).
 
