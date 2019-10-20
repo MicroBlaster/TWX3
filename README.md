@@ -1,4 +1,4 @@
-![image](https://github.com/MicroBlaster/TWXProxy/blob/master/Source/TWXProxy-MB/TWXP-Logo.jpg)
+![image](https://user-images.githubusercontent.com/3355654/67166690-3cd7f100-f357-11e9-953f-561864f26fc1.png)
 
 ## What is TWX3?
 
