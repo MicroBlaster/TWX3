@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace TWXP
@@ -98,6 +97,10 @@ namespace TWXP
 
                 switch (cl.Name)
                 {
+                    case "Goto":
+                        line = "goto " + cl.Param[0].Replace("\"","");
+                        return line;
+
                     case "SetVar":
                         line = cl.Param[0] + " = " + cl.Param[1];
                         return line;
@@ -119,20 +122,20 @@ namespace TWXP
 
 
             public string Name { get; private set; }
-            public int ScriptID { get; private set; }
-            public int CodeLine { get; private set; }
-            public int CmdIndex { get; private set; }
+            public byte ScriptID { get; private set; }
+            public uint CodeLine { get; private set; }
+            public uint CmdIndex { get; private set; }
             public List<string> Param  { get; private set; }
 
             public CommandLine(BinaryReader stream)
             {
-                byte ScriptID = stream.ReadByte();
-                uint CodeLine = stream.ReadUInt16();
+                ScriptID = stream.ReadByte();
+                CodeLine = stream.ReadUInt16();
                 CmdIndex = stream.ReadUInt16();
 
                 Param = new List<string>();
 
-                Name = cmd.cmdList[CmdIndex].Name;
+                Name = cmd.cmdList[(int)CmdIndex].Name;
 
 
                 Debug.Write($"Command: {ScriptID}:{CodeLine}:{CmdIndex}:{Name}\n");
@@ -306,7 +309,15 @@ namespace TWXP
 
                 while (bs.Position < bs.Length)
                 {
+                    var label = labellist.Where(l => l.Location == bs.Position);
+                    if(label.Count() > 0)
+                    {
+                        output.Append(label.First().Name + ":");
+                    }
+
                     CommandLine cl = new CommandLine(codeRef);
+                    //uint codeline = cl.CodeLine;
+                    
                     output.Append("        " + cl + ";\n");
                 }
             }
