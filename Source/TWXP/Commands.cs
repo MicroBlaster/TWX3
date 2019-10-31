@@ -24,7 +24,7 @@ namespace TWXP
             cmdList.Add(new Command("CutText"));
             cmdList.Add(new Command("Delete"));
             cmdList.Add(new Command("Disconnect"));
-            cmdList.Add(new Command("Divide"));
+            cmdList.Add(new Command("Divide",true));
             cmdList.Add(new Command("Echo"));
             cmdList.Add(new Command("FileExists"));
             cmdList.Add(new Command("GetCharCode"));
@@ -61,7 +61,7 @@ namespace TWXP
             cmdList.Add(new Command("Logging"));
             cmdList.Add(new Command("LowerCase"));
             cmdList.Add(new Command("MergeText"));
-            cmdList.Add(new Command("Multiply"));
+            cmdList.Add(new Command("Multiply",true));
             cmdList.Add(new Command("OpenMenu"));
             cmdList.Add(new Command("Or",true));
             cmdList.Add(new Command("Pause"));
@@ -136,36 +136,175 @@ namespace TWXP
             cmdList.Add(new Command("Truncate"));
         }
 
+        /// <summary>
+        /// Mathmatical operator cmd.Add
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Multiply(Param a, double b)
+        {
+            a.Update((double)a * b);
+        }
+
+        /// <summary>
+        /// Mathmatical operator cmd.Add
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Divide(Param a, double b)
+        {
+            a.Update((double)a / b);
+        }
+
+        /// <summary>
+        /// Mathmatical operator cmd.Add
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         public static void Add(Param a, double b)
         {
             a.Update((double)a + b);
         }
 
+        /// <summary>
+        /// Mathmatical operator cmd.Add
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Subtract(Param a, double b)
+        {
+            a.Update((double)a - b);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         public static void And(Param a, bool b)
         {
             a.Update((bool)a && b);
         }
 
-        public static void Echo(params Param[] param)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Or(Param a, bool b)
         {
-            StringBuilder output = new StringBuilder();
-            //string output = "";
-            foreach(Param p in param)
-            {
-                output.Append((string)p);
-            }
-            Debug.Write ($"Echo: {output}\n");
+            a.Update((bool)a || b);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        public static void Xor(Param a, bool b)
+        {
+            a.Update((bool)a ^ b);
+        }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        public static void Not(Param a)
+        {
+            a.Update(!(bool)a);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        public static void IsEquil(Param a, double b, double c)
+        {
+            a.Update(b == c);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        public static void IsNotEquil(Param a, double b, double c)
+        {
+            a.Update(b != c);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        public static void IsGreater(Param a, double b, double c)
+        {
+            a.Update(b > c);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        public static void IsGeaterEquil(Param a, double b, double c)
+        {
+            a.Update(b >= c);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
         public static void IsLesser(Param a, double b, double c)
         {
             a.Update(b < c);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        public static void IsLesserEquil(Param a, double b, double c)
+        {
+            a.Update(b <= c);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         public static void SetVar(Param a, double b)
         {
             a.Update(b);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="param"></param>
+        public static void Echo(params Param[] param)
+        {
+            StringBuilder output = new StringBuilder();
+            //string output = "";
+            foreach (Param p in param)
+            {
+                output.Append((string)p);
+            }
+            Debug.Write($"Echo: {output}\n");
         }
 
     }
