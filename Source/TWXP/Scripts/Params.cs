@@ -27,6 +27,36 @@ namespace TWXP
 
     public class Param
     {
+        // Implicit operator to cast a string to a parameter.
+        public static implicit operator Param(string s)
+        {
+            return new Param(s);
+        }
+
+        // Implicit operator to cast a bool to a parameter.
+        public static implicit operator Param(bool b)
+        {
+            return new Param(b);
+        }
+
+        // Implicit operator to cast a int to a parameter.
+        public static implicit operator Param(double d)
+        {
+            return new Param(d);
+        }
+
+        // Implicit operator to cast a int to a parameter.
+        public static implicit operator Param(int i)
+        {
+            return new Param(i);
+        }
+
+        // Implicit operator to cast a parameter to a string.
+        public static implicit operator string(Param p)
+        {
+            return p.Value;
+        }
+
         // Implicit operator to cast a parameter to boolean.
         public static implicit operator bool(Param p)
         {
@@ -36,46 +66,16 @@ namespace TWXP
                 return false;
         }
 
-        // Implicit operator to cast a parameter to a string.
-        public static implicit operator string(Param p)
+        // Implicit operator to cast a parameter to a double.
+        public static implicit operator double(Param p)
         {
-            return p.Value;
-        }
-
-        // Implicit operator to cast a string to a parameter.
-        public static implicit operator Param(string s)
-        {
-            return new Param(s);
-        }
-
-        // Implicit operator to cast a int to a parameter.
-        public static implicit operator Param(int i)
-        {
-            return new Param(i);
-        }
-
-        // Implicit operator to cast a int to a parameter.
-        public static implicit operator Param(double d)
-        {
-            return new Param(d);
-        }
-
-        // Implicit operator to cast a bool to a parameter.
-        public static implicit operator Param(bool b)
-        {
-            return new Param(b);
+            return p.DecValue;
         }
 
         // Explicit operator to cast a parameter to an intiger.
         public static explicit operator int(Param p)
         {
             return (int)p.DecValue;
-        }
-
-        // Explicit operator to cast a parameter to a double.
-        public static explicit operator double(Param p)
-        {
-            return p.DecValue;
         }
 
 

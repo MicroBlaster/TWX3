@@ -45,7 +45,7 @@ namespace TWXP
             public CmdParam(BinaryReader stream, bool isVar = false)
             {
                 Value = ReadString(stream, stream.ReadInt32());
-                if (isVar) Name =  ReadString(stream, stream.ReadInt32()).Replace("$","").ToLower();
+                if (isVar) Name =  ReadString(stream, stream.ReadInt32()).ToLower().Replace("$$","VAR_").Replace("$","");
                 Debug.Write($"var: {Name} = {Value}\n");
             }
 
@@ -81,7 +81,7 @@ namespace TWXP
             {
                 Location = stream.ReadInt32();
                 int length = stream.ReadInt32();
-                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length);
+                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length).Replace(":","LAB_");
 
                 Debug.Write($"label: {Name} = {Location}\n");
             }
@@ -97,8 +97,12 @@ namespace TWXP
 
                 switch (cl.Name)
                 {
+                    case "Branch":
+                        line = $"if  (!{cl.Param[0]}) goto {cl.Param[1].Replace("\"", "").Replace("::", "LAB_").Replace(":","")}";
+                        return line;
+
                     case "Goto":
-                        line = "goto " + cl.Param[0].Replace("\"","");
+                        line = $"goto {cl.Param[0].Replace("\"", "").Replace("::", "LAB_").Replace(":", "")}";
                         return line;
 
                     case "SetVar":
@@ -276,7 +280,14 @@ namespace TWXP
 
                 while (bs.Position < bs.Length)
                 {
-                    labellist.Add(new Label(stream));
+                    // Load a label from the stream
+                    Label label = new Label(stream);
+
+                    // Create a new label if there isn't already a label by that name
+                    if (labellist.Where(l => l.Name == label.Name).Count() == 0)
+                    {
+                        labellist.Add(label);
+                    }
                 }
 
                 stream.Close();
@@ -307,23 +318,36 @@ namespace TWXP
                 var bs = codeRef.BaseStream;
                 //byte ScriptID = codeRef.ReadByte();
 
+
                 while (bs.Position < bs.Length)
                 {
-                    var label = labellist.Where(l => l.Location == bs.Position);
-                    if(label.Count() > 0)
-                    {
-                        output.Append(label.First().Name + ":");
-                    }
+                    GetLabels(bs.Position, output);
 
                     CommandLine cl = new CommandLine(codeRef);
                     //uint codeline = cl.CodeLine;
                     
                     output.Append("        " + cl + ";\n");
                 }
+
+                GetLabels(bs.Position, output);
+
             }
 
             output.Append("    }\n}\n");
             return output.ToString();
+        }
+
+        private void GetLabels(long pos, StringBuilder output)
+        {
+            var labels = labellist.Where(l => l.Location == pos);
+            if (labels.Count() > 0)
+            {
+                foreach (Label l in labels)
+                {
+                    output.Append(l.Name + ":\n");
+                }
+            }
+
         }
 
         public string WriteVB(MemoryStream stream)

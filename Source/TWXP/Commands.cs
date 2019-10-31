@@ -146,20 +146,28 @@ namespace TWXP
             a.Update((bool)a && b);
         }
 
+        public static void Echo(params Param[] param)
+        {
+            StringBuilder output = new StringBuilder();
+            //string output = "";
+            foreach(Param p in param)
+            {
+                output.Append((string)p);
+            }
+            Debug.Write ($"Echo: {output}\n");
+        }
+
+
+        public static void IsLesser(Param a, double b, double c)
+        {
+            a.Update(b < c);
+        }
+
         public static void SetVar(Param a, double b)
         {
             a.Update(b);
         }
 
-        public static void Echo(params Param[] param)
-        {
-            string output = "";
-            foreach(Param p in param)
-            {
-                output += p;
-            }
-            Debug.Write ($"Echo: {output}\n");
-        }
     }
 
     public class Command
