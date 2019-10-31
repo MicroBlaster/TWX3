@@ -7,133 +7,136 @@ namespace TWXP
 {
     public static class cmd
     {
-        public static List<Command> cmdList {get; private set;}
+        public static List<Command> Commands {get; private set;}
+        private static Proxy proxy;
 
-        public static void Load()
+        public static void Load(Proxy p)
         {
-            if (cmdList != null) return;
-            cmdList = new List<Command>();
+            proxy = p;
 
-            cmdList.Add(new Command("Add",true));
-            cmdList.Add(new Command("AddMenu"));
-            cmdList.Add(new Command("And",true));
-            cmdList.Add(new Command("Branch",true));
-            cmdList.Add(new Command("ClientMessage"));
-            cmdList.Add(new Command("CloseMenu"));
-            cmdList.Add(new Command("Connect"));
-            cmdList.Add(new Command("CutText"));
-            cmdList.Add(new Command("Delete"));
-            cmdList.Add(new Command("Disconnect"));
-            cmdList.Add(new Command("Divide",true));
-            cmdList.Add(new Command("Echo"));
-            cmdList.Add(new Command("FileExists"));
-            cmdList.Add(new Command("GetCharCode"));
-            cmdList.Add(new Command("GetConsoleInput"));
-            cmdList.Add(new Command("GetCourse"));
-            cmdList.Add(new Command("GetDate"));
-            cmdList.Add(new Command("GetDistance"));
-            cmdList.Add(new Command("GetInput"));
-            cmdList.Add(new Command("GetLength"));
-            cmdList.Add(new Command("GetMenuValue"));
-            cmdList.Add(new Command("GetGetOutText"));
-            cmdList.Add(new Command("GetRnd"));
-            cmdList.Add(new Command("GetSector"));
-            cmdList.Add(new Command("GetSectorParameter"));
-            cmdList.Add(new Command("GetText"));
-            cmdList.Add(new Command("GetTime"));
-            cmdList.Add(new Command("Gosub"));
-            cmdList.Add(new Command("Goto"));
-            cmdList.Add(new Command("GetWord"));
-            cmdList.Add(new Command("GetWordPos"));
-            cmdList.Add(new Command("Halt"));
-            cmdList.Add(new Command("IsEquil", true));
-            cmdList.Add(new Command("IsGreater", true));
-            cmdList.Add(new Command("IsGreaterEquil", true));
-            cmdList.Add(new Command("IsLesser", true));
-            cmdList.Add(new Command("IsLesserEquil", true));
-            cmdList.Add(new Command("IsNotEquil", true));
-            cmdList.Add(new Command("IsNumber"));
-            cmdList.Add(new Command("KillWindow"));
-            cmdList.Add(new Command("KillAllTriggers"));
-            cmdList.Add(new Command("KillTriggers"));
-            cmdList.Add(new Command("Load"));
-            cmdList.Add(new Command("LoadVar"));
-            cmdList.Add(new Command("Logging"));
-            cmdList.Add(new Command("LowerCase"));
-            cmdList.Add(new Command("MergeText"));
-            cmdList.Add(new Command("Multiply",true));
-            cmdList.Add(new Command("OpenMenu"));
-            cmdList.Add(new Command("Or",true));
-            cmdList.Add(new Command("Pause"));
-            cmdList.Add(new Command("ProcessIn"));
-            cmdList.Add(new Command("ProcessOut"));
-            cmdList.Add(new Command("Read"));
-            cmdList.Add(new Command("Rename"));
-            cmdList.Add(new Command("ReplaceText"));
-            cmdList.Add(new Command("ReqRecording"));
-            cmdList.Add(new Command("Return"));
-            cmdList.Add(new Command("Round"));
-            cmdList.Add(new Command("SaveVar"));
-            cmdList.Add(new Command("Send"));
-            cmdList.Add(new Command("SetArray"));
-            cmdList.Add(new Command("SetDelayTrigger"));
-            cmdList.Add(new Command("SetEventTrigger"));
-            cmdList.Add(new Command("SetMenuHelp"));
-            cmdList.Add(new Command("SetMenuValue"));
-            cmdList.Add(new Command("SetMenuOptions"));
-            cmdList.Add(new Command("SetPrecision"));
-            cmdList.Add(new Command("SetProgVar"));
-            cmdList.Add(new Command("SetSectorParameter"));
-            cmdList.Add(new Command("SetTextLineTrigger"));
-            cmdList.Add(new Command("SetTextOutTrigger"));
-            cmdList.Add(new Command("SetTextTrigger"));
-            cmdList.Add(new Command("SetVar"));
-            cmdList.Add(new Command("SetWindowContents"));
-            cmdList.Add(new Command("Sound"));
-            cmdList.Add(new Command("Stop"));
-            cmdList.Add(new Command("StripText"));
-            cmdList.Add(new Command("Subtract",true));
-            cmdList.Add(new Command("SYS_CHECK", true));
-            cmdList.Add(new Command("SYS_FAIL", true));
-            cmdList.Add(new Command("SYS_KILL", true));
-            cmdList.Add(new Command("SYS_NOAUTH", true));
-            cmdList.Add(new Command("SYS_NOP", true));
-            cmdList.Add(new Command("SYS_SHOWMSG", true));
-            cmdList.Add(new Command("SystemScript"));
-            cmdList.Add(new Command("UpoperCase"));
-            cmdList.Add(new Command("Xor",true));
-            cmdList.Add(new Command("Window"));
-            cmdList.Add(new Command("Write"));
+            if (Commands != null) return;
+            Commands = new List<Command>();
+
+            Commands.Add(new Command("Add",true));
+            Commands.Add(new Command("AddMenu"));  //TODO:
+            Commands.Add(new Command("And",true));
+            Commands.Add(new Command("Branch",true));
+            Commands.Add(new Command("ClientMessage"));  //TODO:
+            Commands.Add(new Command("CloseMenu"));  //TODO:
+            Commands.Add(new Command("Connect")); //In-Progress
+            Commands.Add(new Command("CutText")); //TODO:
+            Commands.Add(new Command("Delete")); //TODO:
+            Commands.Add(new Command("Disconnect")); //In-Progress
+            Commands.Add(new Command("Divide",true));
+            Commands.Add(new Command("Echo")); //In-Progress
+            Commands.Add(new Command("FileExists")); //TODO: --- through rest of list, except operators ---
+            Commands.Add(new Command("GetCharCode"));
+            Commands.Add(new Command("GetConsoleInput"));
+            Commands.Add(new Command("GetCourse"));
+            Commands.Add(new Command("GetDate"));
+            Commands.Add(new Command("GetDistance"));
+            Commands.Add(new Command("GetInput"));
+            Commands.Add(new Command("GetLength"));
+            Commands.Add(new Command("GetMenuValue"));
+            Commands.Add(new Command("GetGetOutText"));
+            Commands.Add(new Command("GetRnd"));
+            Commands.Add(new Command("GetSector"));
+            Commands.Add(new Command("GetSectorParameter"));
+            Commands.Add(new Command("GetText"));
+            Commands.Add(new Command("GetTime"));
+            Commands.Add(new Command("Gosub"));
+            Commands.Add(new Command("Goto"));
+            Commands.Add(new Command("GetWord"));
+            Commands.Add(new Command("GetWordPos"));
+            Commands.Add(new Command("Halt"));
+            Commands.Add(new Command("IsEquil", true));
+            Commands.Add(new Command("IsGreater", true));
+            Commands.Add(new Command("IsGreaterEquil", true));
+            Commands.Add(new Command("IsLesser", true));
+            Commands.Add(new Command("IsLesserEquil", true));
+            Commands.Add(new Command("IsNotEquil", true));
+            Commands.Add(new Command("IsNumber"));
+            Commands.Add(new Command("KillWindow"));
+            Commands.Add(new Command("KillAllTriggers"));
+            Commands.Add(new Command("KillTriggers"));
+            Commands.Add(new Command("Load"));
+            Commands.Add(new Command("LoadVar"));
+            Commands.Add(new Command("Logging"));
+            Commands.Add(new Command("LowerCase"));
+            Commands.Add(new Command("MergeText"));
+            Commands.Add(new Command("Multiply",true));
+            Commands.Add(new Command("OpenMenu"));
+            Commands.Add(new Command("Or",true));
+            Commands.Add(new Command("Pause"));
+            Commands.Add(new Command("ProcessIn"));
+            Commands.Add(new Command("ProcessOut"));
+            Commands.Add(new Command("Read"));
+            Commands.Add(new Command("Rename"));
+            Commands.Add(new Command("ReplaceText"));
+            Commands.Add(new Command("ReqRecording"));
+            Commands.Add(new Command("Return"));
+            Commands.Add(new Command("Round"));
+            Commands.Add(new Command("SaveVar"));
+            Commands.Add(new Command("Send"));
+            Commands.Add(new Command("SetArray"));
+            Commands.Add(new Command("SetDelayTrigger"));
+            Commands.Add(new Command("SetEventTrigger"));
+            Commands.Add(new Command("SetMenuHelp"));
+            Commands.Add(new Command("SetMenuValue"));
+            Commands.Add(new Command("SetMenuOptions"));
+            Commands.Add(new Command("SetPrecision"));
+            Commands.Add(new Command("SetProgVar"));
+            Commands.Add(new Command("SetSectorParameter"));
+            Commands.Add(new Command("SetTextLineTrigger"));
+            Commands.Add(new Command("SetTextOutTrigger"));
+            Commands.Add(new Command("SetTextTrigger"));
+            Commands.Add(new Command("SetVar",true));
+            Commands.Add(new Command("SetWindowContents"));
+            Commands.Add(new Command("Sound"));
+            Commands.Add(new Command("Stop"));
+            Commands.Add(new Command("StripText"));
+            Commands.Add(new Command("Subtract",true));
+            Commands.Add(new Command("SYS_CHECK", true));
+            Commands.Add(new Command("SYS_FAIL", true));
+            Commands.Add(new Command("SYS_KILL", true));
+            Commands.Add(new Command("SYS_NOAUTH", true));
+            Commands.Add(new Command("SYS_NOP", true));
+            Commands.Add(new Command("SYS_SHOWMSG", true));
+            Commands.Add(new Command("SystemScript"));
+            Commands.Add(new Command("UpoperCase"));
+            Commands.Add(new Command("Xor",true));
+            Commands.Add(new Command("Window"));
+            Commands.Add(new Command("Write"));
 
             // Commands added for 2.04beta
-            cmdList.Add(new Command("GetTimer"));
-            cmdList.Add(new Command("ReadToArray"));
+            Commands.Add(new Command("GetTimer"));
+            Commands.Add(new Command("ReadToArray"));
 
             // Commands added for 2.04final
-            cmdList.Add(new Command("ClearAllAvoids"));
-            cmdList.Add(new Command("ClearAvoid"));
-            cmdList.Add(new Command("GetAllCoarses"));
-            cmdList.Add(new Command("GetFileList"));
-            cmdList.Add(new Command("GetNearestWarps"));
-            cmdList.Add(new Command("GetScriptVersion"));
-            cmdList.Add(new Command("ListActiveScripts"));
-            cmdList.Add(new Command("ListAvoids"));
-            cmdList.Add(new Command("ListSectorParameters"));
-            cmdList.Add(new Command("SetAvoid"));
+            Commands.Add(new Command("ClearAllAvoids"));
+            Commands.Add(new Command("ClearAvoid"));
+            Commands.Add(new Command("GetAllCoarses"));
+            Commands.Add(new Command("GetFileList"));
+            Commands.Add(new Command("GetNearestWarps"));
+            Commands.Add(new Command("GetScriptVersion"));
+            Commands.Add(new Command("ListActiveScripts"));
+            Commands.Add(new Command("ListAvoids"));
+            Commands.Add(new Command("ListSectorParameters"));
+            Commands.Add(new Command("SetAvoid"));
 
             // Commands added for 2.05beta
-            cmdList.Add(new Command("CutLengths"));
-            cmdList.Add(new Command("Format"));
-            cmdList.Add(new Command("GetDirList"));
-            cmdList.Add(new Command("GetWordCount"));
-            cmdList.Add(new Command("MakeDir"));
-            cmdList.Add(new Command("PadLeft"));
-            cmdList.Add(new Command("PadRight"));
-            cmdList.Add(new Command("RemoveDir"));
-            cmdList.Add(new Command("SetMenuKey"));
-            cmdList.Add(new Command("SplitText"));
-            cmdList.Add(new Command("Trim"));
-            cmdList.Add(new Command("Truncate"));
+            Commands.Add(new Command("CutLengths"));
+            Commands.Add(new Command("Format"));
+            Commands.Add(new Command("GetDirList"));
+            Commands.Add(new Command("GetWordCount"));
+            Commands.Add(new Command("MakeDir"));
+            Commands.Add(new Command("PadLeft"));
+            Commands.Add(new Command("PadRight"));
+            Commands.Add(new Command("RemoveDir"));
+            Commands.Add(new Command("SetMenuKey"));
+            Commands.Add(new Command("SplitText"));
+            Commands.Add(new Command("Trim"));
+            Commands.Add(new Command("Truncate"));
         }
 
         /// <summary>
@@ -304,6 +307,8 @@ namespace TWXP
             {
                 output.Append((string)p);
             }
+
+            proxy.Echo(output.ToString());
             Debug.Write($"Echo: {output}\n");
         }
 

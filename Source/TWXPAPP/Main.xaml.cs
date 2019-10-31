@@ -13,6 +13,7 @@ namespace TWXPAPP
     /// </summary>
     public partial class Main : Window
     {
+
         //private Scripts scripts;
         private Proxy proxy;
 
@@ -24,9 +25,6 @@ namespace TWXPAPP
 
             Initialize();
 
-            proxy = new Proxy();
-
-            input.Text = proxy.Scripts.Load(@"scripts\zed-bot.cts");
             //proxy.Scripts.Load(@"scripts\zed-bot.vb");
             //proxy.Scripts.Load(@"scripts\zed-bot.cs");
 
@@ -38,8 +36,9 @@ namespace TWXPAPP
             //Window setup = new Setup();
             //setup.ShowDialog();
 
-            //Proxy proxy = new Proxy();
-            //proxy.StartAsync();
+            Proxy = new Proxy();
+            _ = proxy.StartAsync();
+            input.Text = proxy.Scripts.Load(@"scripts\zed-bot.cts");
 
             //this.Close();
         }

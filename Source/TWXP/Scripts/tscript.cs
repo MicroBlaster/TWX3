@@ -62,7 +62,7 @@ namespace TWXP
                     {
                         result.Add((byte)(Value[i] ^ Key));
                     }
-                    return System.Text.Encoding.Default.GetString(result.ToArray());
+                    return System.Text.Encoding.Default.GetString(result.ToArray()).Replace("\r","*");
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace TWXP
 
                 Param = new List<string>();
 
-                Name = cmd.cmdList[(int)CmdIndex].Name;
+                Name = cmd.Commands[(int)CmdIndex].Name;
 
 
                 Debug.Write($"Command: {ScriptID}:{CodeLine}:{CmdIndex}:{Name}\n");
@@ -306,7 +306,7 @@ namespace TWXP
 
             foreach(CmdParam p in paramlist)
             {
-                if(p.Value == "0")
+                if(p.Value == "0" && !string.IsNullOrEmpty(p.Name))
                 {
                     output.Append("        Param " + p.Name + " = new Param();\n");
                 }

@@ -24,11 +24,12 @@ namespace TWXP
         }
 
         public string FileName { get; private set; }
+        //public Proxy Owner { get; private set; }
 
-
-        public Scripts()
+        public Scripts(Proxy proxy)
         {
-            cmd.Load();
+            //Owner = owner;
+            cmd.Load(proxy);
         }
 
 
