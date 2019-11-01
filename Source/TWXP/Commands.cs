@@ -192,103 +192,103 @@ namespace TWXP
         /// <summary>
         /// Logincal Operator cmd.Or - Performs a logical 'OR' on a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
+        /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
         public static void Or(Param a, bool b)
         {
             a.Update((bool)a || b);
         }
 
         /// <summary>
-        /// 
+        /// Logincal Operator cmd.Xor - Performs a logical 'XOR' on a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
+        /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
         public static void Xor(Param a, bool b)
         {
             a.Update((bool)a ^ b);
         }
 
         /// <summary>
-        /// 
+        /// Logincal Operator cmd.Not - Performs a logical 'Not' on a variable.
         /// </summary>
-        /// <param name="a"></param>
+        /// <param name="a">The variable to be operated. The boolean oposite of this varable will be returned</param>
         public static void Not(Param a)
         {
             a.Update(!(bool)a);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsEquil - True if they are equal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsEquil(Param a, double b, double c)
         {
             a.Update(b == c);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsNotEquil - True if they are not equal.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsNotEquil(Param a, double b, double c)
         {
             a.Update(b != c);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsGreater - True if the first is greator than the second.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsGreater(Param a, double b, double c)
         {
             a.Update(b > c);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsGeaterEquil - True if the first is greater than or equal to the second.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsGeaterEquil(Param a, double b, double c)
         {
             a.Update(b >= c);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsLesser - True if the first is less than the second.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsLesser(Param a, double b, double c)
         {
             a.Update(b < c);
         }
 
         /// <summary>
-        /// 
+        /// Relational Operators cmd.IsLesserEquil - True if the first is less than or equal to the second.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <param name="c"></param>
+        /// <param name="a">A variable to hold the result of the comparison.</param>
+        /// <param name="b">"Left" hand operator to be compared.</param>
+        /// <param name="c">"Right" hand operator to be compared.</param>
         public static void IsLesserEquil(Param a, double b, double c)
         {
             a.Update(b <= c);
         }
 
         /// <summary>
-        /// 
+        /// Assignment Operator - Asigns a value to a parameter.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The paramater to be asigned to.</param>
+        /// <param name="b">The value to be asigned to the paramater.</param>
         public static void SetVar(Param a, double b)
         {
             a.Update(b);
@@ -296,9 +296,9 @@ namespace TWXP
 
 
         /// <summary>
-        /// 
+        /// Command cmd.Echo - Echos all parameters, as strings, to all connected client sessiond.
         /// </summary>
-        /// <param name="param"></param>
+        /// <param name="param">Parameters to be echoed</param>
         public static void Echo(params Param[] param)
         {
             StringBuilder output = new StringBuilder();
@@ -312,6 +312,27 @@ namespace TWXP
             Debug.Write($"Echo: {output}\n");
         }
 
+     
+    // Terminal Control Commands    
+        
+        
+    // Delays and Triggers    
+    //setDelayTrigger - Creates a trigger that will activate after a specified time period.
+    //setEventTrigger - Creates a trigger that will activate on a certain program event.
+    //setTextLineTrigger - Creates a trigger activated when specific text is received from Server.
+    //setTextOutTrigger - Creates a trigger activated when specific text is received from Client.
+    //setTextTrigger - Creates a text trigger activated when specific text is received.
+    //killAllTriggers - Terminates all triggers in the script and its included subroutines.
+    //killTrigger - Terminates the specified trigger.
+    //pause - Pauses the script's execution, allowing it to wait for its triggers to activate.
+    //sleep (NEW) - Pauses the script's execution, but will continue after delay expires.
+    //WaitFor - Pauses script execution, waiting for specified text from server connection.
+    //WaitOn - create a temporary TextTrigger using a macro.
+
+
+    // Menu system commands        
+        
+        
     }
 
     public class Command
