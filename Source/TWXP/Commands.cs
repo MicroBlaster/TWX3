@@ -140,57 +140,57 @@ namespace TWXP
         }
 
         /// <summary>
-        /// Mathmatical operator cmd.Add
+        /// Mathmatical operator cmd.Multiply - Performs mathematical multiplication on a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable to be multiplied.</param>
+        /// <param name="b">The amount to multiply the variable by.</param>
         public static void Multiply(Param a, double b)
         {
             a.Update((double)a * b);
         }
 
         /// <summary>
-        /// Mathmatical operator cmd.Add
+        /// Mathmatical Operator cmd.Multiply - Performs mathematical division  on a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable to be divided.</param>
+        /// <param name="b">The amount to divide the variable by.</param>
         public static void Divide(Param a, double b)
         {
             a.Update((double)a / b);
         }
 
         /// <summary>
-        /// Mathmatical operator cmd.Add
+        /// Mathmatical Operator cmd.Add - Adds a value to a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable that will have its value added to.</param>
+        /// <param name="b">The amount the variable will be increased by.</param>
         public static void Add(Param a, double b)
         {
             a.Update((double)a + b);
         }
 
         /// <summary>
-        /// Mathmatical operator cmd.Add
+        /// Mathmatical Operator cmd.Subtract - Subtracts a value from a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable that will be subtracted from.</param>
+        /// <param name="b">The amount the variable will be subtracted by</param>
         public static void Subtract(Param a, double b)
         {
             a.Update((double)a - b);
         }
 
         /// <summary>
-        /// 
+        /// Logincal Operator cmd.And - Performs a logical 'AND' on a variable.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
+        /// <param name="a">The variable to be operated on. The value in this variable must be either TRUE (1) or FALSE (0).</param>
+        /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
         public static void And(Param a, bool b)
         {
             a.Update((bool)a && b);
         }
 
         /// <summary>
-        /// 
+        /// Logincal Operator cmd.Or - Performs a logical 'OR' on a variable.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
