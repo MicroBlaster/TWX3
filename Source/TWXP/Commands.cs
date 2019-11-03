@@ -781,15 +781,31 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Format - Formats a string for display.
         /// </summary>
-        public static void Format(Param in, Param out, int format)
+        /// Format = (CURRENCY, NUMBER, DATETIMETOSTR, STRTODATETIME)
+        /// <param name="text">The text to be formatted.</param>
+        /// <param name="var">The paramater to hold the formatted string.</param>
+        /// <param name="format">The format to be applied (CURRENCY, NUMBER, DATETIMETOSTR, STRTODATETIME).</param>
+        public static void Format(string text, Param var, string format)
+        {
+            var.Update(text, format));
+        }
+
+        public static Param Format(string text, string format)
         {
             //TODO:
         }
-    
+                       
         /// <summary>
         /// Command cmd.GetCharCode - Retrieves an ASCII character code from a single-character value.
         /// </summary>
-        public static void GetCharCode()
+        /// <param name="c">The charto get a code from. This must be a single character, it cannot be a block of text.</param>
+        /// <param name="var">The paramater to hold the character code.</param>
+        public static void GetCharCode(char c, Param var)
+        {
+            var.Update(GetCharCode(c));
+        }
+                       
+        public static Param GetCharCode(char c)
         {
             //TODO:
         }
@@ -797,63 +813,94 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetLength - Retrieves the length of a block of text.
         /// </summary>
-        public static void GetLength()
+        /// <param name="text">The text to be tested for its length.</param>
+        /// <param name="var">The paramater to hold the character code.</param>
+        public static void GetLength(string text, Param var)
         {
-            //TODO:
+            var.Update(text.Length);
         }
     
         /// <summary>
         /// Command cmd.GetText - Copies a value out of a line of text by using sub strings.
         /// </summary>
-        public static void GetText()
+        /// <param name="text">The line of text to copy a value from.</param>
+        /// <param name="var">The paramater to hold the value</param>
+        /// <param name="start">The position of the first character to be copied.</param>
+        /// <param name="end">The position of the last character to be copied.</param>
+        public static void GetText(string text, Param var, int start, int end)
         {
-            //TODO:
+            var.Update(text.Substring(start, end-start));
         }
     
         /// <summary>
         /// Command cmd.GetWord - Copies a specific word out of a line of text.
         /// </summary>
-        public static void GetWord()
+        /// <param name="text">The line of text to copy a value from.</param>
+        /// <param name="var">The paramater to hold the value</param>
+        /// <param name="index">The index of the word to be copied.</param>
+        /// <param name="default">The default value id no waor is found.</param>
+        public static void GetWord(string text, Param var, int index, string default = "")
         {
-            //TODO:
+            var.update(GetWord(text, index, default));
+        }
+    
+        public static Param GetWord(string text, int index, string default = "")
+        {
+            string s = text.split(" ");
+            if (index > s.Count()) return default;
+            else return s[index];
         }
     
         /// <summary>
         /// Command cmd.GetWordCount - Counts the words in a string.
         /// </summary>
-        public static void GetWordCount()
+        /// <param name="text">The line of text to copy a value from.</param>
+        /// <param name="var">The paramater to hold the value</param>
+        public static void GetWordCount(string text, Param var)
         {
-            //TODO:
+            var.update(GetWordCount(text));
+        }
+        public static Param GetWordCount(string text)
+        {
+            return text.split(" ").Count();
         }
     
         /// <summary>
         /// Command cmd.GetWordPos - Finds the location of a value within a block of text.
         /// </summary>
-        public static void GetWordPos()
+        /// <param name="text">The line of text to copy a value from.</param>
+        /// <param name="var">The paramater to hold the position.</param>
+        /// <param name="value">The value to search for.</param>
+        public static void GetWordPos(string text, Param var, string value)
         {
-            //TODO:
+            var.Update(text.IndexOf(value));
         }
     
         /// <summary>
         /// Command cmd.LowerCase - Converts all text within a variable to lower case.
         /// </summary>
-        public static void LowerCase()
+        /// <param name="var">The paramater to be converted to lowercase.</param>
+        public static void LowerCase(Param var)
         {
-            //TODO:
+            var.Update(var.LowerCasse);
         }
     
         /// <summary>
         /// Command cmd.MergeText - Concatenates two text values together to form one.
         /// </summary>
-        public static void MergeText()
+        /// <param name="text1">The value to form the first part of the merged value.</param>
+        /// <param name="text2">The value to form the second part of the merged value.</param>
+        /// <param name="var">The paramater to hold the merged strings.</param>
+        public static void MergeText(string text1, string text 2, Param var)
         {
-            //TODO:
+            var.Update(text1 = text2);
         }
     
         /// <summary>
         /// Command cmd.PadLeft - Add spaces to the left of a variable.
         /// </summary>
-        public static void PadLeft()
+        /// <param name="var">The paramater to be padded.</param>
+        public static void PadLeft(Param var)
         {
             //TODO:
         }
@@ -861,7 +908,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.PadRight - Add spaces to the right of a variable.
         /// </summary>
-        public static void PadRight()
+        /// <param name="var">The paramater to be padded.</param>
+        public static void PadRight(Param var)
         {
             //TODO:
         }
@@ -893,9 +941,10 @@ namespace TWXP
         /// <summary>
         /// Command cmd.UpperCase - Converts all text within a variable to upper case.
         /// </summary>
+        /// <param name="var">The paramater to be converted to upercase.</param>
         public static void UpperCase()
         {
-            //TODO:
+            var.Update(var.UpperCasse);
         }
     
         
