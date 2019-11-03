@@ -16,7 +16,7 @@ namespace TWXP
 
             if (Commands != null) return;
             Commands = new List<Command>();
-
+#region Command List
             Commands.Add(new Command("Add",true));
             Commands.Add(new Command("AddMenu"));  //TODO:
             Commands.Add(new Command("And",true));
@@ -138,7 +138,9 @@ namespace TWXP
             Commands.Add(new Command("Trim"));
             Commands.Add(new Command("Truncate"));
         }
-
+#endregion
+#region Mathmatical operator commands    
+        
         /// <summary>
         /// Mathmatical operator cmd.Multiply - Performs mathematical multiplication on a variable.
         /// </summary>
@@ -178,6 +180,8 @@ namespace TWXP
         {
             a.Update((double)a - b);
         }
+#endregion
+#region Logincal operator commands    
 
         /// <summary>
         /// Logincal Operator cmd.And - Performs a logical 'AND' on a variable.
@@ -217,6 +221,8 @@ namespace TWXP
         {
             a.Update(!(bool)a);
         }
+#endregion
+#region Relational operator commands    
 
         /// <summary>
         /// Relational Operators cmd.IsEquil - True if they are equal.
@@ -283,6 +289,8 @@ namespace TWXP
         {
             a.Update(b <= c);
         }
+#endregion
+#region Assignment operator command    
 
         /// <summary>
         /// Assignment Operator - Asigns a value to a parameter.
@@ -294,9 +302,38 @@ namespace TWXP
             a.Update(b);
         }
 
+#endregion
+#region Terminal commands
 
         /// <summary>
-        /// Command cmd.Echo - Echos all parameters, as strings, to all connected client sessiond.
+        /// Command cmd.Connect - Connects TWX Proxy to a remote server.
+        /// </summary>
+        public static void Connect()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.Disconnect - Disconnects TWX Proxy from the remote server.
+        /// </summary>
+        public static void Disconnect()
+        {
+            //TODO:
+        }
+
+    
+        /// <summary>
+        /// Command cmd.Echo - Broadcasts a formatted string, to all connected client sessions.
+        ///                    String is sent in Bright White and the prompt is re-displayed afterwards.
+        /// </summary>
+        /// <param name="String">String to be broadcast.</param>
+        public static void ClientMessage(string s)
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Echo - Echos all parameters, as strings, to all connected client sessions.
         /// </summary>
         /// <param name="param">Parameters to be echoed</param>
         public static void Echo(params Param[] param)
@@ -312,27 +349,777 @@ namespace TWXP
             Debug.Write($"Echo: {output}\n");
         }
 
+        
+        /// <summary>
+        /// Command cmd.Send - Sends text to the remote server.
+        /// </summary>
+        public static void Send()
+        {
+            //TODO:
+        }
+
+        
+        /// <summary>
+        /// Command cmd.GetInput - Gets a line of text from the user.
+        /// </summary>
+        public static void GetInput()
+        {
+            //TODO:
+        }
+
+        
+        /// <summary>
+        /// Command cmd.GetConsoleInput - Get input from a connected terminal without sending it.
+        /// </summary>
+        /// var [singleKey?]
+        public static void GetConsoleInput()
+        {
+            //TODO:
+        }
+
+        
+        /// <summary>
+        /// Command cmd.GetOuttext - Retrieve any outgoing text from TWX Proxy's outgoing buffer.
+        /// </summary>
+        public static void GetOuttext ()
+        {
+            //TODO:
+        }
+
+        
+        /// <summary>
+        /// Command cmd.ProcessIn  - Emulates incoming text from the remote server, activating TextLine triggers.
+        /// </summary>
+        public static void ProcessIn ()
+        {
+            //TODO:
+        }
+
+        
+        /// <summary>
+        /// Command cmd.ProcessOut  - Resumes processing out outgoing data that was trapped by a TextOutTrigger.
+        /// </summary>
+        public static void ProcessOut ()
+        {
+            //TODO:
+        }
+
+        
+        
+        /// <summary>
+        /// Command cmd.GetDeafClients  - Retreives the status of any deaf clients.
+        /// </summary>
+        public static void GetDeafClients()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.SetDeafClients - Sets the deaf status on all clients.
+        /// </summary>
+        public static void SetDeafClients()
+        {
+            //TODO:
+        }
+
+        
+        
+        
+#endregion
+#region Delay and Trigger commands
      
-    // Terminal Control Commands    
+        /// <summary>
+        /// Command cmd.setDelayTrigger - Creates a trigger that will activate after a specified time period.
+        /// </summary>
+        public static void SetDelayTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.SetEventTrigger - Creates a trigger that will activate on a certain program event.
+        /// </summary>
+        public static void SetEventTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.SetTextLineTrigger - Creates a trigger activated when specific text is received from Server.
+        /// </summary>
+        public static void SetTextLineTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.SetTextTrigger - Creates a text trigger activated when specific text is received.
+        /// </summary>
+        public static void SetTextTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.SetTextOutTrigger - Creates a trigger activated when specific text is received from Client.
+        /// </summary>
+        public static void SetTextOutTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.KillAllTriggers - Terminates all triggers in the script and its included subroutines.
+        /// </summary>
+        public static void KillAllTriggers()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.KillTrigger - Terminates the specified trigger.
+        /// </summary>
+        public static void KillTrigger()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.Pause - Pauses the script's execution, allowing it to wait for its triggers to activate.
+        /// </summary>
+        public static void Pause()
+        {
+            //TODO:
+        }
+        
+        /// <summary>
+        /// Command cmd.Sleep (NEW) - Pauses the script's execution, but will continue after delay expires.
+        /// </summary>
+        public static void Sleep()
+        {
+            //TODO:
+        }
         
         
-    // Delays and Triggers    
-    //setDelayTrigger - Creates a trigger that will activate after a specified time period.
-    //setEventTrigger - Creates a trigger that will activate on a certain program event.
-    //setTextLineTrigger - Creates a trigger activated when specific text is received from Server.
-    //setTextOutTrigger - Creates a trigger activated when specific text is received from Client.
-    //setTextTrigger - Creates a text trigger activated when specific text is received.
-    //killAllTriggers - Terminates all triggers in the script and its included subroutines.
-    //killTrigger - Terminates the specified trigger.
-    //pause - Pauses the script's execution, allowing it to wait for its triggers to activate.
-    //sleep (NEW) - Pauses the script's execution, but will continue after delay expires.
-    //WaitFor - Pauses script execution, waiting for specified text from server connection.
-    //WaitOn - create a temporary TextTrigger using a macro.
+        /// <summary>
+        /// Command cmd.WaitFor - Pauses script execution, waiting for specified text from server connection.
+        /// </summary>
+        public static void WaitFor()
+        {
+            //TODO:
+        }
+        
+        
+        /// <summary>
+        /// Command cmd.WaitOn - create a temporary TextTrigger using a macro.
+        /// </summary>
+        public static void WaitOn()
+        {
+            //TODO:
+        }
+
+#endregion
+#region Menu System commands
+
+        /// <summary>
+        /// Command cmd.SetMenuKey - Sets the menu key used to activate TWX.
+        /// </summary>
+        public static void SetMenuKey()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.AddMenu - Adds a new TWX menu.
+        /// </summary>
+        public static void AddMenu()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.CloseMenu - Closes the open TWX menu.
+        /// </summary>
+        public static void CloseMenu()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.GetMenuValue -Retrieve the display value of an existing menu.
+        /// </summary>
+        public static void GetMenuValue()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.OpenMenu - Activates an existing script menu or TWX Terminal Menu option.
+        /// </summary>
+        public static void OpenMenu()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.SetMenuHelp - Sets the help display of an existing menu.
+        /// </summary>
+        public static void SetMenuHelp()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.SetMenuOptions - Configures standard options accessible from a menu.
+        /// </summary>
+        public static void SetMenuOptions()
+        {
+            //TODO:
+        }
+        /// <summary>
+        /// Command cmd.SetMenuValue - Sets the display value of an existing menu.
+        /// </summary>
+        public static void SetMenuValue()
+        {
+            //TODO:
+        }
 
 
-    // Menu system commands        
+#endregion
+#region Window commands
         
+        /// <summary>
+        /// Command cmd.Window - Creates a script window to display information while the script is running.
+        /// </summary>
+        public static void Window()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.SetWindowContents - Sets the display content of a script window.
+        /// </summary>
+        public static void SetWindowContents()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.KillWindow - Unloads a script window.
+        /// </summary>
+        public static void KillWindow()
+        {
+            //TODO:
+        }
+
+#endregion
+#region load/save ini file commands
+
+        /// <summary>
+        /// Command cmd.LoadVar - Loads a variable from the config file associated with the current Database.
+        /// </summary>
+        public static void LoadVar()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command SaveVar - Saves a variable to a file associated with the currently selected Database.
+        /// </summary>
+        public static void SaveVar()
+        {
+            //TODO:
+        }
+
+#endregion
+#region Global Var commands
+
+        /// <summary>
+        /// Command cmd.LoadGlobal - Loads a variable from a global array without all that mucking around in INI files.
+        /// </summary>
+        public static void LoadGlobal()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.SaveGlobal - Saves a variable to a global array without all that mucking around in INI files.
+        /// </summary>
+        public static void SaveGlobal()
+        {
+            //TODO:
+        }
+
+        /// <summary>
+        /// Command cmd.ClearGlobals - Clears all global variables from memory.
+        /// </summary>
+        public static void ClearGlobals()
+        {
+            //TODO:
+        }
+
+#endregion
+#region String Manipulation commands
+
+        /// <summary>
+        /// Command cmd.CutLengths - Cuts the lengths of an array of strings.
+        /// </summary>
+        public static void CutLengths()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.CutText - Cuts a value out of a piece of text.
+        /// </summary>
+        public static void CutText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Format - Formats a string for display.
+        /// </summary>
+        public static void Format()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetCharCode - Retrieves an ASCII character code from a single-character value.
+        /// </summary>
+        public static void GetCharCode()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetLength - Retrieves the length of a block of text.
+        /// </summary>
+        public static void GetLength()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetText - Copies a value out of a line of text by using sub strings.
+        /// </summary>
+        public static void GetText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetWord - Copies a specific word out of a line of text.
+        /// </summary>
+        public static void GetWord()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetWordCount - Counts the words in a string.
+        /// </summary>
+        public static void GetWordCount()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetWordPos - Finds the location of a value within a block of text.
+        /// </summary>
+        public static void GetWordPos()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.LowerCase - Converts all text within a variable to lower case.
+        /// </summary>
+        public static void LowerCase()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.MergeText - Concatenates two text values together to form one.
+        /// </summary>
+        public static void MergeText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.PadLeft - Add spaces to the left of a variable.
+        /// </summary>
+        public static void PadLeft()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.PadRight - Add spaces to the right of a variable.
+        /// </summary>
+        public static void PadRight()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.SplitText - Splits a string into an array of words.
+        /// </summary>
+        public static void SplitText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.StripText - Removes a character or sub-string from a variable.
+        /// </summary>
+        public static void StripText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Trim - Removes leading and trailing spaces from a string.
+        /// </summary>
+        public static void Trim()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.UpperCase - Converts all text within a variable to upper case.
+        /// </summary>
+        public static void UpperCase()
+        {
+            //TODO:
+        }
+    
         
+#endregion
+#region File and Direcctory commands
+
+        /// <summary>
+        /// Command cmd.
+        /// </summary>
+        public static void cmd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Delete - Deletes a file.
+        /// </summary>
+        public static void cmd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.FileExists - Checks to see if a file exists.
+        /// </summary>
+        public static void FileExists()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetDirList - Gets a list of files from a directory.
+        /// </summary>
+        public static void GetDirList()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.
+        /// </summary>
+        public static void cmd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetFileList - Populates a specified array with any files that match a specified Mask (like *.ts).
+        /// </summary>
+        public static void GetFileList()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.MakeDir - Creates a directory.
+        /// </summary>
+        public static void MakeDir()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Read - Reads a line of a text from a text file.
+        /// </summary>
+        public static void Read()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Write - Appends a line of text to a text file.
+        /// </summary>
+        public static void Write()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.RemoveDir - Removes a directory.
+        /// </summary>
+        public static void RemoveDir()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Rename - Renames a file.
+        /// </summary>
+        public static void Rename()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ReplaceText - Replaces a value, or set of values within a variable.
+        /// </summary>
+        public static void ReplaceText()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.SetArray - Declares a static array.
+        /// </summary>
+        public static void SetArray()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ReadToArray - Reads a text file directly into a TWX array.
+        /// </summary>
+        public static void ReadToArray()
+        {
+            //TODO:
+        }
+    
+
+#endregion
+#region database commands
+
+        /// <summary>
+        /// Command cmd.SetAvoid - Adds an Avoid to TWX's internal Avoid list.
+        /// </summary>
+        public static void SetAvoid()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ListAvoids - Populates a user-specified array with the list of internal Avoided sectors.
+        /// </summary>
+        public static void ListAvoids()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.
+        /// </summary>
+        public static void cmd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ClearAllAvoids - Removes all sectors from TWX's internal Avoid list.
+        /// </summary>
+        public static void ClearAllAvoids()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ClearAvoid - Removes a single sector from TWX's internal Avoid list.
+        /// </summary>
+        public static void ClearAvoid()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetAllCourses - Populates an array with coarse plots from a specified sector.
+        /// </summary>
+        public static void GetAllCourses()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetCourse - Internally calculates a warp course using warp data in the TWX Proxy database.
+        /// </summary>
+        public static void GetCourse()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetDistance - Internally calculates the distance between two sectors.
+        /// </summary>
+        public static void GetDistance()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.
+        /// </summary>
+        public static void cmd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetNearestWarps - Populates a specified array with surrounding sectors, sorted by distance.
+        /// </summary>
+        public static void GetNearestWarps()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetSector - Retrieve the details of a specific sector from the TWX Proxy Database.
+        /// </summary>
+        public static void GetSector()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.SetSectorParameter - Sets a permanent variable, assigning it to a sector.
+        /// </summary>
+        public static void SetSectorParameter()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetSectorParameter - Retrieves a permanent user specified variable assigned to a sector.
+        /// </summary>
+        public static void GetSectorParameter()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ListSectorParameters - Populates an array with the list of Sector Parameters for a sector.
+        /// </summary>
+        public static void ListSectorParameters()
+        {
+            //TODO:
+        }
+    
+    
+    
+    
+#endregion
+#region Misc commands
+     
+        /// <summary>
+        /// Command cmd.GetDate - Retrieves the date and stores it in a variable.
+        /// </summary>
+        public static void GetDate()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetTime - Retrieves the current system time, or a formatted date/time value.
+        /// </summary>
+        public static void GetTime()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetTimer - Retrieves the number of CPU ticks since power on.
+        /// </summary>
+        public static void GetTimer()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetRnd - Generate a random number within a specified range.
+        /// </summary>
+        public static void GetRnd()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.GetScriptVersion - Reports the version of the compiler used for a compiled script. (*.cts)
+        /// </summary>
+        public static void GetScriptVersion()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Logging - Disables or enables TWX Proxy's logging feature while the script is running.
+        /// </summary>
+        public static void Logging()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.SystemScript - Sets the script as a "systemScript", allowing it to run in the background .
+        /// </summary>
+        public static void SystemScript()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.ReqRecording - Ensures that data recording is turned ON.
+        /// </summary>
+        public static void ReqRecording()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Truncate - Calculates the integral part of a specified decimal number.
+        /// </summary>
+        public static void Truncate()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.Round - Rounds a variable to the specified precision.
+        /// </summary>
+        public static void Round()
+        {
+            //TODO:
+        }
+    
+        /// <summary>
+        /// Command cmd.SetPrecision - Sets the maximum precision for decimal calculations.
+        /// </summary>
+        public static void SetPrecision()
+        {
+            //TODO:
+        }
+    
+    
+        
+#endregion    
     }
 
     public class Command
