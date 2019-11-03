@@ -111,41 +111,72 @@ namespace TWXP
 
                     // Send initialized event
                     Initialized(this, new EventArgs());
-                    stream.ReadTimeout = 500;
 
-                    do
-                    {
-                        try
-                        {
-                            bytes = stream.Read(resp, 0, resp.Length);
-
-                            if (bytes == 0)
-                            {
-                                // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
-                                stream.Write(new byte[]{ 255, 253, 246 }, 0 ,3); 
-                            }
-                            else
-                            {
-                                output.Write(resp, 0, bytes);
-                            }
-                        }
-                        catch { }
-
-                        await Task.Delay(200);
-
-                        if (!stream.DataAvailable && output.Length > 0)
-                        {
-                            // Send receive event
-                            Receive(Encoding.ASCII.GetString(output.ToArray()), new EventArgs());
-                            output.SetLength(0);
-                        }
-                    } while (tcpClient.Connected);
-
-                    // Send disconnect event
-                    Disconnected(this, new EventArgs());
+                    //Read();
                 }
             }
         }
+
+        //private async Task Read()
+        //{
+        //    stream.ReadTimeout = 55000;
+        //    do
+        //    {
+        //        byte[] resp = new byte[2048];
+        //        int bytes = 0;
+
+        //        try
+        //        {
+        //            await stream.BeginRead(resp, 0, resp.Length);
+        //            //bytes = stream.Read(resp, 0, resp.Length);
+        //        }
+        //        catch { }
+
+        //        if (bytes == 0)
+        //        {
+        //            // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
+        //            stream.Write(new byte[] { 255, 253, 246 }, 0, 3);
+        //        }
+        //        else
+        //        {
+        //            output.Write(resp, 0, bytes);
+        //        }
+
+        //        if (!stream.DataAvailable && output.Length > 0)
+        //        {
+        //            StringBuilder control = new StringBuilder();
+        //            StringBuilder text = new StringBuilder();
+
+        //            foreach (char c in Encoding.ASCII.GetString(output.ToArray()))
+        //            {
+        //                if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
+        //                else text.Append(c);
+        //            }
+
+        //            //todo: process control characters
+
+        //            // Send receive event
+        //            Receive(text.ToString(), new EventArgs());
+        //            output.SetLength(0);
+        //        }
+
+        //        await Task.Delay(200);
+
+        //    } while (active && tcpClient.Connected);
+
+        //    active = false;
+        //    tcpClient.Client.Close();
+        //    tcpClient.Close();
+
+        //    // Send disconnect event
+        //    Disconnected(this, new EventArgs());
+
+        //    //tcpClient.Close();
+        //    //tcpClient.Dispose();
+        //    //tcpClient.Client.Disconnect(true);
+        //}
+
+
 
         public void Write(String text)
         {

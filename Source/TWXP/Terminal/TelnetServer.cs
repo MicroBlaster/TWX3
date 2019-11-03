@@ -81,7 +81,6 @@ namespace TWXP
                 using (stream = tcpClient.GetStream())
                 {
                     byte[] resp = new byte[2048];
-                    int bytes;
 
                     // Get the local and remote endpoints from the stream.
                     PropertyInfo socket = stream.GetType().GetProperty("Socket", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -96,63 +95,90 @@ namespace TWXP
 
 
                     stream.ReadTimeout = 500;
+                    stream.Read(resp, 0, resp.Length);
 
-                    do
-                    {
-                        try
-                        {
-                            bytes = stream.Read(resp, 0, resp.Length);
-
-                            if (bytes == 0)
-                            {
-                                // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
-                                stream.Write(new byte[]{ 255, 253, 246 }, 0 ,3); 
-                            }
-                            else
-                            {
-                                output.Write(resp, 0, bytes);
-                            }
-                        }
-                        catch { }
-
-                        if(!stream.DataAvailable && output.Length > 0)
-                        {
-                            StringBuilder control = new StringBuilder();
-                            StringBuilder text = new StringBuilder();
-
-                            foreach (char c in Encoding.ASCII.GetString(output.ToArray()))
-                            {
-                                if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
-                                else text.Append(c);
-                            }
-
-                            //todo: process control characters
-
-                            // Send receive event
-                            Receive(text.ToString(), new EventArgs());
-                            output.SetLength(0);
-                        }
-
-                        await Task.Delay(200);
-
-                    } while (active && tcpClient.Connected);
-
-                    active = false;
-                    tcpClient.Client.Close();
-                    tcpClient.Close();
-
-                    // Send disconnect event
-                    Disconnected(this, new EventArgs());
-
-                    //tcpClient.Close();
-                    //tcpClient.Dispose();
-                    //tcpClient.Client.Disconnect(true);
+                    _ = Read();
                 }
             }
         }
 
+        byte[] resp = new byte[2048];
+        int bytes = 0;
+
+        private async Task Read()
+        {
+            stream.ReadTimeout = 55000;
+            do
+            {
+                try
+                {
+                    //stream.BeginRead
+                }
+                catch { }
+            }while(active && tcpClient.Connected);
+        }
+
+        private async Task Readoldxxx()
+        {
+            stream.ReadTimeout = 55000;
+            do
+            {
+
+                try
+                {
+                    bytes = stream.Read(resp, 0, resp.Length);
+                }
+                catch { }
+
+                if (bytes == 0)
+                {
+                    // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
+                    stream.Write(new byte[] { 255, 253, 246 }, 0, 3);
+                }
+                else
+                {
+                    output.Write(resp, 0, bytes);
+                }
+
+                if (!stream.DataAvailable && output.Length > 0)
+                {
+                    StringBuilder control = new StringBuilder();
+                    StringBuilder text = new StringBuilder();
+
+                    foreach (char c in Encoding.ASCII.GetString(output.ToArray()))
+                    {
+                        if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
+                        else text.Append(c);
+                    }
+
+                    //todo: process control characters
+
+                    // Send receive event
+                    Receive(text.ToString(), new EventArgs());
+                    output.SetLength(0);
+                }
+
+                await Task.Delay(200);
+
+            } while (active && tcpClient.Connected);
+
+            active = false;
+            tcpClient.Client.Close();
+            tcpClient.Close();
+
+            // Send disconnect event
+            Disconnected(this, new EventArgs());
+
+            //tcpClient.Close();
+            //tcpClient.Dispose();
+            //tcpClient.Client.Disconnect(true);
+        }
+
+
         public void Write(String text)
         {
+            //todo: buffer
+
             if (tcpClient.Connected && stream != null)
             {
                 //Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

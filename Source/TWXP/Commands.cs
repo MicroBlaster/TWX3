@@ -370,9 +370,10 @@ namespace TWXP
             var.Update(GetInput(prompt));
         }
 
-        public static Param GetInput(string prompt)
+        public static string GetInput(string prompt)
         {
             //TODO:
+            return "";
         }
 
         
@@ -385,12 +386,13 @@ namespace TWXP
         /// For backwards compatability, any value for the singleKey parameter will be interperted as true.
         public static void GetConsoleInput(Param var, string prompt, bool singleKey = false)
         {
-            var.Update(GetConsoleInput(prompt, singlekey);
+            var.Update(GetConsoleInput(prompt, singleKey));
         }
 
-        public static Param GetConsoleInput(string prompt, bool singleKey = false)
+        public static string GetConsoleInput(string prompt, bool singleKey = false)
         {
             //TODO:
+            return "";
         }
 
         /// <summary>
@@ -402,9 +404,10 @@ namespace TWXP
             var.Update(GetOuttext());
         }
 
-        public static Param GetOuttext()
+        public static string GetOuttext()
         {
             //TODO:
+            return "";
         }
 
         
@@ -439,9 +442,10 @@ namespace TWXP
             var.Update(GetDeafClients());
         }
                        
-        public static Param GetDeafClients()
+        public static bool GetDeafClients()
         {
             //TODO:
+            return false;
         }
 
         /// <summary>
@@ -477,7 +481,7 @@ namespace TWXP
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Event">The name of the program event to attach the trigger to.</param>
         /// <param name="Parameter">(optional) parameter for specific events.</param>
-        public static void SetEventTrigger(string name, string label, string event, string parameter)
+        public static void SetEventTrigger(string name, string label, string fireon, string parameter)
         {
             //TODO:
         }
@@ -633,12 +637,13 @@ namespace TWXP
         /// <param name="Value">A paramater to hold the value associated with the menu.</param>
         public static void GetMenuValue(string name, Param value)
         {
-            value.update(GetMenuValue(name));
+            value.Update(GetMenuValue(name));
         }
                        
-        public static Param GetMenuValue(string name)
+        public static string GetMenuValue(string name)
         {
             //TODO:
+            return "";
         }
 
         /// <summary>
@@ -736,7 +741,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.LoadGlobal - Loads a variable from a global array without all that mucking around in INI files.
         /// </summary>
-        /// <param name="var">The paramater to load from global memory.</param>        public static void LoadGlobal(Param var)
+        /// <param name="var">The paramater to load from global memory.</param>        
+        public static void LoadGlobal(Param var)
         {
             //TODO:
         }
@@ -787,12 +793,13 @@ namespace TWXP
         /// <param name="format">The format to be applied (CURRENCY, NUMBER, DATETIMETOSTR, STRTODATETIME).</param>
         public static void Format(string text, Param var, string format)
         {
-            var.Update(text, format));
+            var.Update(Format(text, format));
         }
 
-        public static Param Format(string text, string format)
+        public static string Format(string text, string format)
         {
             //TODO:
+            return "";
         }
                        
         /// <summary>
@@ -805,9 +812,10 @@ namespace TWXP
             var.Update(GetCharCode(c));
         }
                        
-        public static Param GetCharCode(char c)
+        public static string GetCharCode(char c)
         {
             //TODO:
+            return "";
         }
     
         /// <summary>
@@ -839,15 +847,15 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="index">The index of the word to be copied.</param>
         /// <param name="default">The default value id no waor is found.</param>
-        public static void GetWord(string text, Param var, int index, string default = "")
+        public static void GetWord(string text, Param var, int index, string defaulttext = "")
         {
-            var.update(GetWord(text, index, default));
+            var.Update(GetWord(text, index, defaulttext));
         }
     
-        public static Param GetWord(string text, int index, string default = "")
+        public static string GetWord(string text, int index, string defaulttext = "")
         {
-            string s = text.split(" ");
-            if (index > s.Count()) return default;
+            string[] s = text.Split(" ");
+            if (index > s.Length) return default;
             else return s[index];
         }
     
@@ -858,11 +866,11 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         public static void GetWordCount(string text, Param var)
         {
-            var.update(GetWordCount(text));
+            var.Update(GetWordCount(text));
         }
-        public static Param GetWordCount(string text)
+        public static int GetWordCount(string text)
         {
-            return text.split(" ").Count();
+            return text.Split(" ").Length;
         }
     
         /// <summary>
@@ -882,7 +890,7 @@ namespace TWXP
         /// <param name="var">The paramater to be converted to lowercase.</param>
         public static void LowerCase(Param var)
         {
-            var.Update(var.LowerCasse);
+            var.Update(((string)var).ToLower());
         }
     
         /// <summary>
@@ -891,7 +899,7 @@ namespace TWXP
         /// <param name="text1">The value to form the first part of the merged value.</param>
         /// <param name="text2">The value to form the second part of the merged value.</param>
         /// <param name="var">The paramater to hold the merged strings.</param>
-        public static void MergeText(string text1, string text 2, Param var)
+        public static void MergeText(string text1, string text2, Param var)
         {
             var.Update(text1 = text2);
         }
@@ -942,27 +950,20 @@ namespace TWXP
         /// Command cmd.UpperCase - Converts all text within a variable to upper case.
         /// </summary>
         /// <param name="var">The paramater to be converted to upercase.</param>
-        public static void UpperCase()
+        public static void UpperCase(Param var)
         {
-            var.Update(var.UpperCasse);
+            var.Update(((string)var).ToUpper());
         }
     
         
 #endregion
 #region File and Direcctory commands
 
-        /// <summary>
-        /// Command cmd.
-        /// </summary>
-        public static void cmd()
-        {
-            //TODO:
-        }
     
         /// <summary>
         /// Command cmd.Delete - Deletes a file.
         /// </summary>
-        public static void cmd()
+        public static void Delete()
         {
             //TODO:
         }
@@ -982,15 +983,7 @@ namespace TWXP
         {
             //TODO:
         }
-    
-        /// <summary>
-        /// Command cmd.
-        /// </summary>
-        public static void cmd()
-        {
-            //TODO:
-        }
-    
+      
         /// <summary>
         /// Command cmd.GetFileList - Populates a specified array with any files that match a specified Mask (like *.ts).
         /// </summary>
@@ -1083,14 +1076,7 @@ namespace TWXP
             //TODO:
         }
     
-        /// <summary>
-        /// Command cmd.
-        /// </summary>
-        public static void cmd()
-        {
-            //TODO:
-        }
-    
+   
         /// <summary>
         /// Command cmd.ClearAllAvoids - Removes all sectors from TWX's internal Avoid list.
         /// </summary>
@@ -1131,14 +1117,7 @@ namespace TWXP
             //TODO:
         }
     
-        /// <summary>
-        /// Command cmd.
-        /// </summary>
-        public static void cmd()
-        {
-            //TODO:
-        }
-    
+   
         /// <summary>
         /// Command cmd.GetNearestWarps - Populates a specified array with surrounding sectors, sorted by distance.
         /// </summary>
