@@ -462,7 +462,10 @@ namespace TWXP
         /// <summary>
         /// Command cmd.setDelayTrigger - Creates a trigger that will activate after a specified time period.
         /// </summary>
-        public static void SetDelayTrigger()
+        /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
+        /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
+        /// <param name="Ticks">The number of milliseconds to wait before the delay trigger automatically activates itself.</param>
+        public static void SetDelayTrigger(string name, string label, int tics)
         {
             //TODO:
         }
@@ -470,15 +473,30 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetEventTrigger - Creates a trigger that will activate on a certain program event.
         /// </summary>
-        public static void SetEventTrigger()
+        /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
+        /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
+        /// <param name="Event">The name of the program event to attach the trigger to.</param>
+        /// <param name="Parameter">(optional) parameter for specific events.</param>
+        public static void SetEventTrigger(string name, string label, string event, string parameter)
         {
             //TODO:
         }
+                       
+//SCRIPT LOADED : Activates when a script is loaded. Parameter = Script Name.
+//SCRIPT STOPPED : Activates when a script is terminated. Parameter = Script Name.
+//CONNECTION ACCEPTED : Server connection accepted. (no parameters).
+//CONNECTION LOST : Server connection lost. (no parameters).
+//CLIENT CONNECTED : Telnet client connected. (no parameters).
+//CLIENT DISCONNECTED : Telnet client disconnected. (no parameters).
+//TIME HIT : Activates when specified time is hit. Parameter = specified time.                       
         
         /// <summary>
         /// Command cmd.SetTextLineTrigger - Creates a trigger activated when specific text is received from Server.
         /// </summary>
-        public static void SetTextLineTrigger()
+        /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
+        /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
+        /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
+        public static void SetTextLineTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -486,7 +504,10 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetTextTrigger - Creates a text trigger activated when specific text is received.
         /// </summary>
-        public static void SetTextTrigger()
+        /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
+        /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
+        /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
+        public static void SetTextTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -494,7 +515,10 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetTextOutTrigger - Creates a trigger activated when specific text is received from Client.
         /// </summary>
-        public static void SetTextOutTrigger()
+        /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
+        /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
+        /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
+        public static void SetTextOutTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -510,7 +534,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.KillTrigger - Terminates the specified trigger.
         /// </summary>
-        public static void KillTrigger()
+        /// <param name="Name">The name of the trigger to kill. This name was specified hen the trigger was created.</param>
+        public static void KillTrigger(string name)
         {
             //TODO:
         }
@@ -526,7 +551,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Sleep (NEW) - Pauses the script's execution, but will continue after delay expires.
         /// </summary>
-        public static void Sleep()
+        /// <param name="Ticks">The number of milliseconds to wait before the delay trigger automatically activates itself.</param>
+        public static void Sleep(int ticks)
         {
             //TODO:
         }
@@ -535,7 +561,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.WaitFor - Pauses script execution, waiting for specified text from server connection.
         /// </summary>
-        public static void WaitFor()
+        /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
+        public static void WaitFor(string value)
         {
             //TODO:
         }
@@ -544,7 +571,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.WaitOn - create a temporary TextTrigger using a macro.
         /// </summary>
-        public static void WaitOn()
+        /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
+        public static void WaitOn(string value)
         {
             //TODO:
         }
@@ -555,56 +583,92 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetMenuKey - Sets the menu key used to activate TWX.
         /// </summary>
-        public static void SetMenuKey()
+        /// <param name="Key">A string containing the character to be used to activate the TWX main menu.</param>
+        public static void SetMenuKey(string key)
+        {
+            SetMenuKey(key[0]);
+        }
+        public static void SetMenuKey(char key)
         {
             //TODO:
         }
+
         /// <summary>
         /// Command cmd.AddMenu - Adds a new TWX menu.
         /// </summary>
-        public static void AddMenu()
+        /// <param name="parent">The name of the 'parent' menu this menu will be added to. If left blank, the menu will not be shown in the option list of any other menu in existance.</param>
+        /// <param name="name">The name of the new menu being created.</param>
+        /// <param name="description">The description of the menu being created. This description will be shown in the option list of the parent menu, and as a title for the new menu option list.</param>
+        /// <param name="hotkey">The hotkey used to access this menu from it's parent menu.</param>
+        /// <param name="reference">The script label reference to jump to when the new menu is activated.</param>
+        /// <param name="prompt">The text to display inside the new menu prompt.</param>
+        /// <param name="closeMenu">If TRUE, this menu will automatically close itself when it is activated. For sub-menus that contain their own list of options, this should always be set to FALSE. Default value is FLASE</param>
+        public static void AddMenu(string parent, string name, string description, string hotkey, string reference, string prompt, bool closeMenu = false)
         {
             //TODO:
         }
         /// <summary>
+
+        /// <summary>
+        /// Command cmd.OpenMenu - Activates an existing script menu or TWX Terminal Menu option.
+        /// </summary>
+        /// <param name="name">The name of an existing menu to activate.</param>
+        /// <param name="Pause">(Optional)A value of false causes the menu to display but not pause. Default valuse is true.</param>
+        public static void OpenMenu(string name, bool pause = true)
+        {
+            //TODO:
+        }
+
         /// Command cmd.CloseMenu - Closes the open TWX menu.
         /// </summary>
         public static void CloseMenu()
         {
             //TODO:
         }
+                       
         /// <summary>
         /// Command cmd.GetMenuValue -Retrieve the display value of an existing menu.
         /// </summary>
-        public static void GetMenuValue()
+        /// <param name="name">The name of an existing menu to activate.</param>
+        /// <param name="Value">A paramater to hold the value associated with the menu.</param>
+        public static void GetMenuValue(string name, Param value)
+        {
+            value.update(GetMenuValue(name));
+        }
+                       
+        public static Param GetMenuValue(string name)
         {
             //TODO:
         }
-        /// <summary>
-        /// Command cmd.OpenMenu - Activates an existing script menu or TWX Terminal Menu option.
-        /// </summary>
-        public static void OpenMenu()
-        {
-            //TODO:
-        }
-        /// <summary>
-        /// Command cmd.SetMenuHelp - Sets the help display of an existing menu.
-        /// </summary>
-        public static void SetMenuHelp()
-        {
-            //TODO:
-        }
-        /// <summary>
-        /// Command cmd.SetMenuOptions - Configures standard options accessible from a menu.
-        /// </summary>
-        public static void SetMenuOptions()
-        {
-            //TODO:
-        }
+
         /// <summary>
         /// Command cmd.SetMenuValue - Sets the display value of an existing menu.
         /// </summary>
-        public static void SetMenuValue()
+        /// <param name="name">The name of an existing menu to have its value set.</param>
+        /// <param name="Value">A paramater to hold the new value that will be associated with the menu.</param>
+        public static void SetMenuValue(string name, Param value)
+        {
+            //TODO:
+        }
+                       
+        /// <summary>
+        /// Command cmd.SetMenuHelp - Sets the help display of an existing menu.
+        /// </summary>
+        /// <param name="name">The name of an existing menu to have its value set.</param>
+        /// <param name="text">The new help text for the menu.</param>
+        public static void SetMenuHelp(string name, string text)
+        {
+            //TODO:
+        }
+                       
+        /// <summary>
+        /// Command cmd.SetMenuOptions - Configures standard options accessible from a menu.
+        /// </summary>
+        /// <param name="name">The name of an existing menu to have its value set.</param>
+        /// <param name="quit">{Q} Defines if the "Quit Menu" function will be accessible from within the specified menu. </param>
+        /// <param name="list">{?} Defines if the "Command List" function will be accessible from within the specified menu.</param>
+        /// <param name="help">{+} Defines if the "Help on Command" function will be accessible from within the specified menu.</param>
+        public static void SetMenuOptions(string name, bool quit = true, bool list = true, bool help = true)
         {
             //TODO:
         }
