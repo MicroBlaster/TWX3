@@ -323,8 +323,8 @@ namespace TWXP
 
     
         /// <summary>
-        /// Command cmd.Echo - Broadcasts a formatted string, to all connected client sessions.
-        ///                    String is sent in Bright White and the prompt is re-displayed afterwards.
+        /// Command cmd.ClientMessage - Broadcasts a formatted string, to all connected client
+        /// sessions. String is sent in Bright White and the prompt is re-displayed afterwards.
         /// </summary>
         /// <param name="String">String to be broadcast.</param>
         public static void ClientMessage(string s)
@@ -335,7 +335,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Echo - Echos all parameters, as strings, to all connected client sessions.
         /// </summary>
-        /// <param name="param">Parameters to be echoed</param>
+        /// <param name="param">Parameters to be concatenated and echoed</param>
         public static void Echo(params Param[] param)
         {
             StringBuilder output = new StringBuilder();
@@ -353,7 +353,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Send - Sends text to the remote server.
         /// </summary>
-        public static void Send()
+        /// <param name="param">Parameters to be concatenated and sent.</param>
+        public static void Send(params Param[] param)
         {
             //TODO:
         }
@@ -362,7 +363,14 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetInput - Gets a line of text from the user.
         /// </summary>
-        public static void GetInput()
+        /// <param name="var">The paramater to hold the line of text entered by the user.</param>
+        /// <param name="prompt">The text to display above the input prompt.</param>
+        public static void GetInput(param var, string prompt)
+        {
+            //TODO:
+        }
+
+        public static param GetInput(string prompt)
         {
             //TODO:
         }
@@ -371,17 +379,30 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetConsoleInput - Get input from a connected terminal without sending it.
         /// </summary>
-        /// var [singleKey?]
-        public static void GetConsoleInput()
+        /// <param name="var">The paramater to hold the line of text entered by the user.</param>
+        /// <param name="prompt">The text to display above the input prompt.</param>
+        /// <param name="singleKey">.</param>
+        /// For backwards compatability, any value for the singleKey parameter will be interperted as true.
+        public static void GetConsoleInput(param var, string prompt, bool singleKey = false)
+        {
+            var.update(GetConsoleInput(prompt, singlekey);
+        }
+
+        public static param GetConsoleInput(string prompt, bool singleKey = false)
         {
             //TODO:
         }
 
-        
         /// <summary>
         /// Command cmd.GetOuttext - Retrieve any outgoing text from TWX Proxy's outgoing buffer.
         /// </summary>
-        public static void GetOuttext ()
+        /// <param name="var">The paramater to hold the outgoing text.</param>
+        public static void GetOuttext(param var)
+        {
+            var.update(GetOuttext());
+        }
+
+        public static param GetOuttext()
         {
             //TODO:
         }
