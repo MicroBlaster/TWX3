@@ -680,7 +680,12 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Window - Creates a script window to display information while the script is running.
         /// </summary>
-        public static void Window()
+        /// <param name="windowName">The name of the script window to create. The window will be referenced by this name.</param>
+        /// <param name="sizeX">The width (in pixels) of the new window.</param>
+        /// <param name="sizeY">The height (in pixels) of the new window.</param>
+        /// <param name="title">The title to display at the top of the window.</param>
+        /// <param name="ontop">If specified, the window will be set to appear on top of all other windows on the desktop.</param>
+        public static void Window(string windowName, int sizeX, int sizeY, string title, bool ontop = false)
         {
             //TODO:
         }
@@ -688,7 +693,9 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetWindowContents - Sets the display content of a script window.
         /// </summary>
-        public static void SetWindowContents()
+        /// <param name="windowName">The name of the script window to modify.</param>
+        /// <param name="text">The text content to place inside the script window.</param>
+        public static void SetWindowContents(string windowName, string text)
         {
             //TODO:
         }
@@ -696,7 +703,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.KillWindow - Unloads a script window.
         /// </summary>
-        public static void KillWindow()
+        /// <param name="windowName">The name of the script window to close.</param>
+        public static void KillWindow(string windowName)
         {
             //TODO:
         }
@@ -707,7 +715,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.LoadVar - Loads a variable from the config file associated with the current Database.
         /// </summary>
-        public static void LoadVar()
+        /// <param name="var">The paramater to load from file.</param>
+        public static void LoadVar(Param var)
         {
             //TODO:
         }
@@ -715,7 +724,8 @@ namespace TWXP
         /// <summary>
         /// Command SaveVar - Saves a variable to a file associated with the currently selected Database.
         /// </summary>
-        public static void SaveVar()
+        /// <param name="var">The paramater to save to file.</param>
+        public static void SaveVar(Param var)
         {
             //TODO:
         }
@@ -726,7 +736,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.LoadGlobal - Loads a variable from a global array without all that mucking around in INI files.
         /// </summary>
-        public static void LoadGlobal()
+        /// <param name="var">The paramater to load from global memory.</param>        public static void LoadGlobal(Param var)
         {
             //TODO:
         }
@@ -734,7 +744,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SaveGlobal - Saves a variable to a global array without all that mucking around in INI files.
         /// </summary>
-        public static void SaveGlobal()
+        /// <param name="var">The paramater to save to global memory.</param>
+        public static void SaveGlobal(Param var)
         {
             //TODO:
         }
@@ -761,6 +772,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.CutText - Cuts a value out of a piece of text.
         /// </summary>
+        /// ????  array <lengths1,length2,...>
         public static void CutText()
         {
             //TODO:
@@ -769,7 +781,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Format - Formats a string for display.
         /// </summary>
-        public static void Format()
+        public static void Format(Param in, Param out, int format)
         {
             //TODO:
         }
