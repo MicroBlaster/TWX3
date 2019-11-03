@@ -868,6 +868,12 @@ namespace TWXP
         {
             var.Update(GetWordCount(text));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static int GetWordCount(string text)
         {
             return text.Split(" ").Length;
