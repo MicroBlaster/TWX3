@@ -5,27 +5,29 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace TWXP
 {
     public class Proxy
     {
-        const int DEFAULT_PORT = 2300;
+        const int DEFAULT_PORT = 2002;
+        const int DEFAULT_LISTNER = 2300;
 
-        public event EventHandler<EventArgs> Connected = delegate { };
+        public event EventHandler<EventArgs> ClientConnected = delegate { };
 
-        public string ProxyAddress { get; set; }
-        public IPAddress ProxyIP { get; private set; }
-        public int ProxyPort { get; set; }
+        public TelnetServer Server { get; private set; }
 
-        public int ListenPort { get; set; }
+        public string ListenAddress { get; private set; }
+        public IPAddress ListenIP { get; private set; }
+        public int ListenPort { get; private set; }
 
-        private bool active;
+        private bool active, connecting;
         private TcpListener tcpListener;
+        private Timer connectTimer;
 
         internal List<TelnetClient> Clients { get; private set; }
         public Scripts Scripts { get; private set; }
-
         
         /// <summary>
         /// Initalize a proxy without any parameters.
@@ -33,38 +35,19 @@ namespace TWXP
         public Proxy()
         {
             active = false;
-            ProxyAddress = "";
-            ProxyIP = IPAddress.Any;
-            ProxyPort = DEFAULT_PORT;
+
+            Server = new TelnetServer();
+            Server.Address = "";
+            Server.Port = DEFAULT_PORT;
+            Server.Receive += InboundReceive;
+            Server.Disconnected += ServerDisconnect;
+
+            ListenAddress = "";
+            ListenIP = IPAddress.Any;
+            ListenPort = DEFAULT_LISTNER;
 
             Clients = new List<TelnetClient>();
             Scripts = new Scripts(this);
-        }
-
-        /// <summary>
-        /// Initialize a proxy with ProxyAddress defined
-        /// </summary>
-        /// <param name="Address"></param>
-        public Proxy(String Address)
-        {
-            active = false;
-            ProxyAddress = Address;
-            ProxyIP = IPAddress.Any;
-            ProxyPort = DEFAULT_PORT;
-        }
-
-        /// <summary>
-        /// Initialize a Proxy with Proxy IP and Port defined
-        /// </summary>
-        /// <param name="IP">Specifies the IP Address to bind for the TCP listener.</param>
-        /// <param name="Port">Specifies the Port to bind for the TCP listener.</param>
-        public Proxy(IPAddress IP, int Port)
-        {
-            active = false;
-            ProxyAddress = IP + ":" + Port;
-            ProxyIP = IP;
-            ProxyPort = Port;
-            ProxyAddress = null;
         }
 
         public async Task StartAsync()
@@ -78,28 +61,28 @@ namespace TWXP
                 return;
             }
 
-            if (!string.IsNullOrEmpty(ProxyAddress))
+            if (!string.IsNullOrEmpty(ListenAddress))
             {
                 try
                 {
                     // Set the porrt if specified in ProxyAddress.
-                    if (ProxyAddress.Contains(":"))
+                    if (ListenAddress.Contains(":"))
                     {
-                        String[] s = ProxyAddress.Split(':');
-                        ProxyAddress = s[0];
-                        ProxyPort = int.Parse(s[1]);
+                        String[] s = ListenAddress.Split(':');
+                        ListenAddress = s[0];
+                        ListenPort = int.Parse(s[1]);
                     }
 
                     // Resolve host binding from ProxyAddress
-                    IPHostEntry ipHost = await Dns.GetHostEntryAsync(ProxyAddress);
-                    ProxyIP = ipHost.AddressList[1];
+                    IPHostEntry ipHost = await Dns.GetHostEntryAsync(ListenAddress);
+                    ListenIP = ipHost.AddressList[1];
                 }
                 catch { }
             }
 
             try
             {
-                tcpListener = new TcpListener(ProxyIP, ProxyPort);
+                tcpListener = new TcpListener(ListenIP, ListenPort);
                 tcpListener.Start();
             }
             catch (Exception e)
@@ -121,18 +104,22 @@ namespace TWXP
                 // Wait for connections.
                 TelnetClient client = new TelnetClient(await listener.AcceptTcpClientAsync());
 
+                // Add the receive handler.
+                client.Receive += OutboundReceive;
+                client.Disconnected += ClientDisconnect;
+
                 // Add the client to the list of clients
                 Clients.Add(client);
 
                 // Raise client connected event.
-                //Connected(client, new EventArgs());
-                ClientConnected(client);
+                ClientConnected(client, new EventArgs());
 
                 //Handle New connection
+                NewClient(client);
             }
         }
 
-        private void ClientConnected(TelnetClient client)
+        private void NewClient(TelnetClient client)
         {
             // Send ASCII FF + BS and ANSI Clear Screen + Banner
             client.Write("\u000c\u0008\u001B[2J\r\u001B[0;33mTWX Proxy 3 - Version 3.1944a Alpha - Please do not distribute.\n\r\n\r");
@@ -158,15 +145,92 @@ namespace TWXP
 
         public void Connect()
         {
+            if (!connecting)
+            {
+                connecting = true;
+                ConnectNow(this, null);
+            }
+            else
+            {
+                Echo("Connecting...");
 
+
+                if (connectTimer != null)
+                {
+                    connectTimer.Enabled = true;
+                    return;
+                }
+
+                connectTimer = new System.Timers.Timer();
+                connectTimer.Interval = 3000;
+
+                connectTimer.Elapsed += ConnectNow;
+                connectTimer.AutoReset = false;
+                connectTimer.Enabled = true;
+            }
+        }
+        private void ConnectNow(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            //if (Server.Connecting || Server.Connected) return;
+            Echo($"Connecting to {Server.Address}:{Server.Port}...");
+
+            Server.Connect("MicroBlaster.Net:2002");
+
+            //if (connectTimer != null)
+            //{
+            //    connectTimer.Enabled = false;
+            //}
+
+        }
+
+        private void InboundReceive(Object source, EventArgs e)
+        {
+            connecting = false;
+            string s = (string)source;
+
+            foreach (TelnetClient c in Clients)
+            {
+                c.Write(s);
+            }
+        }
+
+        private void OutboundReceive(Object source, EventArgs e)
+        {
+            string s = (string)source;
+
+            Server.Write(s);
+        }
+
+        private void ServerDisconnect(Object source, EventArgs e)
+        {
+            connecting = false;
+        }
+
+        private void ClientDisconnect(Object source, EventArgs e)
+        {
+        }
+
+        public void Disconnect()
+        {
+            //if (Server.Disconnecting || (!Server.Connected)) return;
+            Echo("Disconnecting...");
+
+            if (connectTimer != null)
+            {
+                connectTimer.Enabled = false;
+            }
+
+            Server.Disconnect();
         }
 
         public void Echo(string s)
         {
-            foreach(TelnetClient c in Clients)
+            foreach (TelnetClient c in Clients)
             {
                 c.Write(s.Replace("*", "\r\n"));
             }
         }
+
+
     }
 }

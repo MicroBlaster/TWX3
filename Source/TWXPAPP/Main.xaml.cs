@@ -77,5 +77,20 @@ namespace TWXPAPP
             proxy.Scripts.Compile(input.Text);
 
         }
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            if (Connect.Content.ToString() == "Connect")
+            {
+                Connect.Content = "Disconnect";
+                proxy.Connect();
+            }
+            else 
+            {
+                Connect.Content = "Connect";
+                proxy.Disconnect();
+            }
+
+        }
     }
 }
