@@ -365,12 +365,12 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to hold the line of text entered by the user.</param>
         /// <param name="prompt">The text to display above the input prompt.</param>
-        public static void GetInput(param var, string prompt)
+        public static void GetInput(Param var, string prompt)
         {
-            //TODO:
+            var.Update(GetInput(prompt));
         }
 
-        public static param GetInput(string prompt)
+        public static Param GetInput(string prompt)
         {
             //TODO:
         }
@@ -383,12 +383,12 @@ namespace TWXP
         /// <param name="prompt">The text to display above the input prompt.</param>
         /// <param name="singleKey">.</param>
         /// For backwards compatability, any value for the singleKey parameter will be interperted as true.
-        public static void GetConsoleInput(param var, string prompt, bool singleKey = false)
+        public static void GetConsoleInput(Param var, string prompt, bool singleKey = false)
         {
-            var.update(GetConsoleInput(prompt, singlekey);
+            var.Update(GetConsoleInput(prompt, singlekey);
         }
 
-        public static param GetConsoleInput(string prompt, bool singleKey = false)
+        public static Param GetConsoleInput(string prompt, bool singleKey = false)
         {
             //TODO:
         }
@@ -397,12 +397,12 @@ namespace TWXP
         /// Command cmd.GetOuttext - Retrieve any outgoing text from TWX Proxy's outgoing buffer.
         /// </summary>
         /// <param name="var">The paramater to hold the outgoing text.</param>
-        public static void GetOuttext(param var)
+        public static void GetOuttext(Param var)
         {
-            var.update(GetOuttext());
+            var.Update(GetOuttext());
         }
 
-        public static param GetOuttext()
+        public static Param GetOuttext()
         {
             //TODO:
         }
@@ -411,7 +411,9 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ProcessIn  - Emulates incoming text from the remote server, activating TextLine triggers.
         /// </summary>
-        public static void ProcessIn ()
+        /// <param name="AllScripts">True will activate all matching triggers in ALL scripts, while false will onlly process triggers from the current script.</param>
+        /// <param name="text">The text to be processed as inbound.</param>
+        public static void ProcessIn(bool AllScripts, string text)
         {
             //TODO:
         }
@@ -420,7 +422,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ProcessOut  - Resumes processing out outgoing data that was trapped by a TextOutTrigger.
         /// </summary>
-        public static void ProcessOut ()
+        /// <param name="text">The text to be processed as outbound.</param>
+        public static void ProcessOut()
         {
             //TODO:
         }
@@ -430,7 +433,13 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetDeafClients  - Retreives the status of any deaf clients.
         /// </summary>
-        public static void GetDeafClients()
+        /// <param name="var">The paramater that will contain TRUE if any dead clients are found.</param>
+        public static void GetDeafClients(Param var)
+        {
+            var.Update(GetDeafClients());
+        }
+                       
+        public static Param GetDeafClients()
         {
             //TODO:
         }
@@ -438,7 +447,8 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetDeafClients - Sets the deaf status on all clients.
         /// </summary>
-        public static void SetDeafClients()
+        /// <param name="var">An optional variable that will wake clients if set to FALSE. By default the command will deafen all clients.</param>
+        public static void SetDeafClients(bool deafen = true)
         {
             //TODO:
         }
