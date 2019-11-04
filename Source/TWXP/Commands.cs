@@ -770,6 +770,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.CutLengths - Cuts the lengths of an array of strings.
         /// </summary>
+        /// ????  array <lengths1,length2,...>
         public static void CutLengths()
         {
             //TODO:
@@ -778,10 +779,13 @@ namespace TWXP
         /// <summary>
         /// Command cmd.CutText - Cuts a value out of a piece of text.
         /// </summary>
-        /// ????  array <lengths1,length2,...>
-        public static void CutText()
+        /// <param name="text">The line of text to copy a value from.</param>
+        /// <param name="var">The paramater to hold the value</param>
+        /// <param name="start">The position of the first character to be copied.</param>
+        /// <param name="length">The length of the last text to be copied.</param>
+        public static void CutText(string text, Param var, int start, int length)
         {
-            //TODO:
+            var.Update(text.Substring(start, length));
         }
     
         /// <summary>
@@ -907,7 +911,7 @@ namespace TWXP
         /// <param name="var">The paramater to hold the merged strings.</param>
         public static void MergeText(string text1, string text2, Param var)
         {
-            var.Update(text1 = text2);
+            var.Update(text1 + text2);
         }
     
         /// <summary>
@@ -916,7 +920,7 @@ namespace TWXP
         /// <param name="var">The paramater to be padded.</param>
         public static void PadLeft(Param var)
         {
-            //TODO:
+            var.Update(((string)var).PadLeft());
         }
     
         /// <summary>
@@ -925,31 +929,49 @@ namespace TWXP
         /// <param name="var">The paramater to be padded.</param>
         public static void PadRight(Param var)
         {
-            //TODO:
+            var.Update(((string)var).PadRight());
         }
     
         /// <summary>
         /// Command cmd.SplitText - Splits a string into an array of words.
         /// </summary>
-        public static void SplitText()
+        /// <param name="text">A variable containing the text to be split.</param>
+        /// <param name="var[]">An array to contain the split strings.</param>
+        /// <param name="delims">Delimiters used to split string. Space and Tab will be used if omitted.</param>
+        public static void SplitText(string text, Param[] vars, string delims = null)
         {
-            //TODO:
+            char[] d;
+            if(delims = null)
+            {
+                d = new char[] {' ', '\t'};
+            }
+            else
+            {
+                foreach(char c in delims)
+                {
+                    d.add(c);
+                }
+            }
+            vars = text.Split(d)
         }
     
         /// <summary>
         /// Command cmd.StripText - Removes a character or sub-string from a variable.
         /// </summary>
-        public static void StripText()
+        /// <param name="var">A paramater containing a text value to have certain characters or sub-strings to be removed.</param>
+        /// <param name="text">The character or sub-string to strip from "var".</param>
+        public static void StripText(Param var, string text)
         {
-            //TODO:
+            var.Update(((string)var).Replace(text,"");
         }
     
         /// <summary>
         /// Command cmd.Trim - Removes leading and trailing spaces from a string.
         /// </summary>
-        public static void Trim()
+        /// <param name="var">A paramater containing a text to be trimmed.</param>
+        public static void Trim(Param var)
         {
-            //TODO:
+            var.Update(((string)var).Trim());
         }
     
         /// <summary>
