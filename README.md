@@ -26,9 +26,4 @@ Originally written by Remco Mulder, and Elder Prophit. We are proud to finally b
 * [TWXProxy BBS](https://code.google.com/archive/p/twxproxy-ep/wikis/TwxBbsAdministrationGuide.wiki) A server-side proxy for TWGS based on TWXProxy 2.04.
 * [TWXProxy PRO](https://sourceforge.net/projects/twxproxy/) This fork of TWXProxy was maintained by The [TWX Proxy Group](http://twxproxy.sourceforge.net/).
 
-## Active Contributers:
-
-* David McCartney (aka MicroBlaster)
-* Shadow
-
 If you would like to contribute to this project, please email DMC@IT1.BIZ for further information.
