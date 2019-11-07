@@ -7,11 +7,11 @@ using Microsoft.CodeAnalysis.VisualBasic;
 using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.Loader;
-
+using System.Collections.Generic;
 
 namespace TWXP
 {
-    public partial class Scripts
+    public partial class Scripts : List<Script>
     {
         public static string AssemblyDirectory
         {
@@ -25,12 +25,12 @@ namespace TWXP
         }
 
         public string FileName { get; private set; }
-        //public Proxy Owner { get; private set; }
+        private Proxy proxy;
 
         public Scripts(Proxy proxy)
         {
-            //Owner = owner;
-            cmd.Load(proxy);
+            this.proxy = proxy;
+            cmd.Load();
         }
 
         private delegate void SayAnything();
@@ -54,8 +54,10 @@ namespace TWXP
                     break;
 
                 case ".cts":
-                    MemoryStream stream = ReadCTS();
-                    source = WriteCS(stream);
+                    // TODO: See if the script is already running.
+                    TScript tscript = new TScript(FileName, proxy);
+                    tscript.ReadCTS();
+                    tscript.Exec();
                     break;
             }
             return source;
@@ -147,7 +149,7 @@ namespace TWXP
         private void Exec(Compilation compilation)
         {
             var context = new LoadContext();
-  
+
             using (var ms = new MemoryStream())
             {
                 var cr = compilation.Emit(ms);
@@ -180,50 +182,10 @@ namespace TWXP
                 return null;
             }
         }
-
     }
+
     public class Script
     {
-        //public ScriptCmds scrcmds { get; private set; }
-        //public Labels Labels { get; private set; }
-        //public Varables Vars { get; private set; }
 
-        // Public Read-only Properties
-        public string Name { get; private set; }
-        public bool Silent { get; private set; }
-
-        /// <summary>
-        /// Creates a new script.
-        /// </summary>
-        /// <param name="name">The name of the command.</param>
-        /// <param name="silent">Run script in silent mode.</param>
-        public Script(string name, bool silent)
-        {
-            //scrcmds = new ScriptCmds();
-            //Labels = new Labels();
-            //Vars = new Varables();
-
-            Name = name;
-            Silent = silent;
-
-        }
-
-        //public void Exec()
-        //{
-        //    // Loop through each command until the end is reached or Halt Is called.
-        //    foreach (ScriptCmd sc in scrcmds)
-        //    {
-        //        // Invoke the referenced command.
-        //        //Commands CmdRef = new Commands();
-        //        Commands.Invoke(this, sc);
-        //    }
-        //}
-
-        //public void Echo(string s)
-        //{
-        //    Console.Text += s;
-        //}
     }
-
-    
 }

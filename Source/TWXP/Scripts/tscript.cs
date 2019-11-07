@@ -6,224 +6,59 @@ using System.Text;
 
 namespace TWXP
 {
-    partial class Scripts
+    public class TScript
     {
-        public enum ParamType { CMD, VAR, CONST, SYSCONST, PROGVAR, CHAR }
+        // Public Read-only Properties
+        public string FileName { get; private set; }
+        public Proxy Proxy { get; private set; }
+        public bool Silent { get; private set; }
+        public List<Param> Vars { get; private set; }
+        //public List<CmdParam> ParamList { get; private set; }
+        //public List<string> IncludeList { get; private set; }
+        //public List<Label> LabelList { get; private set; }
 
-        //static List<CmdParam> cmdParamlist;
-        static List<CmdParam> paramlist;
-        static List<string> includelist;
-        static List<Label> labellist;
+        private List<CommandLine> commandlist = new List<CommandLine>();
+        //private List<CmdParam> cmdParamlist = new List<CmdParam>();
+        private List<CmdParam> paramlist = new List<CmdParam>();
+        private List<string> includelist = new List<string>();
+        private List<Label> labellist = new List<Label>();
 
-        public class FileHeader
+        /// <summary>
+        /// Creates a new script.
+        /// </summary>
+        /// <param name="name">The name of the command.</param>
+        /// <param name="silent">Run script in silent mode.</param>
+        public TScript(string filename, Proxy proxy, bool silent = false)
         {
-            public string FileType { get; private set; }
-            public string Description { get; private set; }
-            public int Version { get; private set; }
-            public int DescSize { get; private set; }
-            public int CodeSize { get; private set; }
+            FileName = filename;
+            Proxy = proxy;
+            Silent = silent;
 
-            
+            Vars = new List<Param>();
+        }
 
-            public FileHeader(BinaryReader stream)
+        public void Exec()
+        {
+            // Loop through each command until the end is reached or Halt Is called.
+            foreach (CommandLine cl in commandlist)
             {
-                FileType = Encoding.UTF8.GetString(stream.ReadBytes(12), 0, 12).Replace("\n", "").Replace("\0", "");
-                Version = stream.ReadInt32();
-                DescSize = stream.ReadInt32();
-                CodeSize = stream.ReadInt32();
-
-                if (DescSize > 0)
-                {
-                    Description = Encoding.UTF8.GetString(stream.ReadBytes(DescSize), 0, DescSize);
-                }
+                // Invoke the referenced command.
+                //Commands CmdRef = new Commands();
+                cl.Invoke();
             }
         }
 
-        public class CmdParam
-        {
-            public string Name { get; private set; }
-            public string Value { get; private set; }
-
-            public CmdParam(BinaryReader stream, bool isVar = false)
-            {
-                Value = ReadString(stream, stream.ReadInt32());
-                if (isVar) Name =  ReadString(stream, stream.ReadInt32()).ToLower().Replace("$$","VAR_").Replace("$","");
-                Debug.Write($"var: {Name} = {Value}\n");
-            }
-
-            public static string ReadString(BinaryReader stream, int size)
-            {
-                byte Key = 113;
-                byte[] Value = stream.ReadBytes(size);
-
-                List<byte> result = new List<byte>();
-
-                if (Value.Length > 0)
-                {
-                    for (int i = 0; i < Value.Length; i++)
-                    {
-                        result.Add((byte)(Value[i] ^ Key));
-                    }
-                    return System.Text.Encoding.Default.GetString(result.ToArray()).Replace("\r","*");
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-        }
-
-        public class Label
-        {
-            public string Name { get; private set; }
-            public int Location { get; private set; }
-
-            public Label(BinaryReader stream)
-            {
-                Location = stream.ReadInt32();
-                int length = stream.ReadInt32();
-                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length).Replace(":","LAB_");
-
-                Debug.Write($"label: {Name} = {Location}\n");
-            }
-        }
-
-        public class CommandLine
-        {
-            // Implicit operator to cast a parameter to a string.
-            public static implicit operator string(CommandLine cl)
-            {
-                // Build the line from the command and paramater strings.
-                string line;
-
-                switch (cl.Name)
-                {
-                    case "Branch":
-                        line = $"if  (!{cl.Param[0]}) goto {cl.Param[1].Replace("\"", "").Replace("::", "LAB_").Replace(":","")}";
-                        return line;
-
-                    case "Goto":
-                        line = $"goto {cl.Param[0].Replace("\"", "").Replace("::", "LAB_").Replace(":", "")}";
-                        return line;
-
-                    case "SetVar":
-                        line = cl.Param[0] + " = " + cl.Param[1];
-                        return line;
-
-                    default:
-                        line = "cmd." + cl.Name;
-                        if (cl.Param.Count > 0)
-                        {
-                            line += "(";
-                            foreach (string p in cl.Param)
-                            {
-                                line += p + ", ";
-                            }
-                            line = line.Substring(0, line.Length - 2) + ")";
-                        }
-                        return line;
-                }
-            }
-
-
-            public string Name { get; private set; }
-            public byte ScriptID { get; private set; }
-            public uint CodeLine { get; private set; }
-            public uint CmdIndex { get; private set; }
-            public List<string> Param  { get; private set; }
-
-            public CommandLine(BinaryReader stream)
-            {
-                ScriptID = stream.ReadByte();
-                CodeLine = stream.ReadUInt16();
-                CmdIndex = stream.ReadUInt16();
-
-                Param = new List<string>();
-
-                Name = cmd.Commands[(int)CmdIndex].Name;
-
-
-                Debug.Write($"Command: {ScriptID}:{CodeLine}:{CmdIndex}:{Name}\n");
-
-                while (true)
-                {
-                    var pt = stream.ReadByte();
-                    switch (pt)
-                    {
-                        case (byte)ParamType.CMD:
-                            return;
-
-                        case (byte)ParamType.VAR:
-                            Param.Add(ReadVar(stream));
-                            break;
-
-                        case (byte)ParamType.CONST:
-                            Param.Add(ReadConst(stream));
-                            break;
-
-                        case (byte)ParamType.SYSCONST:
-                            break;
-
-                        case (byte)ParamType.PROGVAR:
-                            break;
-
-                        case (byte)ParamType.CHAR:
-                            break;
-
-                    }
-                }
-            }
-
-            string ReadVar(BinaryReader stream)
-            {
-                int VarRef = stream.ReadInt32();
-                byte IndexCount = stream.ReadByte();
-
-                string name = paramlist[VarRef].Name;
-
-                for (int i = 0; i < IndexCount; i++)
-                {
-
-                }
-
-                Debug.Write($"Param: VAR = {name}\n");
-                return name;
-            }
-
-            string ReadConst(BinaryReader stream)
-            {
-                int VarRef = stream.ReadInt32();
-                string value = paramlist[VarRef].Value;
-                decimal dv;
-
-                //byte IndexCount = stream.ReadByte();
-                if (!decimal.TryParse(value, out dv))
-                {
-                    value = "\"" + value + "\"";
-                }
-                    
-
-                Debug.Write($"Param: CONST = {value}\n");
-                return value;
-            }
-        }
-
-
-        public MemoryStream ReadCTS()
+        public void ReadCTS()
         {
             FileHeader hdr;
 
             //cmdParamlist = new List<CmdParam>();
-            paramlist = new List<CmdParam>();
-            includelist = new List<string>();
-            labellist = new List<Label>();
 
             if (!File.Exists(FileName))
             {
                 // TODO: Report and Log Error
-                Debug.WriteLine("Invalid Filename");
-                return null;
+                Debug.WriteLine("Invalid fliename");
+                return;
             }
 
             FileInfo path = new FileInfo(FileName);
@@ -237,13 +72,13 @@ namespace TWXP
                 if (hdr.FileType != "TWX SCRIPT")
                 {
                     Debug.WriteLine($"Error: This is not a compiled TWX script.");
-                    return null;
+                    return;
                 }
 
                 if (hdr.Version < 3 || hdr.Version > 6)
                 {
                     Debug.WriteLine($"Error: Invalid Script Version {hdr.Version}, unable to read.");
-                    return null;
+                    return;
                 }
 
                 byte[] Code = stream.ReadBytes(hdr.CodeSize);
@@ -291,101 +126,234 @@ namespace TWXP
                         labellist.Add(label);
                     }
                 }
-
                 stream.Close();
-                return ms;
+
+                using (BinaryReader codeRef = new BinaryReader(ms))
+                {
+                    // Loop through the main CodeBase
+                    bs = codeRef.BaseStream;
+                    while (bs.Position < bs.Length)
+                    {
+                        // Add each command to the CommandList
+                        commandlist.Add(new CommandLine(this, codeRef));
+                    }
+                }
             }
-            
         }
+        public enum ParamType { CMD, VAR, CONST, SYSCONST, PROGVAR, CHAR }
 
-
-        public string WriteCS(MemoryStream stream)
+        public class FileHeader
         {
-            StringBuilder output = new StringBuilder();
+            public string FileType { get; private set; }
+            public string Description { get; private set; }
+            public int Version { get; private set; }
+            public int DescSize { get; private set; }
+            public int CodeSize { get; private set; }
 
-            output.Append("using System;\nusing System.IO;\nusing TWXP;\n\n" +
-                "public class Script\n{\n    public static void Main()\n    {\n");
-
-            foreach(CmdParam p in paramlist)
+            public FileHeader(BinaryReader stream)
             {
-                if(p.Value == "0" && !string.IsNullOrEmpty(p.Name))
+                FileType = Encoding.UTF8.GetString(stream.ReadBytes(12), 0, 12).Replace("\n", "").Replace("\0", "");
+                Version = stream.ReadInt32();
+                DescSize = stream.ReadInt32();
+                CodeSize = stream.ReadInt32();
+
+                if (DescSize > 0)
                 {
-                    output.Append("        Param " + p.Name + " = new Param();\n");
+                    Description = Encoding.UTF8.GetString(stream.ReadBytes(DescSize), 0, DescSize);
                 }
             }
-            output.Append("\n");
-
-            using (BinaryReader codeRef = new BinaryReader(stream))
-            {
-                var bs = codeRef.BaseStream;
-                //byte ScriptID = codeRef.ReadByte();
-
-
-                while (bs.Position < bs.Length)
-                {
-                    GetLabels(bs.Position, output);
-
-                    CommandLine cl = new CommandLine(codeRef);
-                    //uint codeline = cl.CodeLine;
-                    
-                    output.Append("        " + cl + ";\n");
-                }
-
-                GetLabels(bs.Position, output);
-
-            }
-
-            output.Append("    }\n}\n");
-            return output.ToString();
         }
 
-        private void GetLabels(long pos, StringBuilder output)
+        public class CmdParam
         {
-            var labels = labellist.Where(l => l.Location == pos);
-            if (labels.Count() > 0)
+            public string Name { get; private set; }
+            public string Value { get; private set; }
+
+            public CmdParam(BinaryReader stream, bool isVar = false)
             {
-                foreach (Label l in labels)
+                Value = ReadString(stream, stream.ReadInt32());
+                if (isVar) Name = ReadString(stream, stream.ReadInt32()).ToLower();
+                Debug.Write($"var: {Name} = {Value}\n");
+            }
+
+            public static string ReadString(BinaryReader stream, int size)
+            {
+                byte Key = 113;
+                byte[] Value = stream.ReadBytes(size);
+
+                List<byte> result = new List<byte>();
+
+                if (Value.Length > 0)
                 {
-                    output.Append(l.Name + ":\n");
+                    for (int i = 0; i < Value.Length; i++)
+                    {
+                        result.Add((byte)(Value[i] ^ Key));
+                    }
+                    return System.Text.Encoding.Default.GetString(result.ToArray()).Replace("\r", "*");
+                }
+                else
+                {
+                    return null;
                 }
             }
 
         }
 
-        public string WriteVB(MemoryStream stream)
+        public class Label
         {
-            StringBuilder output = new StringBuilder();
+            public string Name { get; private set; }
+            public int Location { get; private set; }
 
-            output.Append("Imports System\nImports System.IO\nImports TWXP\n\n" +
-                "Module Script\n    Public Sub Main()\n");
- 
-            foreach (CmdParam p in paramlist)
+            public Label(BinaryReader stream)
             {
-                if (p.Value == "0")
-                {
-                    //output.Append("        Dim " + p.Name + " = \"\"\n");
-                    output.Append("        Dim " + p.Name + "\n");
-                }
+                Location = stream.ReadInt32();
+                int length = stream.ReadInt32();
+                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length).Replace(":", "LAB_");
+
+                Debug.Write($"label: {Name} = {Location}\n");
             }
-            output.Append("\n");
-
-            using (BinaryReader codeRef = new BinaryReader(stream))
-            {
-                var bs = codeRef.BaseStream;
-                //byte ScriptID = codeRef.ReadByte();
-
-                while (bs.Position < bs.Length)
-                {
-                    CommandLine cl = new CommandLine(codeRef);
-                    output.Append("        " + cl + "\n");
-                }
-            }
-
-            output.Append("    End Sub\nEnd Module\n");
-            return output.ToString();
         }
 
+        public class CommandLine
+        {
+            public string Name { get; private set; }
+            public byte ScriptID { get; private set; }
+            public uint CodeLine { get; private set; }
+            public uint CmdIndex { get; private set; }
+            public Command CmdRef { get; private set; }
+            //public Script Script { get; private set; }
+            public List<Param> Param { get; private set; }
+            private TScript script;
 
+            public CommandLine(TScript script, BinaryReader stream)
+            {
+                this.script = script;
+
+                ScriptID = stream.ReadByte();
+                CodeLine = stream.ReadUInt16();
+                CmdIndex = stream.ReadUInt16();
+
+                Param = new List<Param>();
+
+                CmdRef = cmd.Commands[(int)CmdIndex];
+                Name = CmdRef.Name;
+
+
+                Debug.Write($"Command: {ScriptID}:{CodeLine}:{CmdIndex}:{Name}\n");
+
+                while (true)
+                {
+                    var pt = stream.ReadByte();
+                    switch (pt)
+                    {
+                        case (byte)ParamType.CMD:
+                            return;
+
+                        case (byte)ParamType.VAR:
+                            Param.Add(new Param(script, ReadVar(stream), true));
+                            break;
+
+                        case (byte)ParamType.CONST:
+                            Param.Add(new Param(script, ReadConst(stream)));
+                            break;
+
+                        case (byte)ParamType.SYSCONST:
+                            break;
+
+                        case (byte)ParamType.PROGVAR:
+                            break;
+
+                        case (byte)ParamType.CHAR:
+                            break;
+
+                    }
+                }
+            }
+
+            string ReadVar(BinaryReader stream)
+            {
+                int VarRef = stream.ReadInt32();
+                byte IndexCount = stream.ReadByte();
+
+                string name = script.paramlist[VarRef].Name;
+
+                for (int i = 0; i < IndexCount; i++)
+                {
+
+                }
+
+                //if (Param.Where(p => p.VarName == name).Count() == 0)
+                //{
+                //    Param.Add(new Param(name, null));
+                //}
+                Debug.Write($"Param: VAR = {name}\n");
+                return name;
+            }
+
+            string ReadConst(BinaryReader stream)
+            {
+                int VarRef = stream.ReadInt32();
+                string name = script.paramlist[VarRef].Name;
+                string value = script.paramlist[VarRef].Value;
+                decimal dv;
+
+                //byte IndexCount = stream.ReadByte();
+                if (!decimal.TryParse(value, out dv))
+                {
+                    value = "\"" + value + "\"";
+                }
+
+                //var param = Param.Where(p => p.VarName == name);
+                //if (param.Count() == 0)
+                //{
+                //    Param.Add(new Param(name, value));
+                //}
+                //else
+                //{
+                //    param.First().Update(value);
+                //}
+
+                Debug.Write($"Param: CONST {name} = {value}\n");
+                return value;
+            }
+
+            // Invoke this command line
+            public void Invoke()
+            {
+                switch (Name)
+                {
+                    case "Branch":
+                        //TODO:
+                        return;
+
+                    case "Goto":
+                        //TODO
+                        return;
+
+                    default:
+                        foreach (Param p in Param)
+                        {
+                            IEnumerable<Param> vars;
+                            if (p.IsVarable)
+                            {
+                                vars = script.Vars.Where(v => v.VarName.ToLower() == p.VarName.ToLower());
+                            }
+                            else
+                            {
+                                vars = script.Vars.Where(v => v.VarName.ToLower() == p.Value.ToLower());
+                            }
+
+                            if (vars.Count() > 0)
+                            {
+                                p.Update(vars.Single().Value);
+                            }
+                        }
+                        
+                        CmdRef.Invoke(script, Param.ToArray());
+                        return;
+                }
+            }
+
+        }
     }
-
 }

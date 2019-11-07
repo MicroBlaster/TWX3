@@ -8,27 +8,27 @@ namespace TWXP
     public static class cmd
     {
         public static List<Command> Commands {get; private set;}
-        private static Proxy proxy;
+        //private static Proxy proxy;
 
-        public static void Load(Proxy p)
+        public static void Load()
         {
-            proxy = p;
-
             if (Commands != null) return;
+
             Commands = new List<Command>();
-#region Command List
-            Commands.Add(new Command("Add",true));
+
+            #region Command List
+            Commands.Add(new Command("Add", Add, 2, 2));
             Commands.Add(new Command("AddMenu"));  //TODO:
-            Commands.Add(new Command("And",true));
-            Commands.Add(new Command("Branch",true));
+            Commands.Add(new Command("And"));
+            Commands.Add(new Command("Branch")); //In-Progress
             Commands.Add(new Command("ClientMessage"));  //TODO:
             Commands.Add(new Command("CloseMenu"));  //TODO:
-            Commands.Add(new Command("Connect")); //In-Progress
+            Commands.Add(new Command("Connect", Connect));
             Commands.Add(new Command("CutText")); //TODO:
             Commands.Add(new Command("Delete")); //TODO:
             Commands.Add(new Command("Disconnect")); //In-Progress
-            Commands.Add(new Command("Divide",true));
-            Commands.Add(new Command("Echo")); //In-Progress
+            Commands.Add(new Command("Divide"));
+            Commands.Add(new Command("Echo", Echo, 1, -1)); //In-Progress
             Commands.Add(new Command("FileExists")); //TODO: --- through rest of list, except operators ---
             Commands.Add(new Command("GetCharCode"));
             Commands.Add(new Command("GetConsoleInput"));
@@ -49,12 +49,12 @@ namespace TWXP
             Commands.Add(new Command("GetWord"));
             Commands.Add(new Command("GetWordPos"));
             Commands.Add(new Command("Halt"));
-            Commands.Add(new Command("IsEquil", true));
-            Commands.Add(new Command("IsGreater", true));
-            Commands.Add(new Command("IsGreaterEquil", true));
-            Commands.Add(new Command("IsLesser", true));
-            Commands.Add(new Command("IsLesserEquil", true));
-            Commands.Add(new Command("IsNotEquil", true));
+            Commands.Add(new Command("IsEquil"));
+            Commands.Add(new Command("IsGreater"));
+            Commands.Add(new Command("IsGreaterEquil"));
+            Commands.Add(new Command("IsLesser", IsLesser, 3, 3));
+            Commands.Add(new Command("IsLesserEquil"));
+            Commands.Add(new Command("IsNotEquil"));
             Commands.Add(new Command("IsNumber"));
             Commands.Add(new Command("KillWindow"));
             Commands.Add(new Command("KillAllTriggers"));
@@ -64,9 +64,9 @@ namespace TWXP
             Commands.Add(new Command("Logging"));
             Commands.Add(new Command("LowerCase"));
             Commands.Add(new Command("MergeText"));
-            Commands.Add(new Command("Multiply",true));
+            Commands.Add(new Command("Multiply"));
             Commands.Add(new Command("OpenMenu"));
-            Commands.Add(new Command("Or",true));
+            Commands.Add(new Command("Or"));
             Commands.Add(new Command("Pause"));
             Commands.Add(new Command("ProcessIn"));
             Commands.Add(new Command("ProcessOut"));
@@ -90,21 +90,21 @@ namespace TWXP
             Commands.Add(new Command("SetTextLineTrigger"));
             Commands.Add(new Command("SetTextOutTrigger"));
             Commands.Add(new Command("SetTextTrigger"));
-            Commands.Add(new Command("SetVar",true));
+            Commands.Add(new Command("SetVar", SetVar, 2, 2));
             Commands.Add(new Command("SetWindowContents"));
             Commands.Add(new Command("Sound"));
             Commands.Add(new Command("Stop"));
             Commands.Add(new Command("StripText"));
-            Commands.Add(new Command("Subtract",true));
-            Commands.Add(new Command("SYS_CHECK", true));
-            Commands.Add(new Command("SYS_FAIL", true));
-            Commands.Add(new Command("SYS_KILL", true));
-            Commands.Add(new Command("SYS_NOAUTH", true));
-            Commands.Add(new Command("SYS_NOP", true));
-            Commands.Add(new Command("SYS_SHOWMSG", true));
+            Commands.Add(new Command("Subtract"));
+            Commands.Add(new Command("SYS_CHECK"));
+            Commands.Add(new Command("SYS_FAIL"));
+            Commands.Add(new Command("SYS_KILL"));
+            Commands.Add(new Command("SYS_NOAUTH"));
+            Commands.Add(new Command("SYS_NOP"));
+            Commands.Add(new Command("SYS_SHOWMSG"));
             Commands.Add(new Command("SystemScript"));
             Commands.Add(new Command("UpoperCase"));
-            Commands.Add(new Command("Xor",true));
+            Commands.Add(new Command("Xor"));
             Commands.Add(new Command("Window"));
             Commands.Add(new Command("Write"));
 
@@ -138,9 +138,22 @@ namespace TWXP
             Commands.Add(new Command("Trim"));
             Commands.Add(new Command("Truncate"));
         }
+        #endregion
+        #region Assignment operator commands  
+        /// <summary>
+        /// Assignment Operator - Asigns a value to a parameter.
+        /// </summary>
+        /// <param name="a">The paramater to be asigned to.</param>
+        /// <param name="b">The value to be asigned to the paramater.</param>
+        public static void SetVar(TScript script, params Param[] param)
+        {
+            param[0].Update((string)param[1]);
+        }
+
+
 #endregion
 #region Mathmatical operator commands    
-        
+
         /// <summary>
         /// Mathmatical operator cmd.Multiply - Performs mathematical multiplication on a variable.
         /// </summary>
@@ -166,9 +179,9 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable that will have its value added to.</param>
         /// <param name="b">The amount the variable will be increased by.</param>
-        public static void Add(Param a, double b)
+        public static void Add(TScript script, params Param[] param)
         {
-            a.Update((double)a + b);
+            param[0].Update((double)param[0] + (double)param[1]);
         }
 
         /// <summary>
@@ -274,9 +287,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsLesser(Param a, double b, double c)
+        public static void IsLesser(TScript script, params Param[] param)
         {
-            a.Update(b < c);
+            param[0].Update((double)param[1] < (double)param[2]);
         }
 
         /// <summary>
@@ -290,35 +303,22 @@ namespace TWXP
             a.Update(b <= c);
         }
 #endregion
-#region Assignment operator command    
-
-        /// <summary>
-        /// Assignment Operator - Asigns a value to a parameter.
-        /// </summary>
-        /// <param name="a">The paramater to be asigned to.</param>
-        /// <param name="b">The value to be asigned to the paramater.</param>
-        public static void SetVar(Param a, double b)
-        {
-            a.Update(b);
-        }
-
-#endregion
 #region Terminal commands
 
         /// <summary>
         /// Command cmd.Connect - Connects TWX Proxy to a remote server.
         /// </summary>
-        public static void Connect()
+        public static void Connect(TScript script, params Param[] param)
         {
-            //TODO:
+            script.Proxy.Connect();
         }
 
         /// <summary>
         /// Command cmd.Disconnect - Disconnects TWX Proxy from the remote server.
         /// </summary>
-        public static void Disconnect()
+        public static void Disconnect(TScript script, params Param[] param)
         {
-            //TODO:
+            script.Proxy.Disconnect();
         }
 
     
@@ -336,7 +336,7 @@ namespace TWXP
         /// Command cmd.Echo - Echos all parameters, as strings, to all connected client sessions.
         /// </summary>
         /// <param name="param">Parameters to be concatenated and echoed</param>
-        public static void Echo(params Param[] param)
+        public static void Echo(TScript script, params Param[] param)
         {
             StringBuilder output = new StringBuilder();
             //string output = "";
@@ -345,7 +345,7 @@ namespace TWXP
                 output.Append((string)p);
             }
 
-            proxy.Echo(output.ToString());
+            script.Proxy.Echo(output.ToString());
             Debug.Write($"Echo: {output}\n");
         }
 
@@ -1279,13 +1279,31 @@ namespace TWXP
 
     public class Command
     {
-        public string Name {get; private set;}
-        public bool Depreciated { get; private set; }
+        public delegate void CmdRef(TScript script, params Param[] param);
 
-        public Command (string name, bool depreciated = false)
+        public string Name {get; private set;}
+        public int MinArgs { get; private set; }
+        public int MaxArgs { get; private set; }
+        private CmdRef reference;
+
+        public Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = 0)
         {
             Name = name;
-            Depreciated = depreciated;
+            MinArgs = minArgs;
+            MaxArgs = maxArgs;
+            this.reference = reference;
+        }
+
+        public void Invoke(TScript script, params Param[] param)
+        {
+            if (reference != null)
+            {
+                reference.Invoke(script, param);
+            }
+            else
+            {
+                Debug.Write($"Error: Command \"{Name}\" not implimented.");
+            }
         }
     }
 }

@@ -28,17 +28,17 @@ namespace TWXPAPP
             //proxy.Scripts.Load(@"scripts\zed-bot.vb");
             //proxy.Scripts.Load(@"scripts\zed-bot.cs");
 
-            this.Hide();
+            //this.Hide();
 
-            //Window welcome = new Welcome();
-            //welcome.ShowDialog();
+            Window welcome = new Welcome();
+            welcome.ShowDialog();
 
             Window setup = new Setup();
             setup.ShowDialog();
 
             Proxy = new Proxy();
             _ = proxy.StartAsync();
-            input.Text = proxy.Scripts.Load(@"scripts\zed-bot.cts");
+            //input.Text = proxy.Scripts.Load(@"scripts\zed-bot.cts");
 
             //this.Close();
         }
@@ -73,8 +73,8 @@ namespace TWXPAPP
 
             //    ;
 
-
-            proxy.Scripts.Compile(input.Text);
+            proxy.Scripts.Load(@"scripts\zed-bot.cts");
+            //proxy.Scripts.Compile(input.Text);
 
         }
 

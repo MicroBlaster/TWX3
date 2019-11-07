@@ -9,47 +9,31 @@ namespace TWXP
 {
     //public enum CommandType { Internal, Operator, Public, System };
 
-
-    public class Params : List<Param>
-    {
-        //public delegate void voidDeligate(string[] args);
-
-        /// <summary>
-        /// Default Constructor.
-        /// </summary>
-        public Params()
-        {
-
-        }
-
-
-    }
-
     public class Param
     {
-        // Implicit operator to cast a string to a parameter.
-        public static implicit operator Param(string s)
-        {
-            return new Param(s);
-        }
+        //// Implicit operator to cast a string to a parameter.
+        //public static implicit operator Param(string s)
+        //{
+        //    return new Param(s);
+        //}
 
-        // Implicit operator to cast a bool to a parameter.
-        public static implicit operator Param(bool b)
-        {
-            return new Param(b);
-        }
+        //// Implicit operator to cast a bool to a parameter.
+        //public static implicit operator Param(bool b)
+        //{
+        //    return new Param(b);
+        //}
 
-        // Implicit operator to cast a int to a parameter.
-        public static implicit operator Param(double d)
-        {
-            return new Param(d);
-        }
+        //// Implicit operator to cast a int to a parameter.
+        //public static implicit operator Param(double d)
+        //{
+        //    return new Param(d);
+        //}
 
-        // Implicit operator to cast a int to a parameter.
-        public static implicit operator Param(int i)
-        {
-            return new Param(i);
-        }
+        //// Implicit operator to cast a int to a parameter.
+        //public static implicit operator Param(int i)
+        //{
+        //    return new Param(i);
+        //}
 
         // Implicit operator to cast a parameter to a string.
         public static implicit operator string(Param p)
@@ -87,12 +71,7 @@ namespace TWXP
         public bool IsNumeric { get; private set; }
         public bool IsVarable { get; private set; }
 
-        private Script script;
-
-        public Param()
-        {
-
-        }
+        private TScript script;
 
         public Param(int value)
         {
@@ -125,21 +104,56 @@ namespace TWXP
             }
         }
 
+        // This is just a var, not an actual paramater
+        public Param(string varname, string value)
+        {
+            VarName = varname;
+            IsVarable = false;
+
+            // Do note create a var, this already is one.
+            Update(value, true);
+        }
+
+
         /// <summary>
         /// Creates a new Param.
         /// </summary>
         /// <param name="value">The iniial value to be asigned to the paramater.</param>
 //        public Param(Script script, string value, bool isVarable = false)
-        public Param(string value, bool isVarable = false)
+        public Param(TScript script, string value, bool isVarable = false)
         {
-            // Store the script in a private for use by Vars
-            //this.script = script;
+            // Store the script for use in UpdateVars.
+            this.script = script;
 
             // Set the IsVarable flag.
             IsVarable = isVarable;
 
-            // Update the initial value.
-            Update(value, true);
+            //try
+            //{
+            //    // Look for any vars matching the value.
+            //    var vars = script.Vars.Where(v => v.VarName.ToLower() == value.ToLower());
+
+            //    if (vars.Count() > 0)
+            //    {
+            //        Update(vars.Single().Value, true);
+            //    }
+            //    else
+            //    {
+                    if (isVarable)
+                    {
+
+                        // Set the Variable name
+                        VarName = value;
+                    }
+                    else
+                    {
+                        // Update the value
+                        Update(value, true);
+                    }
+            //    }
+            //}
+            //catch { }
+
         }
 
         public void Update(string value, bool skipvar = false)
@@ -156,7 +170,7 @@ namespace TWXP
                 DecValue = decValue;
             }
 
-            //if (!skipvar) UpdateVar();
+            if (!skipvar) UpdateVar();
         }
 
         public void Update(double value, bool skipvar = false)
@@ -166,7 +180,7 @@ namespace TWXP
             Value = value.ToString();
             DecValue = value;
 
-            //if (!skipvar) UpdateVar();
+            if (!skipvar) UpdateVar();
         }
 
         public void Update(bool value, bool skipvar = false)
@@ -184,25 +198,29 @@ namespace TWXP
                 DecValue = 0;
             }
 
-            //if (!skipvar) UpdateVar();
+            if (!skipvar) UpdateVar();
         }
 
-        //private void UpdateVar()
-        //{
-        //    if (IsVarable)
-        //    {
-        //        try
-        //        {
-        //            Varable var = script.Vars.Where(v => v.Name.ToLower() == VarName.ToLower()).Single();
+        private void UpdateVar()
+        {
+            if (IsVarable)
+            {
+                try
+                {
+                    var vars = script.Vars.Where(v => v.VarName.ToLower() == VarName.ToLower());
 
-        //            if (IsNumeric)
-        //                var.Update(DecValue);
-        //            else
-        //                var.Update(Value);
-        //        }
-        //        catch { }
-        //    }
-        //}
+                    if (vars.Count() > 0)
+                    {
+                        vars.Single().Update(Value);
+                    }
+                    else
+                    {
+                        script.Vars.Add(new Param(VarName, Value));
+                    }
+                }
+                catch { }
+            }
+        }
 
         //public void LoadVar()
         //{
