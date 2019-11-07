@@ -1279,29 +1279,51 @@ namespace TWXP
 
     public class Command
     {
+        // This is the deligate definition, which defines the 
+        // parameters and return value of TWX commands.
         public delegate void CmdRef(TScript script, params Param[] param);
 
+        // A private instance of our deligate stores the reference to the real command.
+        private CmdRef reference;
+
+        // Public properties for use by the compiler.
         public string Name {get; private set;}
         public int MinArgs { get; private set; }
         public int MaxArgs { get; private set; }
-        private CmdRef reference;
 
-        public Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = 0)
+        /// <summary>
+        /// Command constructor class, initializes the class with the required properties.
+        /// </summary>
+        /// <param name="name">The name of the command used by the compiler.</param>
+        /// <param name="reference">A deligate reference to the command.</param>
+        /// <param name="minArgs">The minimum number of arguments allowed.</param>
+        /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
+        public Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = -1)
         {
+            // Store the command refererence.
+            this.reference = reference;
+
+            // Store the properties.
             Name = name;
             MinArgs = minArgs;
             MaxArgs = maxArgs;
-            this.reference = reference;
         }
 
+        /// <summary>
+        /// Invoke the command referance if it has been defined.
+        /// </summary>
+        /// <param name="script">The parent script for use by the command.</param>
+        /// <param name="param">An array of paramaters for use by the command.</param>
         public void Invoke(TScript script, params Param[] param)
         {
             if (reference != null)
             {
+                // Invoke the command referance.
                 reference.Invoke(script, param);
             }
             else
             {
+                // If the reference is null, the command has not been implimented.
                 Debug.Write($"Error: Command \"{Name}\" not implimented.");
             }
         }
