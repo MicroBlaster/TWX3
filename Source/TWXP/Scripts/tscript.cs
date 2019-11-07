@@ -23,6 +23,8 @@ namespace TWXP
             public int DescSize { get; private set; }
             public int CodeSize { get; private set; }
 
+            
+
             public FileHeader(BinaryReader stream)
             {
                 FileType = Encoding.UTF8.GetString(stream.ReadBytes(12), 0, 12).Replace("\n", "").Replace("\0", "");

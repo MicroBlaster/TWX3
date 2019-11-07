@@ -79,8 +79,7 @@ namespace TWXPAPP
 
         private void onTreviewChange(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            ServerGrid.Visibility = Visibility.Hidden;
-            LoginGrid.Visibility = Visibility.Hidden;
+            DatabaseGrid.Visibility = Visibility.Hidden;
             QwkLyncGrid.Visibility = Visibility.Hidden;
             SecurityGrid.Visibility = Visibility.Hidden;
             TerminalGrid.Visibility = Visibility.Hidden;
@@ -94,19 +93,15 @@ namespace TWXPAPP
                     if (Item1 != null) Item1.IsSelected = true;
                     break;
 
-                case "Server / Game":
-                    ServerGrid.Visibility = Visibility.Visible;
+                case "Server / Login":
+                    DatabaseGrid.Visibility = Visibility.Visible;
                     break;
 
-                case "Login / Corp":
-                    LoginGrid.Visibility = Visibility.Visible;
-                    break;
-
-                case "QwkLync / BBS":
+                case "QwkLync / Bots":
                     QwkLyncGrid.Visibility = Visibility.Visible;
                     break;
 
-                case "Security":
+                case "BBS / Security":
                     SecurityGrid.Visibility = Visibility.Visible;
                     break;
 

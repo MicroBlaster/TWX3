@@ -20,6 +20,7 @@ namespace TWXP
         public IPEndPoint RemoteEP { get; private set; }
         public IPEndPoint LocalEP { get; private set; }
         public string ReverseDNS { get; private set; }
+        public string Terminal { get; private set; }
 
         private TcpClient tcpClient;
         private NetworkStream stream;
@@ -45,136 +46,123 @@ namespace TWXP
             if (tcpClient.Connected)
             {
                 // Get the underlying stream from the client.
-                using (stream = tcpClient.GetStream())
+                //using (stream = tcpClient.GetStream())
+                stream = tcpClient.GetStream();
+                byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+                //int bytes;
+
+                // Get the local and remote endpoints from the stream.
+                PropertyInfo socket = stream.GetType().GetProperty("Socket", BindingFlags.NonPublic | BindingFlags.Instance);
+                RemoteEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).RemoteEndPoint;
+                LocalEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).LocalEndPoint;
+
+                // Start reverse DNS lookup using an asynchronous task.
+                Task<IPHostEntry> rdnsTask = Dns.GetHostEntryAsync(IPAddress.Parse(RemoteEP.Address.ToString()));
+
+                // Send ASCII FF + BS and ANSI Clear Screen
+                //Write("\u000c\u0008\u001B[2J\r");
+
+                // Send Telnet and ANSI handshake
+                byte[] telnet = {
+                        12, 5,             // ASCII FF + ENQ
+                        27, 91, 62, 112,   // ANSI Clear Screen
+                        255, 251, 1,       // Telnet (IAC)(Will)(ECHO) - Will Echo
+                        255, 251, 3,       // Telnet (IAC)(Will)(SGA)  - Will Supress Go Ahead
+                        255, 251, 31,      // Telnet (IAC)(Will)(NAWS) - Will Negotiate About Window Size
+                        27, 91, 54, 110 }; //  ANSI (ESC)[6n - Request Cursor Position
+                stream.Write(telnet, 0, telnet.Length);
+
+                // Send Initializing
+                //Write("TWX Proxy 3" + "\r\n\u001B[0;32m  Initializing...");
+                Write("\rInitializing...");
+                await Task.Delay(200);
+
+                try
                 {
-                    byte[] resp = new byte[4096];
-                    int bytes;
-
+                    // Read the response.
                     stream.ReadTimeout = 500;
+                    stream.Read(buffer, 0, 1024);
 
-                    // Get the local and remote endpoints from the stream.
-                    PropertyInfo socket = stream.GetType().GetProperty("Socket", BindingFlags.NonPublic | BindingFlags.Instance);
-                    RemoteEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).RemoteEndPoint;
-                    LocalEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).LocalEndPoint;
+                    string response = Encoding.UTF8.GetString(buffer);
+                    // Check if response contains an ANSI excape sequence.
+                    // ansiDetected = Encoding.UTF8.GetString(readBuffer).Contains("\u001B[");
+                    ansiDetected = Regex.IsMatch(response, "\\x1b[[0-9;]*R");
 
-                    // Start reverse DNS lookup using an asynchronous task.
-                    Task<IPHostEntry> rdnsTask = Dns.GetHostEntryAsync(IPAddress.Parse(RemoteEP.Address.ToString()));
-
-                    // Send ASCII FF + BS and ANSI Clear Screen
-                    Write("\u000c\u0008\u001B[2J\r");
-
-                    // Send Telnet handshake
-                    byte[] telnet = {
-                    255, 251, 1,    // Telnet (IAC)(Will)(ECHO) - Will Echo
-                    255, 251, 3 };  // Telnet (IAC)(Will)(SGA)  - Will Supress Go Ahead
-                    stream.Write(telnet, 0, telnet.Length);
-
-                    // Send Banner and Initializing
-                    //Write("TWX Proxy 3" + "\r\n\u001B[0;32m  Initializing...");
-                    Write("TWX Proxy 3 Initializing...");
-
-                    // Send ANSI detect.
-                    byte[] ansi = { 27, 91, 54, 110 }; // ANSI (ESC)[6n - Request Cursor Position
-                    stream.Write(ansi, 0, ansi.Length);
-                    await Task.Delay(200);
-
-                    try
+                    if (buffer.Take(6).SequenceEqual(new byte[] { 255, 253, 200, 255, 253, 200 }))
                     {
-                        //todo: this needs to timeout
-                        // Read the response.
-                        stream.Read(resp, 0, 1024);
-
-                        // Check if response contains an ANSI excape sequence.
-                        // ansiDetected = Encoding.UTF8.GetString(readBuffer).Contains("\u001B[");
-                        ansiDetected = Regex.IsMatch(Encoding.UTF8.GetString(resp), "\\x1b[[0-9;]*R");
+                        Terminal = "Swath";  // Swath sends (IAC)(DO)(200) response twice on initial connection.
+                                             // This response is invalid since options 141 - 254 are Unassigned
                     }
-                    catch (Exception)
+                    else
                     {
-
-                        // TODO: Log ANSI detection error.
+                        Terminal = "";
+                        foreach (char c in response)
+                        {
+                            if (c == 27) break;
+                            if (c > 63 && c < 128) Terminal += c;
+                        }
                     }
 
 
-                    // TODO: skip ReverseDNS if localhost or local interface
-                    // Get the reverse DNS result.
-                    //await Task.Delay(2000);
-                    ReverseDNS = "UNKNOWN";
-                    try
-                    {
-                        rdnsTask.Wait();
-                        ReverseDNS = rdnsTask.Result.HostName;
-                    }
-                    catch (Exception)
-                    {
-                        // TODO: Log reverse DNS error.
-                    }
-
-                    // Send initialized event
-                    Initialized(this, new EventArgs());
-
-                    //Read();
                 }
+                catch (Exception)
+                {
+
+                    // TODO: Log ANSI detection error.
+                }
+
+                // TODO: skip ReverseDNS if localhost or local interface
+                // Get the reverse DNS result.
+                //await Task.Delay(2000);
+                ReverseDNS = "UNKNOWN";
+                try
+                {
+                    rdnsTask.Wait();
+                    ReverseDNS = rdnsTask.Result.HostName;
+                }
+                catch (Exception)
+                {
+                    // TODO: Log reverse DNS error.
+                }
+
+
+                // Send initialized event.
+                Initialized(this, new EventArgs());
+
+                // 
+                stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
             }
         }
 
-        //private async Task Read()
-        //{
-        //    stream.ReadTimeout = 55000;
-        //    do
-        //    {
-        //        byte[] resp = new byte[2048];
-        //        int bytes = 0;
+        private void ReadCallback(IAsyncResult result)
+        {
+            try
+            {
+                // Get the response
+                int bytes = stream.EndRead(result);
+                byte[] buffer = result.AsyncState as byte[];
 
-        //        try
-        //        {
-        //            await stream.BeginRead(resp, 0, resp.Length);
-        //            //bytes = stream.Read(resp, 0, resp.Length);
-        //        }
-        //        catch { }
+                // Send receive event with data.
+                Receive(ASCIIEncoding.ASCII.GetString(buffer, 0, bytes), new EventArgs());
+            }
+            catch (Exception)
+            {
+                active = false;
+                Disconnected(this, new EventArgs());
+            }
 
-        //        if (bytes == 0)
-        //        {
-        //            // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
-        //            stream.Write(new byte[] { 255, 253, 246 }, 0, 3);
-        //        }
-        //        else
-        //        {
-        //            output.Write(resp, 0, bytes);
-        //        }
-
-        //        if (!stream.DataAvailable && output.Length > 0)
-        //        {
-        //            StringBuilder control = new StringBuilder();
-        //            StringBuilder text = new StringBuilder();
-
-        //            foreach (char c in Encoding.ASCII.GetString(output.ToArray()))
-        //            {
-        //                if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
-        //                else text.Append(c);
-        //            }
-
-        //            //todo: process control characters
-
-        //            // Send receive event
-        //            Receive(text.ToString(), new EventArgs());
-        //            output.SetLength(0);
-        //        }
-
-        //        await Task.Delay(200);
-
-        //    } while (active && tcpClient.Connected);
-
-        //    active = false;
-        //    tcpClient.Client.Close();
-        //    tcpClient.Close();
-
-        //    // Send disconnect event
-        //    Disconnected(this, new EventArgs());
-
-        //    //tcpClient.Close();
-        //    //tcpClient.Dispose();
-        //    //tcpClient.Client.Disconnect(true);
-        //}
+            // Start reading from the network again.
+            try
+            {
+                byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+                stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+            }
+            catch (Exception)
+            {
+                active = false;
+                Disconnected(this, new EventArgs());
+            }
+        }
 
 
 
@@ -195,6 +183,7 @@ namespace TWXP
                 stream.Write(buffer, 0, buffer.Length);
             }
         }
-
     }
 }
+    
+

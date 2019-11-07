@@ -105,6 +105,7 @@ namespace TWXP
                 TelnetClient client = new TelnetClient(await listener.AcceptTcpClientAsync());
 
                 // Add the receive handler.
+                client.Initialized += ClientInitialized;
                 client.Receive += OutboundReceive;
                 client.Disconnected += ClientDisconnect;
 
@@ -115,17 +116,19 @@ namespace TWXP
                 ClientConnected(client, new EventArgs());
 
                 //Handle New connection
-                NewClient(client);
+                //NewClient(client);
             }
         }
 
-        private void NewClient(TelnetClient client)
+        private void ClientInitialized(Object source, EventArgs e)
         {
+            TelnetClient client = (TelnetClient)source;
+
             // Send ASCII FF + BS and ANSI Clear Screen + Banner
             client.Write("\u000c\u0008\u001B[2J\r\u001B[0;33mTWX Proxy 3 - Version 3.1944a Alpha - Please do not distribute.\n\r\n\r");
 
             // Send Greeting
-            client.Write(String.Format("\u001B[1;31mConnection accepted from {0}({1})\n\r\n\r",client.RemoteEP,client.ReverseDNS));
+            BroadCast($"\u001B[1;31mConnection accepted from {client.RemoteEP.Address}({client.ReverseDNS})\n\r\n\r");
         }
 
         public void Pause()
@@ -203,11 +206,17 @@ namespace TWXP
 
         private void ServerDisconnect(Object source, EventArgs e)
         {
+            TelnetServer server = (TelnetServer)source;
             connecting = false;
+
+            BroadCast($"\u001B[1;31mServer disconnected {server.RemoteEP.Address}:{server.RemoteEP.Port}\n\r\n\r");
         }
 
         private void ClientDisconnect(Object source, EventArgs e)
         {
+            TelnetClient client = (TelnetClient)source;
+
+            BroadCast($"\u001B[1;31mClient disconnected {client.RemoteEP.Address}({client.ReverseDNS})\n\r\n\r");
         }
 
         public void Disconnect()
@@ -224,6 +233,14 @@ namespace TWXP
         }
 
         public void Echo(string s)
+        {
+            foreach (TelnetClient c in Clients)
+            {
+                c.Write(s.Replace("*", "\r\n"));
+            }
+        }
+
+        public void BroadCast(string s)
         {
             foreach (TelnetClient c in Clients)
             {

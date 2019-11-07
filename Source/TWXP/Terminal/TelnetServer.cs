@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -61,137 +62,136 @@ namespace TWXP
             Connect();
         }
 
-        private async void Connect()
+        public void Connect()
         {
-            ///if (tcpClient != null && tcpClient.Connected) return;
             if (active) return;
             active = true;
 
-            if (tcpClient != null)
+            try
             {
-                tcpClient.Client.Close();
-                tcpClient.Close();
+                tcpClient = new TcpClient();
+
+                //IPAddress[] remoteHost = Dns.GetHostAddresses("hostaddress");
+
+                //Start the async connect operation          
+
+                tcpClient.BeginConnect(Address, Port, new AsyncCallback(ConnectCallback), tcpClient);
+
             }
-            tcpClient = new TcpClient();
-
-            tcpClient.Connect(Address, Port);
-            if (tcpClient.Connected)
+            catch (Exception ex)
             {
-                // Get the underlying stream from the client.
-                using (stream = tcpClient.GetStream())
-                {
-                    byte[] resp = new byte[2048];
+                Debug.Write(ex.Message);
+            }
+        }
 
-                    // Get the local and remote endpoints from the stream.
-                    PropertyInfo socket = stream.GetType().GetProperty("Socket", BindingFlags.NonPublic | BindingFlags.Instance);
-                    RemoteEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).RemoteEndPoint;
-                    LocalEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).LocalEndPoint;
 
-                    // Send Telnet handshake
-                    byte[] telnet = {
+        private void ConnectCallback(IAsyncResult result)
+        {
+            if (!active) return;
+            try
+            {
+                stream = tcpClient.GetStream();
+
+                // Get the local and remote endpoints from the stream.
+                PropertyInfo socket = stream.GetType().GetProperty("Socket", BindingFlags.NonPublic | BindingFlags.Instance);
+                RemoteEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).RemoteEndPoint;
+                LocalEP = (IPEndPoint)((Socket)socket.GetValue(stream, null)).LocalEndPoint;
+
+                // Send Telnet handshake
+                byte[] telnet = {
                     255, 251, 1,    // Telnet (IAC)(Will)(ECHO) - Will Echo
                     255, 251, 3 };  // Telnet (IAC)(Will)(SGA)  - Will Supress Go Ahead
-                    stream.Write(telnet, 0, telnet.Length);
+                stream.Write(telnet, 0, telnet.Length);
 
+                ///stream.ReadTimeout = 500;
 
-                    stream.ReadTimeout = 500;
-                    stream.Read(resp, 0, resp.Length);
+                //NetworkStream networkStream = tcpClient.GetStream();
 
-                    _ = Read();
+                byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+                stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+            }
+            catch (Exception ex)
+            {
+                Debug.Write(ex.Message);
+            }
+
+            while(active)
+            {
+                if (!tcpClient.Client.Poll(0, SelectMode.SelectWrite))
+                {
+                    active = false;
+                    Disconnected(this, new EventArgs());
                 }
             }
         }
 
-        byte[] resp = new byte[2048];
-        int bytes = 0;
-
-        private async Task Read()
+        private void ReadCallback(IAsyncResult result)
         {
-            stream.ReadTimeout = 55000;
-            do
+            if (!active) return;
+
+            try
             {
-                try
-                {
-                    //stream.BeginRead
-                }
-                catch { }
-            }while(active && tcpClient.Connected);
-        }
+                // Get the response
+                int bytes = stream.EndRead(result);
+                byte[] buffer = (byte[])result.AsyncState;
 
-        private async Task Readoldxxx()
-        {
-            stream.ReadTimeout = 55000;
-            do
+
+                StringBuilder control = new StringBuilder();
+                StringBuilder text = new StringBuilder();
+
+                foreach (char c in Encoding.ASCII.GetString(buffer, 0, bytes))
+                {
+                    if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
+                    else text.Append(c);
+                }
+
+                // Send receive event with data.
+                Receive(text.ToString(), new EventArgs());
+            }
+            catch (Exception)
             {
+                active = false;
+                Disconnected(this, new EventArgs());
+            }
 
-                try
-                {
-                    bytes = stream.Read(resp, 0, resp.Length);
-                }
-                catch { }
-
-                if (bytes == 0)
-                {
-                    // No Bytes Received, send Telnet (IAC)(DO)(AYT) - Are you there?
-                    stream.Write(new byte[] { 255, 253, 246 }, 0, 3);
-                }
-                else
-                {
-                    output.Write(resp, 0, bytes);
-                }
-
-                if (!stream.DataAvailable && output.Length > 0)
-                {
-                    StringBuilder control = new StringBuilder();
-                    StringBuilder text = new StringBuilder();
-
-                    foreach (char c in Encoding.ASCII.GetString(output.ToArray()))
-                    {
-                        if (c < 32 && c != 13 && c != 10 && c != 27) control.Append(c);
-                        else text.Append(c);
-                    }
-
-                    //todo: process control characters
-
-                    // Send receive event
-                    Receive(text.ToString(), new EventArgs());
-                    output.SetLength(0);
-                }
-
-                await Task.Delay(200);
-
-            } while (active && tcpClient.Connected);
-
-            active = false;
-            tcpClient.Client.Close();
-            tcpClient.Close();
-
-            // Send disconnect event
-            Disconnected(this, new EventArgs());
-
-            //tcpClient.Close();
-            //tcpClient.Dispose();
-            //tcpClient.Client.Disconnect(true);
+            // Start reading from the network again.
+            try
+            {
+                byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
+                stream.BeginRead(buffer, 0, buffer.Length, ReadCallback, buffer);
+            }
+            catch (Exception)
+            {
+                active = false;
+                Disconnected(this, new EventArgs());
+            }
         }
 
 
         public void Write(String text)
         {
-            //todo: buffer
-
-            if (tcpClient.Connected && stream != null)
+            if (active)
             {
-                //Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-                //byte[] buffer = Encoding.GetEncoding("IBM437").GetBytes(text);
-                byte[] buffer = Encoding.ASCII.GetBytes(text);
-                stream.Write(buffer, 0, buffer.Length);
+                //todo: buffer ???  determin if a buffer is needed
+                try
+                {
+                    //Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                    //byte[] buffer = Encoding.GetEncoding("IBM437").GetBytes(text);
+                    byte[] buffer = Encoding.ASCII.GetBytes(text);
+                    stream.Write(buffer, 0, buffer.Length);
+                }
+                catch (Exception)
+                {
+
+                    //throw;
+                }
             }
         }
 
         public void Disconnect()
         {
             active = false;
-            //tcpClient.Client.Disconnect(true);
+            tcpClient.Client.Disconnect(true);
         }
     }
 }

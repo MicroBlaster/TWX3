@@ -913,23 +913,25 @@ namespace TWXP
         {
             var.Update(text1 + text2);
         }
-    
+
         /// <summary>
         /// Command cmd.PadLeft - Add spaces to the left of a variable.
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
-        public static void PadLeft(Param var)
+        /// <param name="length">The desired length of the result.</param>
+        public static void PadLeft(Param var, int length)
         {
-            var.Update(((string)var).PadLeft());
+            var.Update(((string)var).PadLeft(length));
         }
-    
+
         /// <summary>
         /// Command cmd.PadRight - Add spaces to the right of a variable.
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
-        public static void PadRight(Param var)
+        /// <param name="length">The desired length of the result.</param>
+        public static void PadRight(Param var, int length)
         {
-            var.Update(((string)var).PadRight());
+            var.Update(((string)var).PadRight(length));
         }
     
         /// <summary>
@@ -940,19 +942,9 @@ namespace TWXP
         /// <param name="delims">Delimiters used to split string. Space and Tab will be used if omitted.</param>
         public static void SplitText(string text, Param[] vars, string delims = null)
         {
-            char[] d;
-            if(delims = null)
-            {
-                d = new char[] {' ', '\t'};
-            }
-            else
-            {
-                foreach(char c in delims)
-                {
-                    d.add(c);
-                }
-            }
-            vars = text.Split(d)
+            //TODO:
+            if (delims == null) _ = " \t";
+            //vars = (Param[])text.Split(delims.ToCharArray());
         }
     
         /// <summary>
@@ -962,7 +954,7 @@ namespace TWXP
         /// <param name="text">The character or sub-string to strip from "var".</param>
         public static void StripText(Param var, string text)
         {
-            var.Update(((string)var).Replace(text,"");
+            var.Update(((string)var).Replace(text,""));
         }
     
         /// <summary>

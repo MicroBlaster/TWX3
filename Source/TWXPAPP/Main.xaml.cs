@@ -28,13 +28,13 @@ namespace TWXPAPP
             //proxy.Scripts.Load(@"scripts\zed-bot.vb");
             //proxy.Scripts.Load(@"scripts\zed-bot.cs");
 
-            //this.Hide();
+            this.Hide();
 
             //Window welcome = new Welcome();
             //welcome.ShowDialog();
 
-            //Window setup = new Setup();
-            //setup.ShowDialog();
+            Window setup = new Setup();
+            setup.ShowDialog();
 
             Proxy = new Proxy();
             _ = proxy.StartAsync();
@@ -80,6 +80,7 @@ namespace TWXPAPP
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
+
             if (Connect.Content.ToString() == "Connect")
             {
                 Connect.Content = "Disconnect";
@@ -90,7 +91,6 @@ namespace TWXPAPP
                 Connect.Content = "Connect";
                 proxy.Disconnect();
             }
-
         }
     }
 }

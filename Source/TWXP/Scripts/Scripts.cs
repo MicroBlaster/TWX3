@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.Loader;
 
+
 namespace TWXP
 {
     public partial class Scripts
@@ -32,6 +33,7 @@ namespace TWXP
             cmd.Load(proxy);
         }
 
+        private delegate void SayAnything();
 
         public string Load(string filename)
         {
@@ -142,11 +144,10 @@ namespace TWXP
                 new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         }
 
-
         private void Exec(Compilation compilation)
         {
             var context = new LoadContext();
-
+  
             using (var ms = new MemoryStream())
             {
                 var cr = compilation.Emit(ms);
@@ -160,6 +161,7 @@ namespace TWXP
 
                     //var instance = Activator.CreateInstance(type);
                     var result = greetMethod.Invoke(null, null);
+
                 }
             }
 

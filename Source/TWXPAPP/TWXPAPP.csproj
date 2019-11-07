@@ -11,9 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Windows\Setup - Copy.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Images\lightning.png" />
     <None Remove="Images\logo.png" />
     <None Remove="Images\proxy.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Windows\Setup - Copy.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Windows\" />
   </ItemGroup>
 
   <ItemGroup>
