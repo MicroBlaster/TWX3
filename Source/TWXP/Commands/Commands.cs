@@ -19,8 +19,8 @@ namespace TWXP
             #region Command List
             Commands.Add(new Command("Add", Add, 2, 2));
             Commands.Add(new Command("AddMenu"));  //TODO:
-            Commands.Add(new Command("And"));
-            Commands.Add(new Command("Branch")); //In-Progress
+            Commands.Add(new Command("And", And, 2, 2));
+            Commands.Add(new Command("Branch", Branch, 2, 2)); //In-Progress
             Commands.Add(new Command("ClientMessage"));  //TODO:
             Commands.Add(new Command("CloseMenu"));  //TODO:
             Commands.Add(new Command("Connect", Connect));
@@ -44,8 +44,8 @@ namespace TWXP
             Commands.Add(new Command("GetSectorParameter"));
             Commands.Add(new Command("GetText"));
             Commands.Add(new Command("GetTime"));
-            Commands.Add(new Command("Gosub"));
-            Commands.Add(new Command("Goto"));
+            Commands.Add(new Command("Gosub", Gosub, 1, 1));
+            Commands.Add(new Command("Goto", Goto, 1, 1));
             Commands.Add(new Command("GetWord"));
             Commands.Add(new Command("GetWordPos"));
             Commands.Add(new Command("Halt"));
@@ -74,7 +74,7 @@ namespace TWXP
             Commands.Add(new Command("Rename"));
             Commands.Add(new Command("ReplaceText"));
             Commands.Add(new Command("ReqRecording"));
-            Commands.Add(new Command("Return"));
+            Commands.Add(new Command("Return", Return, 0, 0));
             Commands.Add(new Command("Round"));
             Commands.Add(new Command("SaveVar"));
             Commands.Add(new Command("Send"));
@@ -138,8 +138,56 @@ namespace TWXP
             Commands.Add(new Command("Trim"));
             Commands.Add(new Command("Truncate"));
         }
+
+        #endregion
+        #region Flow Control commands  
+
+
+        /// <summary>
+        /// Brances to the specified label if condition is false, otherwise 
+        /// operation will continue with the next line.
+        /// </summary>
+        /// <param name="condition">The condition to be tested.</param>
+        /// <param name="label">The label to jump to if the condition is false.</param>
+        public static void Branch(TScript script, params Param[] param)
+        {
+            if (!param[0]) script.GotoLabel(param[1]);
+        }
+
+        /// <summary>
+        /// Goto unconditinally jumps to the specified label.
+        /// </summary>
+        /// <param name="label">The label to jump to if the condition is false.</param>
+        public static void Goto(TScript script, params Param[] param)
+        {
+            script.GotoLabel(param[0]);
+        }
+
+        /// <summary>
+        /// Goto unconditinally jumps to the specified label.
+        /// </summary>
+        /// <param name="label">The label to jump to if the condition is false.</param>
+        public static void Gosub(TScript script, params Param[] param)
+        {
+            //script.GotoLabel(param[0]);
+        }
+
+        /// <summary>
+        /// Goto unconditinally jumps to the specified label.
+        /// </summary>
+        /// <param name="label">The label to jump to if the condition is false.</param>
+        public static void Return(TScript script, params Param[] param)
+        {
+            //script.GotoLabel(param[0]);
+        }
+
+
+
+
         #endregion
         #region Assignment operator commands  
+
+
         /// <summary>
         /// Assignment Operator - Asigns a value to a parameter.
         /// </summary>
@@ -179,9 +227,10 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable that will have its value added to.</param>
         /// <param name="b">The amount the variable will be increased by.</param>
-        public static void Add(TScript script, params Param[] param)
+        public static void Add(Param a, Param b)
         {
-            param[0].Update((double)param[0] + (double)param[1]);
+            a.Update((Double)a + b);
+            //param[0].Update((double)param[0] + (double)param[1]);
         }
 
         /// <summary>
@@ -201,7 +250,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated on. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void And(Param a, bool b)
+        public static Param And(Param a, Param b)
         {
             a.Update((bool)a && b);
         }
@@ -1282,9 +1331,10 @@ namespace TWXP
         // This is the deligate definition, which defines the 
         // parameters and return value of TWX commands.
         public delegate void CmdRef(TScript script, params Param[] param);
+        public delegate void CmdRef2(Param a, Param b);
 
         // A private instance of our deligate stores the reference to the real command.
-        private CmdRef reference;
+        private Delegate reference;
 
         // Public properties for use by the compiler.
         public string Name {get; private set;}
@@ -1299,6 +1349,24 @@ namespace TWXP
         /// <param name="minArgs">The minimum number of arguments allowed.</param>
         /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
         public Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = -1)
+        {
+            // Store the command refererence.
+            this.reference = reference;
+
+            // Store the properties.
+            Name = name;
+            MinArgs = minArgs;
+            MaxArgs = maxArgs;
+        }
+
+        /// <summary>
+        /// Command constructor class, initializes the class with the required properties.
+        /// </summary>
+        /// <param name="name">The name of the command used by the compiler.</param>
+        /// <param name="reference">A deligate reference to the command.</param>
+        /// <param name="minArgs">The minimum number of arguments allowed.</param>
+        /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
+        public Command(string name, CmdRef2 reference, int minArgs = 0, int maxArgs = -1)
         {
             // Store the command refererence.
             this.reference = reference;

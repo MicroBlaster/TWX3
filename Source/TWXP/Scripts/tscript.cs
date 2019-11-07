@@ -8,10 +8,13 @@ namespace TWXP
 {
     public class TScript
     {
+        public enum ParamType { CMD, VAR, CONST, SYSCONST, PROGVAR, CHAR }
+
         // Public Read-only Properties
         public string FileName { get; private set; }
         public Proxy Proxy { get; private set; }
         public bool Silent { get; private set; }
+        public int CodePos { get; private set; }
         public List<Param> Vars { get; private set; }
         //public List<CmdParam> ParamList { get; private set; }
         //public List<string> IncludeList { get; private set; }
@@ -39,13 +42,30 @@ namespace TWXP
 
         public void Exec()
         {
+            CodePos = 0;
+
             // Loop through each command until the end is reached or Halt Is called.
-            foreach (CommandLine cl in commandlist)
+            while (CodePos < commandlist.Count())
             {
-                // Invoke the referenced command.
-                //Commands CmdRef = new Commands();
-                cl.Invoke();
+                commandlist[CodePos].Invoke();
+
+                CodePos++;
             }
+        }
+
+        public void GotoLabel(string labelname)
+        {
+            var labels = labellist.Where(l => l.Name.ToLower() == labelname.Replace("::",":").ToLower());
+
+            if (labels.Count() > 0)
+            {
+                CodePos = labels.Single().CodeLine -1;
+            }
+            else
+            {
+                Debug.Write("Error: Invalid label specified.");
+            }
+            //CodePos = (((int)Cmp.Code) + Cmp.Labels[I].Location as object);
         }
 
         public void ReadCTS()
@@ -128,19 +148,35 @@ namespace TWXP
                 }
                 stream.Close();
 
+                int CodeLine = 0;
                 using (BinaryReader codeRef = new BinaryReader(ms))
                 {
                     // Loop through the main CodeBase
                     bs = codeRef.BaseStream;
                     while (bs.Position < bs.Length)
                     {
+                        GetLabels(bs.Position, CodeLine);
+
                         // Add each command to the CommandList
                         commandlist.Add(new CommandLine(this, codeRef));
+                        CodeLine++;
                     }
                 }
             }
         }
-        public enum ParamType { CMD, VAR, CONST, SYSCONST, PROGVAR, CHAR }
+
+        private void GetLabels(long pos, int CodeLine)
+        {
+            var labels = labellist.Where(l => l.Location == pos);
+            if (labels.Count() > 0)
+            {
+                foreach (Label l in labels)
+                {
+                    l.CodeLine = CodeLine;
+                }
+            }
+
+        }
 
         public class FileHeader
         {
@@ -203,12 +239,16 @@ namespace TWXP
         {
             public string Name { get; private set; }
             public int Location { get; private set; }
+            public int CodeLine { get; set; }
 
             public Label(BinaryReader stream)
             {
                 Location = stream.ReadInt32();
                 int length = stream.ReadInt32();
-                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length).Replace(":", "LAB_");
+                Name = Encoding.UTF8.GetString(stream.ReadBytes(length), 0, length).Replace("\"","");
+
+                // This makes the : optional when specifying a label name.
+                if (Name.IndexOf(":") == -1) Name = $":{Name}";
 
                 Debug.Write($"label: {Name} = {Location}\n");
             }
@@ -298,10 +338,13 @@ namespace TWXP
                 decimal dv;
 
                 //byte IndexCount = stream.ReadByte();
-                if (!decimal.TryParse(value, out dv))
-                {
-                    value = "\"" + value + "\"";
-                }
+
+
+                // ????? WHY?????
+                //if (!decimal.TryParse(value, out dv))
+                //{
+                //    value = "\"" + value + "\"";
+                //}
 
                 //var param = Param.Where(p => p.VarName == name);
                 //if (param.Count() == 0)
@@ -320,40 +363,26 @@ namespace TWXP
             // Invoke this command line
             public void Invoke()
             {
-                switch (Name)
+                foreach (Param p in Param)
                 {
-                    case "Branch":
-                        //TODO:
-                        return;
+                    IEnumerable<Param> vars;
+                    if (p.IsVarable)
+                    {
+                        vars = script.Vars.Where(v => v.VarName.ToLower() == p.VarName.ToLower());
+                    }
+                    else
+                    {
+                        vars = script.Vars.Where(v => v.VarName.ToLower() == p.Value.ToLower());
+                    }
 
-                    case "Goto":
-                        //TODO
-                        return;
-
-                    default:
-                        foreach (Param p in Param)
-                        {
-                            IEnumerable<Param> vars;
-                            if (p.IsVarable)
-                            {
-                                vars = script.Vars.Where(v => v.VarName.ToLower() == p.VarName.ToLower());
-                            }
-                            else
-                            {
-                                vars = script.Vars.Where(v => v.VarName.ToLower() == p.Value.ToLower());
-                            }
-
-                            if (vars.Count() > 0)
-                            {
-                                p.Update(vars.Single().Value);
-                            }
-                        }
-                        
-                        CmdRef.Invoke(script, Param.ToArray());
-                        return;
+                    if (vars.Count() > 0)
+                    {
+                        p.Update(vars.Single().Value);
+                    }
                 }
-            }
 
+                CmdRef.Invoke(script, Param.ToArray());
+            }           
         }
     }
 }
