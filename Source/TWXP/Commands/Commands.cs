@@ -27,7 +27,7 @@ namespace TWXP
             Commands.Add(new Command("CutText")); //TODO:
             Commands.Add(new Command("Delete")); //TODO:
             Commands.Add(new Command("Disconnect")); //In-Progress
-            Commands.Add(new Command("Divide"));
+            Commands.Add(new Command("Divide", Divide, 2, 2));
             Commands.Add(new Command("Echo", Echo, 1, -1)); //In-Progress
             Commands.Add(new Command("FileExists")); //TODO: --- through rest of list, except operators ---
             Commands.Add(new Command("GetCharCode"));
@@ -64,9 +64,9 @@ namespace TWXP
             Commands.Add(new Command("Logging"));
             Commands.Add(new Command("LowerCase"));
             Commands.Add(new Command("MergeText"));
-            Commands.Add(new Command("Multiply"));
+            Commands.Add(new Command("Multiply", Multiply, 2, 2));
             Commands.Add(new Command("OpenMenu"));
-            Commands.Add(new Command("Or"));
+            Commands.Add(new Command("Or", Or, 2, 2));
             Commands.Add(new Command("Pause"));
             Commands.Add(new Command("ProcessIn"));
             Commands.Add(new Command("ProcessOut"));
@@ -95,7 +95,7 @@ namespace TWXP
             Commands.Add(new Command("Sound"));
             Commands.Add(new Command("Stop"));
             Commands.Add(new Command("StripText"));
-            Commands.Add(new Command("Subtract"));
+            Commands.Add(new Command("Subtract", Subtract, 2, 2));
             Commands.Add(new Command("SYS_CHECK"));
             Commands.Add(new Command("SYS_FAIL"));
             Commands.Add(new Command("SYS_KILL"));
@@ -104,7 +104,7 @@ namespace TWXP
             Commands.Add(new Command("SYS_SHOWMSG"));
             Commands.Add(new Command("SystemScript"));
             Commands.Add(new Command("UpoperCase"));
-            Commands.Add(new Command("Xor"));
+            Commands.Add(new Command("Xor", Xor, 2, 2));
             Commands.Add(new Command("Window"));
             Commands.Add(new Command("Write"));
 
@@ -137,6 +137,12 @@ namespace TWXP
             Commands.Add(new Command("SplitText"));
             Commands.Add(new Command("Trim"));
             Commands.Add(new Command("Truncate"));
+
+
+
+
+            Commands.Add(new Command("Not", Not, 1, 1));
+
         }
 
         #endregion
@@ -193,9 +199,9 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The paramater to be asigned to.</param>
         /// <param name="b">The value to be asigned to the paramater.</param>
-        public static void SetVar(TScript script, params Param[] param)
+        public static void SetVar(Param a, Param b)
         {
-            param[0].Update((string)param[1]);
+            a.Update((string)b);
         }
 
 
@@ -207,7 +213,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be multiplied.</param>
         /// <param name="b">The amount to multiply the variable by.</param>
-        public static void Multiply(Param a, double b)
+        public static void Multiply(Param a, Param b)
         {
             a.Update((double)a * b);
         }
@@ -217,7 +223,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be divided.</param>
         /// <param name="b">The amount to divide the variable by.</param>
-        public static void Divide(Param a, double b)
+        public static void Divide(Param a, Param b)
         {
             a.Update((double)a / b);
         }
@@ -233,12 +239,13 @@ namespace TWXP
             //param[0].Update((double)param[0] + (double)param[1]);
         }
 
+
         /// <summary>
         /// Mathmatical Operator cmd.Subtract - Subtracts a value from a variable.
         /// </summary>
         /// <param name="a">The variable that will be subtracted from.</param>
         /// <param name="b">The amount the variable will be subtracted by</param>
-        public static void Subtract(Param a, double b)
+        public static void Subtract(Param a, Param b)
         {
             a.Update((double)a - b);
         }
@@ -250,7 +257,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated on. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static Param And(Param a, Param b)
+        public static void And(Param a, Param b)
         {
             a.Update((bool)a && b);
         }
@@ -260,7 +267,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void Or(Param a, bool b)
+        public static void Or(Param a, Param b)
         {
             a.Update((bool)a || b);
         }
@@ -270,7 +277,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void Xor(Param a, bool b)
+        public static void Xor(Param a, Param b)
         {
             a.Update((bool)a ^ b);
         }
@@ -1328,13 +1335,18 @@ namespace TWXP
 
     public class Command
     {
+        public enum RefType { CmdRef, CmdRef1, CmdRef2, CmdRef3 }
+
         // This is the deligate definition, which defines the 
         // parameters and return value of TWX commands.
         public delegate void CmdRef(TScript script, params Param[] param);
+        public delegate void CmdRef1(Param a);
         public delegate void CmdRef2(Param a, Param b);
+        public delegate void CmdRef3(Param a, Param b, Param c);
 
         // A private instance of our deligate stores the reference to the real command.
         private Delegate reference;
+        private RefType reftype;
 
         // Public properties for use by the compiler.
         public string Name {get; private set;}
@@ -1352,6 +1364,26 @@ namespace TWXP
         {
             // Store the command refererence.
             this.reference = reference;
+            reftype = RefType.CmdRef;
+
+            // Store the properties.
+            Name = name;
+            MinArgs = minArgs;
+            MaxArgs = maxArgs;
+        }
+
+        /// <summary>
+        /// Command constructor class, initializes the class with the required properties.
+        /// </summary>
+        /// <param name="name">The name of the command used by the compiler.</param>
+        /// <param name="reference">A deligate reference to the command.</param>
+        /// <param name="minArgs">The minimum number of arguments allowed.</param>
+        /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
+        public Command(string name, CmdRef1 reference, int minArgs = 0, int maxArgs = -1)
+        {
+            // Store the command refererence.
+            this.reference = reference;
+            reftype = RefType.CmdRef1;
 
             // Store the properties.
             Name = name;
@@ -1370,6 +1402,26 @@ namespace TWXP
         {
             // Store the command refererence.
             this.reference = reference;
+            reftype = RefType.CmdRef2;
+
+            // Store the properties.
+            Name = name;
+            MinArgs = minArgs;
+            MaxArgs = maxArgs;
+        }
+
+        /// <summary>
+        /// Command constructor class, initializes the class with the required properties.
+        /// </summary>
+        /// <param name="name">The name of the command used by the compiler.</param>
+        /// <param name="reference">A deligate reference to the command.</param>
+        /// <param name="minArgs">The minimum number of arguments allowed.</param>
+        /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
+        public Command(string name, CmdRef3 reference, int minArgs = 0, int maxArgs = -1)
+        {
+            // Store the command refererence.
+            this.reference = reference;
+            reftype = RefType.CmdRef3;
 
             // Store the properties.
             Name = name;
@@ -1386,8 +1438,25 @@ namespace TWXP
         {
             if (reference != null)
             {
-                // Invoke the command referance.
-                reference.Invoke(script, param);
+                switch (reftype)
+                {
+                    // Invoke the command referance based on the RefType.
+                    case RefType.CmdRef:
+                        ((CmdRef)reference).Invoke(script, param);
+                        break;
+
+                    case RefType.CmdRef1:
+                        ((CmdRef1)reference).Invoke(param[0]);
+                        break;
+
+                    case RefType.CmdRef2:
+                        ((CmdRef2)reference).Invoke(param[0], param[1]);
+                        break;
+
+                    case RefType.CmdRef3:
+                        ((CmdRef3)reference).Invoke(param[0], param[1], param[2]);
+                        break;
+                }
             }
             else
             {
