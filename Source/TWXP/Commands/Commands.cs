@@ -5,30 +5,30 @@ using System.Text;
 
 namespace TWXP
 {
-    public static class cmd
+    internal static class cmd
     {
-        public static List<Command> Commands {get; private set;}
+        internal static List<Command> Commands {get; private set;}
         //private static Proxy proxy;
 
-        public static void Load()
+        internal static void Load()
         {
             if (Commands != null) return;
 
             Commands = new List<Command>();
 
             #region Command List
-            Commands.Add(new Command("Add", Add, 2, 2));
+            Commands.Add(new Command("Add", Add));
             Commands.Add(new Command("AddMenu"));  //TODO:
-            Commands.Add(new Command("And", And, 2, 2));
-            Commands.Add(new Command("Branch", Branch, 2, 2)); //In-Progress
+            Commands.Add(new Command("And", And));
+            Commands.Add(new Command("Branch", Branch)); 
             Commands.Add(new Command("ClientMessage"));  //TODO:
             Commands.Add(new Command("CloseMenu"));  //TODO:
-            Commands.Add(new Command("Connect", Connect));
-            Commands.Add(new Command("CutText")); //TODO:
+            Commands.Add(new Command("Connect", Connect, 0, 0, 0));
+            Commands.Add(new Command("CutText", CutText, 1, 4, 4));
             Commands.Add(new Command("Delete")); //TODO:
-            Commands.Add(new Command("Disconnect")); //In-Progress
-            Commands.Add(new Command("Divide", Divide, 2, 2));
-            Commands.Add(new Command("Echo", Echo, 1, -1)); //In-Progress
+            Commands.Add(new Command("Disconnect", Disconnect, 0, 0, 0)); //In-Progress
+            Commands.Add(new Command("Divide", Divide));
+            Commands.Add(new Command("Echo", Echo)); //In-Progress
             Commands.Add(new Command("FileExists")); //TODO: --- through rest of list, except operators ---
             Commands.Add(new Command("GetCharCode"));
             Commands.Add(new Command("GetConsoleInput"));
@@ -155,7 +155,7 @@ namespace TWXP
         /// </summary>
         /// <param name="condition">The condition to be tested.</param>
         /// <param name="label">The label to jump to if the condition is false.</param>
-        public static void Branch(TScript script, params Param[] param)
+        internal static void Branch(TScript script, params Param[] param)
         {
             if (!param[0]) script.GotoLabel(param[1]);
         }
@@ -164,7 +164,7 @@ namespace TWXP
         /// Goto unconditinally jumps to the specified label.
         /// </summary>
         /// <param name="label">The label to jump to if the condition is false.</param>
-        public static void Goto(TScript script, params Param[] param)
+        internal static void Goto(TScript script, params Param[] param)
         {
             script.GotoLabel(param[0]);
         }
@@ -173,7 +173,7 @@ namespace TWXP
         /// Goto unconditinally jumps to the specified label.
         /// </summary>
         /// <param name="label">The label to jump to if the condition is false.</param>
-        public static void Gosub(TScript script, params Param[] param)
+        internal static void Gosub(TScript script, params Param[] param)
         {
             //script.GotoLabel(param[0]);
         }
@@ -182,7 +182,7 @@ namespace TWXP
         /// Goto unconditinally jumps to the specified label.
         /// </summary>
         /// <param name="label">The label to jump to if the condition is false.</param>
-        public static void Return(TScript script, params Param[] param)
+        internal static void Return(TScript script, params Param[] param)
         {
             //script.GotoLabel(param[0]);
         }
@@ -199,7 +199,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The paramater to be asigned to.</param>
         /// <param name="b">The value to be asigned to the paramater.</param>
-        public static void SetVar(Param a, Param b)
+        internal static void SetVar(Param a, Param b)
         {
             a.Update((string)b);
         }
@@ -213,7 +213,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be multiplied.</param>
         /// <param name="b">The amount to multiply the variable by.</param>
-        public static void Multiply(Param a, Param b)
+        internal static void Multiply(Param a, Param b)
         {
             a.Update((double)a * b);
         }
@@ -223,7 +223,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be divided.</param>
         /// <param name="b">The amount to divide the variable by.</param>
-        public static void Divide(Param a, Param b)
+        internal static void Divide(Param a, Param b)
         {
             a.Update((double)a / b);
         }
@@ -233,7 +233,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable that will have its value added to.</param>
         /// <param name="b">The amount the variable will be increased by.</param>
-        public static void Add(Param a, Param b)
+        internal static void Add(Param a, Param b)
         {
             a.Update((Double)a + b);
             //param[0].Update((double)param[0] + (double)param[1]);
@@ -245,7 +245,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable that will be subtracted from.</param>
         /// <param name="b">The amount the variable will be subtracted by</param>
-        public static void Subtract(Param a, Param b)
+        internal static void Subtract(Param a, Param b)
         {
             a.Update((double)a - b);
         }
@@ -257,7 +257,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated on. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void And(Param a, Param b)
+        internal static void And(Param a, Param b)
         {
             a.Update((bool)a && b);
         }
@@ -267,7 +267,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void Or(Param a, Param b)
+        internal static void Or(Param a, Param b)
         {
             a.Update((bool)a || b);
         }
@@ -277,7 +277,7 @@ namespace TWXP
         /// </summary>
         /// <param name="a">The variable to be operated. The value in this variable must be either TRUE (1) or FALSE (0).</param>
         /// <param name="b">The value to be operated by. This value must be either TRUE (1) or FALSE (0).</param>
-        public static void Xor(Param a, Param b)
+        internal static void Xor(Param a, Param b)
         {
             a.Update((bool)a ^ b);
         }
@@ -286,7 +286,7 @@ namespace TWXP
         /// Logincal Operator cmd.Not - Performs a logical 'Not' on a variable.
         /// </summary>
         /// <param name="a">The variable to be operated. The boolean oposite of this varable will be returned</param>
-        public static void Not(Param a)
+        internal static void Not(Param a)
         {
             a.Update(!(bool)a);
         }
@@ -299,7 +299,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsEquil(Param a, double b, double c)
+        internal static void IsEquil(Param a, double b, double c)
         {
             a.Update(b == c);
         }
@@ -310,7 +310,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsNotEquil(Param a, double b, double c)
+        internal static void IsNotEquil(Param a, double b, double c)
         {
             a.Update(b != c);
         }
@@ -321,7 +321,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsGreater(Param a, double b, double c)
+        internal static void IsGreater(Param a, double b, double c)
         {
             a.Update(b > c);
         }
@@ -332,7 +332,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsGeaterEquil(Param a, double b, double c)
+        internal static void IsGeaterEquil(Param a, double b, double c)
         {
             a.Update(b >= c);
         }
@@ -343,7 +343,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsLesser(TScript script, params Param[] param)
+        internal static void IsLesser(TScript script, params Param[] param)
         {
             param[0].Update((double)param[1] < (double)param[2]);
         }
@@ -354,7 +354,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        public static void IsLesserEquil(Param a, double b, double c)
+        internal static void IsLesserEquil(Param a, double b, double c)
         {
             a.Update(b <= c);
         }
@@ -383,7 +383,7 @@ namespace TWXP
         /// sessions. String is sent in Bright White and the prompt is re-displayed afterwards.
         /// </summary>
         /// <param name="String">String to be broadcast.</param>
-        public static void ClientMessage(string s)
+        internal static void ClientMessage(string s)
         {
             //TODO:
         }
@@ -410,7 +410,7 @@ namespace TWXP
         /// Command cmd.Send - Sends text to the remote server.
         /// </summary>
         /// <param name="param">Parameters to be concatenated and sent.</param>
-        public static void Send(params Param[] param)
+        internal static void Send(params Param[] param)
         {
             //TODO:
         }
@@ -421,12 +421,12 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to hold the line of text entered by the user.</param>
         /// <param name="prompt">The text to display above the input prompt.</param>
-        public static void GetInput(Param var, string prompt)
+        internal static void GetInput(Param var, string prompt)
         {
             var.Update(GetInput(prompt));
         }
 
-        public static string GetInput(string prompt)
+        internal static string GetInput(string prompt)
         {
             //TODO:
             return "";
@@ -440,12 +440,12 @@ namespace TWXP
         /// <param name="prompt">The text to display above the input prompt.</param>
         /// <param name="singleKey">.</param>
         /// For backwards compatability, any value for the singleKey parameter will be interperted as true.
-        public static void GetConsoleInput(Param var, string prompt, bool singleKey = false)
+        internal static void GetConsoleInput(Param var, string prompt, bool singleKey = false)
         {
             var.Update(GetConsoleInput(prompt, singleKey));
         }
 
-        public static string GetConsoleInput(string prompt, bool singleKey = false)
+        internal static string GetConsoleInput(string prompt, bool singleKey = false)
         {
             //TODO:
             return "";
@@ -455,12 +455,12 @@ namespace TWXP
         /// Command cmd.GetOuttext - Retrieve any outgoing text from TWX Proxy's outgoing buffer.
         /// </summary>
         /// <param name="var">The paramater to hold the outgoing text.</param>
-        public static void GetOuttext(Param var)
+        internal static void GetOuttext(Param var)
         {
             var.Update(GetOuttext());
         }
 
-        public static string GetOuttext()
+        internal static string GetOuttext()
         {
             //TODO:
             return "";
@@ -472,7 +472,7 @@ namespace TWXP
         /// </summary>
         /// <param name="AllScripts">True will activate all matching triggers in ALL scripts, while false will onlly process triggers from the current script.</param>
         /// <param name="text">The text to be processed as inbound.</param>
-        public static void ProcessIn(bool AllScripts, string text)
+        internal static void ProcessIn(bool AllScripts, string text)
         {
             //TODO:
         }
@@ -482,7 +482,7 @@ namespace TWXP
         /// Command cmd.ProcessOut  - Resumes processing out outgoing data that was trapped by a TextOutTrigger.
         /// </summary>
         /// <param name="text">The text to be processed as outbound.</param>
-        public static void ProcessOut()
+        internal static void ProcessOut()
         {
             //TODO:
         }
@@ -493,12 +493,12 @@ namespace TWXP
         /// Command cmd.GetDeafClients  - Retreives the status of any deaf clients.
         /// </summary>
         /// <param name="var">The paramater that will contain TRUE if any dead clients are found.</param>
-        public static void GetDeafClients(Param var)
+        internal static void GetDeafClients(Param var)
         {
             var.Update(GetDeafClients());
         }
                        
-        public static bool GetDeafClients()
+        internal static bool GetDeafClients()
         {
             //TODO:
             return false;
@@ -508,7 +508,7 @@ namespace TWXP
         /// Command cmd.SetDeafClients - Sets the deaf status on all clients.
         /// </summary>
         /// <param name="var">An optional variable that will wake clients if set to FALSE. By default the command will deafen all clients.</param>
-        public static void SetDeafClients(bool deafen = true)
+        internal static void SetDeafClients(bool deafen = true)
         {
             //TODO:
         }
@@ -525,7 +525,7 @@ namespace TWXP
         /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Ticks">The number of milliseconds to wait before the delay trigger automatically activates itself.</param>
-        public static void SetDelayTrigger(string name, string label, int tics)
+        internal static void SetDelayTrigger(string name, string label, int tics)
         {
             //TODO:
         }
@@ -537,7 +537,7 @@ namespace TWXP
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Event">The name of the program event to attach the trigger to.</param>
         /// <param name="Parameter">(optional) parameter for specific events.</param>
-        public static void SetEventTrigger(string name, string label, string fireon, string parameter)
+        internal static void SetEventTrigger(string name, string label, string fireon, string parameter)
         {
             //TODO:
         }
@@ -556,7 +556,7 @@ namespace TWXP
         /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
-        public static void SetTextLineTrigger(string name, string label, string Value)
+        internal static void SetTextLineTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -567,7 +567,7 @@ namespace TWXP
         /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
-        public static void SetTextTrigger(string name, string label, string Value)
+        internal static void SetTextTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -578,7 +578,7 @@ namespace TWXP
         /// <param name="Name">The name of the trigger to create. This name is used for later references to the trigger.</param>
         /// <param name="Label">A label within the script to jump to when the trigger is activated.</param>
         /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
-        public static void SetTextOutTrigger(string name, string label, string Value)
+        internal static void SetTextOutTrigger(string name, string label, string Value)
         {
             //TODO:
         }
@@ -586,7 +586,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.KillAllTriggers - Terminates all triggers in the script and its included subroutines.
         /// </summary>
-        public static void KillAllTriggers()
+        internal static void KillAllTriggers()
         {
             //TODO:
         }
@@ -595,7 +595,7 @@ namespace TWXP
         /// Command cmd.KillTrigger - Terminates the specified trigger.
         /// </summary>
         /// <param name="Name">The name of the trigger to kill. This name was specified hen the trigger was created.</param>
-        public static void KillTrigger(string name)
+        internal static void KillTrigger(string name)
         {
             //TODO:
         }
@@ -603,7 +603,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Pause - Pauses the script's execution, allowing it to wait for its triggers to activate.
         /// </summary>
-        public static void Pause()
+        internal static void Pause()
         {
             //TODO:
         }
@@ -612,7 +612,7 @@ namespace TWXP
         /// Command cmd.Sleep (NEW) - Pauses the script's execution, but will continue after delay expires.
         /// </summary>
         /// <param name="Ticks">The number of milliseconds to wait before the delay trigger automatically activates itself.</param>
-        public static void Sleep(int ticks)
+        internal static void Sleep(int ticks)
         {
             //TODO:
         }
@@ -622,7 +622,7 @@ namespace TWXP
         /// Command cmd.WaitFor - Pauses script execution, waiting for specified text from server connection.
         /// </summary>
         /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
-        public static void WaitFor(string value)
+        internal static void WaitFor(string value)
         {
             //TODO:
         }
@@ -632,7 +632,7 @@ namespace TWXP
         /// Command cmd.WaitOn - create a temporary TextTrigger using a macro.
         /// </summary>
         /// <param name="Value">A value that is required to be in the block of incoming text for the trigger to activate. If this parameter is not specified, the trigger will activate on any line - even if it is blank.</param>
-        public static void WaitOn(string value)
+        internal static void WaitOn(string value)
         {
             //TODO:
         }
@@ -644,11 +644,11 @@ namespace TWXP
         /// Command cmd.SetMenuKey - Sets the menu key used to activate TWX.
         /// </summary>
         /// <param name="Key">A string containing the character to be used to activate the TWX main menu.</param>
-        public static void SetMenuKey(string key)
+        internal static void SetMenuKey(string key)
         {
             SetMenuKey(key[0]);
         }
-        public static void SetMenuKey(char key)
+        internal static void SetMenuKey(char key)
         {
             //TODO:
         }
@@ -663,7 +663,7 @@ namespace TWXP
         /// <param name="reference">The script label reference to jump to when the new menu is activated.</param>
         /// <param name="prompt">The text to display inside the new menu prompt.</param>
         /// <param name="closeMenu">If TRUE, this menu will automatically close itself when it is activated. For sub-menus that contain their own list of options, this should always be set to FALSE. Default value is FLASE</param>
-        public static void AddMenu(string parent, string name, string description, string hotkey, string reference, string prompt, bool closeMenu = false)
+        internal static void AddMenu(string parent, string name, string description, string hotkey, string reference, string prompt, bool closeMenu = false)
         {
             //TODO:
         }
@@ -674,14 +674,14 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of an existing menu to activate.</param>
         /// <param name="Pause">(Optional)A value of false causes the menu to display but not pause. Default valuse is true.</param>
-        public static void OpenMenu(string name, bool pause = true)
+        internal static void OpenMenu(string name, bool pause = true)
         {
             //TODO:
         }
 
         /// Command cmd.CloseMenu - Closes the open TWX menu.
         /// </summary>
-        public static void CloseMenu()
+        internal static void CloseMenu()
         {
             //TODO:
         }
@@ -691,12 +691,12 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of an existing menu to activate.</param>
         /// <param name="Value">A paramater to hold the value associated with the menu.</param>
-        public static void GetMenuValue(string name, Param value)
+        internal static void GetMenuValue(string name, Param value)
         {
             value.Update(GetMenuValue(name));
         }
                        
-        public static string GetMenuValue(string name)
+        internal static string GetMenuValue(string name)
         {
             //TODO:
             return "";
@@ -707,7 +707,7 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of an existing menu to have its value set.</param>
         /// <param name="Value">A paramater to hold the new value that will be associated with the menu.</param>
-        public static void SetMenuValue(string name, Param value)
+        internal static void SetMenuValue(string name, Param value)
         {
             //TODO:
         }
@@ -717,7 +717,7 @@ namespace TWXP
         /// </summary>
         /// <param name="name">The name of an existing menu to have its value set.</param>
         /// <param name="text">The new help text for the menu.</param>
-        public static void SetMenuHelp(string name, string text)
+        internal static void SetMenuHelp(string name, string text)
         {
             //TODO:
         }
@@ -729,7 +729,7 @@ namespace TWXP
         /// <param name="quit">{Q} Defines if the "Quit Menu" function will be accessible from within the specified menu. </param>
         /// <param name="list">{?} Defines if the "Command List" function will be accessible from within the specified menu.</param>
         /// <param name="help">{+} Defines if the "Help on Command" function will be accessible from within the specified menu.</param>
-        public static void SetMenuOptions(string name, bool quit = true, bool list = true, bool help = true)
+        internal static void SetMenuOptions(string name, bool quit = true, bool list = true, bool help = true)
         {
             //TODO:
         }
@@ -746,7 +746,7 @@ namespace TWXP
         /// <param name="sizeY">The height (in pixels) of the new window.</param>
         /// <param name="title">The title to display at the top of the window.</param>
         /// <param name="ontop">If specified, the window will be set to appear on top of all other windows on the desktop.</param>
-        public static void Window(string windowName, int sizeX, int sizeY, string title, bool ontop = false)
+        internal static void Window(string windowName, int sizeX, int sizeY, string title, bool ontop = false)
         {
             //TODO:
         }
@@ -756,7 +756,7 @@ namespace TWXP
         /// </summary>
         /// <param name="windowName">The name of the script window to modify.</param>
         /// <param name="text">The text content to place inside the script window.</param>
-        public static void SetWindowContents(string windowName, string text)
+        internal static void SetWindowContents(string windowName, string text)
         {
             //TODO:
         }
@@ -765,7 +765,7 @@ namespace TWXP
         /// Command cmd.KillWindow - Unloads a script window.
         /// </summary>
         /// <param name="windowName">The name of the script window to close.</param>
-        public static void KillWindow(string windowName)
+        internal static void KillWindow(string windowName)
         {
             //TODO:
         }
@@ -777,7 +777,7 @@ namespace TWXP
         /// Command cmd.LoadVar - Loads a variable from the config file associated with the current Database.
         /// </summary>
         /// <param name="var">The paramater to load from file.</param>
-        public static void LoadVar(Param var)
+        internal static void LoadVar(Param var)
         {
             //TODO:
         }
@@ -786,7 +786,7 @@ namespace TWXP
         /// Command SaveVar - Saves a variable to a file associated with the currently selected Database.
         /// </summary>
         /// <param name="var">The paramater to save to file.</param>
-        public static void SaveVar(Param var)
+        internal static void SaveVar(Param var)
         {
             //TODO:
         }
@@ -798,7 +798,7 @@ namespace TWXP
         /// Command cmd.LoadGlobal - Loads a variable from a global array without all that mucking around in INI files.
         /// </summary>
         /// <param name="var">The paramater to load from global memory.</param>        
-        public static void LoadGlobal(Param var)
+        internal static void LoadGlobal(Param var)
         {
             //TODO:
         }
@@ -807,7 +807,7 @@ namespace TWXP
         /// Command cmd.SaveGlobal - Saves a variable to a global array without all that mucking around in INI files.
         /// </summary>
         /// <param name="var">The paramater to save to global memory.</param>
-        public static void SaveGlobal(Param var)
+        internal static void SaveGlobal(Param var)
         {
             //TODO:
         }
@@ -815,7 +815,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ClearGlobals - Clears all global variables from memory.
         /// </summary>
-        public static void ClearGlobals()
+        internal static void ClearGlobals()
         {
             //TODO:
         }
@@ -827,7 +827,7 @@ namespace TWXP
         /// Command cmd.CutLengths - Cuts the lengths of an array of strings.
         /// </summary>
         /// ????  array <lengths1,length2,...>
-        public static void CutLengths()
+        internal static void CutLengths()
         {
             //TODO:
         }
@@ -839,9 +839,9 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="start">The position of the first character to be copied.</param>
         /// <param name="length">The length of the last text to be copied.</param>
-        public static void CutText(string text, Param var, int start, int length)
+        internal static void CutText(TScript script, params Param[] param)
         {
-            var.Update(text.Substring(start, length));
+            param[1].Update(((string)param[0]).Substring((int)param[2], (int)param[3]));
         }
     
         /// <summary>
@@ -851,12 +851,12 @@ namespace TWXP
         /// <param name="text">The text to be formatted.</param>
         /// <param name="var">The paramater to hold the formatted string.</param>
         /// <param name="format">The format to be applied (CURRENCY, NUMBER, DATETIMETOSTR, STRTODATETIME).</param>
-        public static void Format(string text, Param var, string format)
+        internal static void Format(string text, Param var, string format)
         {
             var.Update(Format(text, format));
         }
 
-        public static string Format(string text, string format)
+        internal static string Format(string text, string format)
         {
             //TODO:
             return "";
@@ -867,12 +867,12 @@ namespace TWXP
         /// </summary>
         /// <param name="c">The charto get a code from. This must be a single character, it cannot be a block of text.</param>
         /// <param name="var">The paramater to hold the character code.</param>
-        public static void GetCharCode(char c, Param var)
+        internal static void GetCharCode(char c, Param var)
         {
             var.Update(GetCharCode(c));
         }
                        
-        public static string GetCharCode(char c)
+        internal static string GetCharCode(char c)
         {
             //TODO:
             return "";
@@ -883,7 +883,7 @@ namespace TWXP
         /// </summary>
         /// <param name="text">The text to be tested for its length.</param>
         /// <param name="var">The paramater to hold the character code.</param>
-        public static void GetLength(string text, Param var)
+        internal static void GetLength(string text, Param var)
         {
             var.Update(text.Length);
         }
@@ -895,7 +895,7 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="start">The position of the first character to be copied.</param>
         /// <param name="end">The position of the last character to be copied.</param>
-        public static void GetText(string text, Param var, int start, int end)
+        internal static void GetText(string text, Param var, int start, int end)
         {
             var.Update(text.Substring(start, end-start));
         }
@@ -907,12 +907,12 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="index">The index of the word to be copied.</param>
         /// <param name="default">The default value id no waor is found.</param>
-        public static void GetWord(string text, Param var, int index, string defaulttext = "")
+        internal static void GetWord(string text, Param var, int index, string defaulttext = "")
         {
             var.Update(GetWord(text, index, defaulttext));
         }
     
-        public static string GetWord(string text, int index, string defaulttext = "")
+        internal static string GetWord(string text, int index, string defaulttext = "")
         {
             string[] s = text.Split(" ");
             if (index > s.Length) return default;
@@ -924,7 +924,7 @@ namespace TWXP
         /// </summary>
         /// <param name="text">The line of text to copy a value from.</param>
         /// <param name="var">The paramater to hold the value</param>
-        public static void GetWordCount(string text, Param var)
+        internal static void GetWordCount(string text, Param var)
         {
             var.Update(GetWordCount(text));
         }
@@ -934,7 +934,7 @@ namespace TWXP
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        public static int GetWordCount(string text)
+        internal static int GetWordCount(string text)
         {
             return text.Split(" ").Length;
         }
@@ -945,7 +945,7 @@ namespace TWXP
         /// <param name="text">The line of text to copy a value from.</param>
         /// <param name="var">The paramater to hold the position.</param>
         /// <param name="value">The value to search for.</param>
-        public static void GetWordPos(string text, Param var, string value)
+        internal static void GetWordPos(string text, Param var, string value)
         {
             var.Update(text.IndexOf(value));
         }
@@ -954,7 +954,7 @@ namespace TWXP
         /// Command cmd.LowerCase - Converts all text within a variable to lower case.
         /// </summary>
         /// <param name="var">The paramater to be converted to lowercase.</param>
-        public static void LowerCase(Param var)
+        internal static void LowerCase(Param var)
         {
             var.Update(((string)var).ToLower());
         }
@@ -965,7 +965,7 @@ namespace TWXP
         /// <param name="text1">The value to form the first part of the merged value.</param>
         /// <param name="text2">The value to form the second part of the merged value.</param>
         /// <param name="var">The paramater to hold the merged strings.</param>
-        public static void MergeText(string text1, string text2, Param var)
+        internal static void MergeText(string text1, string text2, Param var)
         {
             var.Update(text1 + text2);
         }
@@ -975,7 +975,7 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
         /// <param name="length">The desired length of the result.</param>
-        public static void PadLeft(Param var, int length)
+        internal static void PadLeft(Param var, int length)
         {
             var.Update(((string)var).PadLeft(length));
         }
@@ -985,7 +985,7 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
         /// <param name="length">The desired length of the result.</param>
-        public static void PadRight(Param var, int length)
+        internal static void PadRight(Param var, int length)
         {
             var.Update(((string)var).PadRight(length));
         }
@@ -996,7 +996,7 @@ namespace TWXP
         /// <param name="text">A variable containing the text to be split.</param>
         /// <param name="var[]">An array to contain the split strings.</param>
         /// <param name="delims">Delimiters used to split string. Space and Tab will be used if omitted.</param>
-        public static void SplitText(string text, Param[] vars, string delims = null)
+        internal static void SplitText(string text, Param[] vars, string delims = null)
         {
             //TODO:
             if (delims == null) _ = " \t";
@@ -1008,7 +1008,7 @@ namespace TWXP
         /// </summary>
         /// <param name="var">A paramater containing a text value to have certain characters or sub-strings to be removed.</param>
         /// <param name="text">The character or sub-string to strip from "var".</param>
-        public static void StripText(Param var, string text)
+        internal static void StripText(Param var, string text)
         {
             var.Update(((string)var).Replace(text,""));
         }
@@ -1017,7 +1017,7 @@ namespace TWXP
         /// Command cmd.Trim - Removes leading and trailing spaces from a string.
         /// </summary>
         /// <param name="var">A paramater containing a text to be trimmed.</param>
-        public static void Trim(Param var)
+        internal static void Trim(Param var)
         {
             var.Update(((string)var).Trim());
         }
@@ -1026,7 +1026,7 @@ namespace TWXP
         /// Command cmd.UpperCase - Converts all text within a variable to upper case.
         /// </summary>
         /// <param name="var">The paramater to be converted to upercase.</param>
-        public static void UpperCase(Param var)
+        internal static void UpperCase(Param var)
         {
             var.Update(((string)var).ToUpper());
         }
@@ -1039,7 +1039,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Delete - Deletes a file.
         /// </summary>
-        public static void Delete()
+        internal static void Delete()
         {
             //TODO:
         }
@@ -1047,7 +1047,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.FileExists - Checks to see if a file exists.
         /// </summary>
-        public static void FileExists()
+        internal static void FileExists()
         {
             //TODO:
         }
@@ -1055,7 +1055,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetDirList - Gets a list of files from a directory.
         /// </summary>
-        public static void GetDirList()
+        internal static void GetDirList()
         {
             //TODO:
         }
@@ -1063,7 +1063,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetFileList - Populates a specified array with any files that match a specified Mask (like *.ts).
         /// </summary>
-        public static void GetFileList()
+        internal static void GetFileList()
         {
             //TODO:
         }
@@ -1071,7 +1071,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.MakeDir - Creates a directory.
         /// </summary>
-        public static void MakeDir()
+        internal static void MakeDir()
         {
             //TODO:
         }
@@ -1079,7 +1079,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Read - Reads a line of a text from a text file.
         /// </summary>
-        public static void Read()
+        internal static void Read()
         {
             //TODO:
         }
@@ -1087,7 +1087,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Write - Appends a line of text to a text file.
         /// </summary>
-        public static void Write()
+        internal static void Write()
         {
             //TODO:
         }
@@ -1095,7 +1095,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.RemoveDir - Removes a directory.
         /// </summary>
-        public static void RemoveDir()
+        internal static void RemoveDir()
         {
             //TODO:
         }
@@ -1103,7 +1103,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Rename - Renames a file.
         /// </summary>
-        public static void Rename()
+        internal static void Rename()
         {
             //TODO:
         }
@@ -1111,7 +1111,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ReplaceText - Replaces a value, or set of values within a variable.
         /// </summary>
-        public static void ReplaceText()
+        internal static void ReplaceText()
         {
             //TODO:
         }
@@ -1119,7 +1119,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetArray - Declares a static array.
         /// </summary>
-        public static void SetArray()
+        internal static void SetArray()
         {
             //TODO:
         }
@@ -1127,7 +1127,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ReadToArray - Reads a text file directly into a TWX array.
         /// </summary>
-        public static void ReadToArray()
+        internal static void ReadToArray()
         {
             //TODO:
         }
@@ -1139,7 +1139,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetAvoid - Adds an Avoid to TWX's internal Avoid list.
         /// </summary>
-        public static void SetAvoid()
+        internal static void SetAvoid()
         {
             //TODO:
         }
@@ -1147,7 +1147,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ListAvoids - Populates a user-specified array with the list of internal Avoided sectors.
         /// </summary>
-        public static void ListAvoids()
+        internal static void ListAvoids()
         {
             //TODO:
         }
@@ -1156,7 +1156,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ClearAllAvoids - Removes all sectors from TWX's internal Avoid list.
         /// </summary>
-        public static void ClearAllAvoids()
+        internal static void ClearAllAvoids()
         {
             //TODO:
         }
@@ -1164,7 +1164,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ClearAvoid - Removes a single sector from TWX's internal Avoid list.
         /// </summary>
-        public static void ClearAvoid()
+        internal static void ClearAvoid()
         {
             //TODO:
         }
@@ -1172,7 +1172,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetAllCourses - Populates an array with coarse plots from a specified sector.
         /// </summary>
-        public static void GetAllCourses()
+        internal static void GetAllCourses()
         {
             //TODO:
         }
@@ -1180,7 +1180,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetCourse - Internally calculates a warp course using warp data in the TWX Proxy database.
         /// </summary>
-        public static void GetCourse()
+        internal static void GetCourse()
         {
             //TODO:
         }
@@ -1188,7 +1188,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetDistance - Internally calculates the distance between two sectors.
         /// </summary>
-        public static void GetDistance()
+        internal static void GetDistance()
         {
             //TODO:
         }
@@ -1197,7 +1197,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetNearestWarps - Populates a specified array with surrounding sectors, sorted by distance.
         /// </summary>
-        public static void GetNearestWarps()
+        internal static void GetNearestWarps()
         {
             //TODO:
         }
@@ -1205,7 +1205,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetSector - Retrieve the details of a specific sector from the TWX Proxy Database.
         /// </summary>
-        public static void GetSector()
+        internal static void GetSector()
         {
             //TODO:
         }
@@ -1213,7 +1213,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetSectorParameter - Sets a permanent variable, assigning it to a sector.
         /// </summary>
-        public static void SetSectorParameter()
+        internal static void SetSectorParameter()
         {
             //TODO:
         }
@@ -1221,7 +1221,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetSectorParameter - Retrieves a permanent user specified variable assigned to a sector.
         /// </summary>
-        public static void GetSectorParameter()
+        internal static void GetSectorParameter()
         {
             //TODO:
         }
@@ -1229,7 +1229,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ListSectorParameters - Populates an array with the list of Sector Parameters for a sector.
         /// </summary>
-        public static void ListSectorParameters()
+        internal static void ListSectorParameters()
         {
             //TODO:
         }
@@ -1243,7 +1243,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetDate - Retrieves the date and stores it in a variable.
         /// </summary>
-        public static void GetDate()
+        internal static void GetDate()
         {
             //TODO:
         }
@@ -1251,7 +1251,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetTime - Retrieves the current system time, or a formatted date/time value.
         /// </summary>
-        public static void GetTime()
+        internal static void GetTime()
         {
             //TODO:
         }
@@ -1259,7 +1259,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetTimer - Retrieves the number of CPU ticks since power on.
         /// </summary>
-        public static void GetTimer()
+        internal static void GetTimer()
         {
             //TODO:
         }
@@ -1267,7 +1267,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetRnd - Generate a random number within a specified range.
         /// </summary>
-        public static void GetRnd()
+        internal static void GetRnd()
         {
             //TODO:
         }
@@ -1275,7 +1275,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.GetScriptVersion - Reports the version of the compiler used for a compiled script. (*.cts)
         /// </summary>
-        public static void GetScriptVersion()
+        internal static void GetScriptVersion()
         {
             //TODO:
         }
@@ -1283,7 +1283,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Logging - Disables or enables TWX Proxy's logging feature while the script is running.
         /// </summary>
-        public static void Logging()
+        internal static void Logging()
         {
             //TODO:
         }
@@ -1291,7 +1291,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SystemScript - Sets the script as a "systemScript", allowing it to run in the background .
         /// </summary>
-        public static void SystemScript()
+        internal static void SystemScript()
         {
             //TODO:
         }
@@ -1299,7 +1299,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.ReqRecording - Ensures that data recording is turned ON.
         /// </summary>
-        public static void ReqRecording()
+        internal static void ReqRecording()
         {
             //TODO:
         }
@@ -1307,7 +1307,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Truncate - Calculates the integral part of a specified decimal number.
         /// </summary>
-        public static void Truncate()
+        internal static void Truncate()
         {
             //TODO:
         }
@@ -1315,7 +1315,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.Round - Rounds a variable to the specified precision.
         /// </summary>
-        public static void Round()
+        internal static void Round()
         {
             //TODO:
         }
@@ -1323,7 +1323,7 @@ namespace TWXP
         /// <summary>
         /// Command cmd.SetPrecision - Sets the maximum precision for decimal calculations.
         /// </summary>
-        public static void SetPrecision()
+        internal static void SetPrecision()
         {
             //TODO:
         }
@@ -1333,25 +1333,27 @@ namespace TWXP
 #endregion    
     }
 
-    public class Command
+    internal class Command
     {
-        public enum RefType { CmdRef, CmdRef1, CmdRef2, CmdRef3 }
+        // Defines the reference types available.
+        internal enum RefType { CmdRef, CmdRef1, CmdRef2, CmdRef3 }
 
         // This is the deligate definition, which defines the 
         // parameters and return value of TWX commands.
-        public delegate void CmdRef(TScript script, params Param[] param);
-        public delegate void CmdRef1(Param a);
-        public delegate void CmdRef2(Param a, Param b);
-        public delegate void CmdRef3(Param a, Param b, Param c);
+        internal delegate void CmdRef(TScript script, params Param[] param);
+        internal delegate void CmdRef1(Param a);
+        internal delegate void CmdRef2(Param a, Param b);
+        internal delegate void CmdRef3(Param a, Param b, Param c);
 
         // A private instance of our deligate stores the reference to the real command.
         private Delegate reference;
         private RefType reftype;
 
-        // Public properties for use by the compiler.
-        public string Name {get; private set;}
-        public int MinArgs { get; private set; }
-        public int MaxArgs { get; private set; }
+        // internal properties for use by the compiler.
+        internal string Name {get; private set;}
+        internal int MinArgs { get; private set; }
+        internal int MaxArgs { get; private set; }
+        internal int Var { get; private set; }
 
         /// <summary>
         /// Command constructor class, initializes the class with the required properties.
@@ -1360,7 +1362,7 @@ namespace TWXP
         /// <param name="reference">A deligate reference to the command.</param>
         /// <param name="minArgs">The minimum number of arguments allowed.</param>
         /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
-        public Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = -1)
+        internal Command(string name, CmdRef reference = null, int minArgs = 0, int maxArgs = -1, int var = 0)
         {
             // Store the command refererence.
             this.reference = reference;
@@ -1370,6 +1372,7 @@ namespace TWXP
             Name = name;
             MinArgs = minArgs;
             MaxArgs = maxArgs;
+            Var = var;
         }
 
         /// <summary>
@@ -1379,7 +1382,7 @@ namespace TWXP
         /// <param name="reference">A deligate reference to the command.</param>
         /// <param name="minArgs">The minimum number of arguments allowed.</param>
         /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
-        public Command(string name, CmdRef1 reference, int minArgs = 0, int maxArgs = -1)
+        internal Command(string name, CmdRef1 reference, int var = 0, int minArgs = 1, int maxArgs = 1)
         {
             // Store the command refererence.
             this.reference = reference;
@@ -1389,6 +1392,7 @@ namespace TWXP
             Name = name;
             MinArgs = minArgs;
             MaxArgs = maxArgs;
+            Var = var;
         }
 
         /// <summary>
@@ -1398,7 +1402,7 @@ namespace TWXP
         /// <param name="reference">A deligate reference to the command.</param>
         /// <param name="minArgs">The minimum number of arguments allowed.</param>
         /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
-        public Command(string name, CmdRef2 reference, int minArgs = 0, int maxArgs = -1)
+        internal Command(string name, CmdRef2 reference, int var = 0, int minArgs = 2, int maxArgs = 2)
         {
             // Store the command refererence.
             this.reference = reference;
@@ -1408,6 +1412,7 @@ namespace TWXP
             Name = name;
             MinArgs = minArgs;
             MaxArgs = maxArgs;
+            Var = var;
         }
 
         /// <summary>
@@ -1417,7 +1422,7 @@ namespace TWXP
         /// <param name="reference">A deligate reference to the command.</param>
         /// <param name="minArgs">The minimum number of arguments allowed.</param>
         /// <param name="maxArgs">The Maximum number of arguments allowed.</param>
-        public Command(string name, CmdRef3 reference, int minArgs = 0, int maxArgs = -1)
+        internal Command(string name, CmdRef3 reference, int var = 0, int minArgs = 3, int maxArgs = 3)
         {
             // Store the command refererence.
             this.reference = reference;
@@ -1427,6 +1432,7 @@ namespace TWXP
             Name = name;
             MinArgs = minArgs;
             MaxArgs = maxArgs;
+            Var = var;
         }
 
         /// <summary>
@@ -1434,34 +1440,31 @@ namespace TWXP
         /// </summary>
         /// <param name="script">The parent script for use by the command.</param>
         /// <param name="param">An array of paramaters for use by the command.</param>
-        public void Invoke(TScript script, params Param[] param)
+        internal void Invoke(TScript script, params Param[] param)
         {
-            if (reference != null)
+            // Invoke the command referance based on the RefType.
+            switch (reftype)
             {
-                switch (reftype)
-                {
-                    // Invoke the command referance based on the RefType.
-                    case RefType.CmdRef:
-                        ((CmdRef)reference).Invoke(script, param);
-                        break;
+                case RefType.CmdRef:
+                    ((CmdRef)reference).Invoke(script, param);
+                    break;
 
-                    case RefType.CmdRef1:
-                        ((CmdRef1)reference).Invoke(param[0]);
-                        break;
+                case RefType.CmdRef1:
+                    ((CmdRef1)reference).Invoke(param[0]);
+                    break;
 
-                    case RefType.CmdRef2:
-                        ((CmdRef2)reference).Invoke(param[0], param[1]);
-                        break;
+                case RefType.CmdRef2:
+                    ((CmdRef2)reference).Invoke(param[0], param[1]);
+                    break;
 
-                    case RefType.CmdRef3:
-                        ((CmdRef3)reference).Invoke(param[0], param[1], param[2]);
-                        break;
-                }
-            }
-            else
-            {
-                // If the reference is null, the command has not been implimented.
-                Debug.Write($"Error: Command \"{Name}\" not implimented.");
+                case RefType.CmdRef3:
+                    ((CmdRef3)reference).Invoke(param[0], param[1], param[2]);
+                    break;
+
+                default:
+                    // If the reference is null, the command has not been implimented.
+                    Debug.Write($"Error: Command \"{Name}\" not implimented.");
+                    break;
             }
         }
     }
