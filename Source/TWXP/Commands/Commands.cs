@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -36,25 +36,25 @@ namespace TWXP
             Commands.Add(new Command("GetDate"));
             Commands.Add(new Command("GetDistance"));
             Commands.Add(new Command("GetInput"));
-            Commands.Add(new Command("GetLength"));
+            Commands.Add(new Command("GetLength", GetLength, 1));
             Commands.Add(new Command("GetMenuValue"));
             Commands.Add(new Command("GetGetOutText"));
             Commands.Add(new Command("GetRnd"));
             Commands.Add(new Command("GetSector"));
             Commands.Add(new Command("GetSectorParameter"));
-            Commands.Add(new Command("GetText"));
+            Commands.Add(new Command("GetText", CutText, 1, 4, 4));
             Commands.Add(new Command("GetTime"));
-            Commands.Add(new Command("Gosub", Gosub, 1, 1));
-            Commands.Add(new Command("Goto", Goto, 1, 1));
-            Commands.Add(new Command("GetWord"));
-            Commands.Add(new Command("GetWordPos"));
+            Commands.Add(new Command("Gosub", Gosub, 0, 1, 1));
+            Commands.Add(new Command("Goto", Goto, 0, 1, 1));
+            Commands.Add(new Command("GetWord", GetWord, 1));
+            Commands.Add(new Command("GetWordPos", GetWordPos));
             Commands.Add(new Command("Halt"));
-            Commands.Add(new Command("IsEquil"));
-            Commands.Add(new Command("IsGreater"));
-            Commands.Add(new Command("IsGreaterEquil"));
-            Commands.Add(new Command("IsLesser", IsLesser, 3, 3));
-            Commands.Add(new Command("IsLesserEquil"));
-            Commands.Add(new Command("IsNotEquil"));
+            Commands.Add(new Command("IsEquil", IsEquil));
+            Commands.Add(new Command("IsGreater", IsGreater));
+            Commands.Add(new Command("IsGreaterEquil", IsGreaterEquil));
+            Commands.Add(new Command("IsLesser", IsLesser));
+            Commands.Add(new Command("IsLesserEquil", IsLesserEquil));
+            Commands.Add(new Command("IsNotEquil", IsNotEquil));
             Commands.Add(new Command("IsNumber"));
             Commands.Add(new Command("KillWindow"));
             Commands.Add(new Command("KillAllTriggers"));
@@ -62,11 +62,11 @@ namespace TWXP
             Commands.Add(new Command("Load"));
             Commands.Add(new Command("LoadVar"));
             Commands.Add(new Command("Logging"));
-            Commands.Add(new Command("LowerCase"));
-            Commands.Add(new Command("MergeText"));
-            Commands.Add(new Command("Multiply", Multiply, 2, 2));
+            Commands.Add(new Command("LowerCase", LowerCase));
+            Commands.Add(new Command("MergeText", MergeText, 2));
+            Commands.Add(new Command("Multiply", Multiply));
             Commands.Add(new Command("OpenMenu"));
-            Commands.Add(new Command("Or", Or, 2, 2));
+            Commands.Add(new Command("Or", Or));
             Commands.Add(new Command("Pause"));
             Commands.Add(new Command("ProcessIn"));
             Commands.Add(new Command("ProcessOut"));
@@ -74,7 +74,7 @@ namespace TWXP
             Commands.Add(new Command("Rename"));
             Commands.Add(new Command("ReplaceText"));
             Commands.Add(new Command("ReqRecording"));
-            Commands.Add(new Command("Return", Return, 0, 0));
+            Commands.Add(new Command("Return", Return, 0, 0, 0));
             Commands.Add(new Command("Round"));
             Commands.Add(new Command("SaveVar"));
             Commands.Add(new Command("Send"));
@@ -90,12 +90,12 @@ namespace TWXP
             Commands.Add(new Command("SetTextLineTrigger"));
             Commands.Add(new Command("SetTextOutTrigger"));
             Commands.Add(new Command("SetTextTrigger"));
-            Commands.Add(new Command("SetVar", SetVar, 2, 2));
+            Commands.Add(new Command("SetVar", SetVar));
             Commands.Add(new Command("SetWindowContents"));
             Commands.Add(new Command("Sound"));
             Commands.Add(new Command("Stop"));
-            Commands.Add(new Command("StripText"));
-            Commands.Add(new Command("Subtract", Subtract, 2, 2));
+            Commands.Add(new Command("StripText", StripText));
+            Commands.Add(new Command("Subtract", Subtract));
             Commands.Add(new Command("SYS_CHECK"));
             Commands.Add(new Command("SYS_FAIL"));
             Commands.Add(new Command("SYS_KILL"));
@@ -103,8 +103,8 @@ namespace TWXP
             Commands.Add(new Command("SYS_NOP"));
             Commands.Add(new Command("SYS_SHOWMSG"));
             Commands.Add(new Command("SystemScript"));
-            Commands.Add(new Command("UpoperCase"));
-            Commands.Add(new Command("Xor", Xor, 2, 2));
+            Commands.Add(new Command("UpperCase", UpperCase));
+            Commands.Add(new Command("Xor", Xor));
             Commands.Add(new Command("Window"));
             Commands.Add(new Command("Write"));
 
@@ -128,20 +128,20 @@ namespace TWXP
             Commands.Add(new Command("CutLengths"));
             Commands.Add(new Command("Format"));
             Commands.Add(new Command("GetDirList"));
-            Commands.Add(new Command("GetWordCount"));
+            Commands.Add(new Command("GetWordCount",1));
             Commands.Add(new Command("MakeDir"));
-            Commands.Add(new Command("PadLeft"));
-            Commands.Add(new Command("PadRight"));
+            Commands.Add(new Command("PadLeft", PadLeft));
+            Commands.Add(new Command("PadRight", PadRight));
             Commands.Add(new Command("RemoveDir"));
             Commands.Add(new Command("SetMenuKey"));
-            Commands.Add(new Command("SplitText"));
-            Commands.Add(new Command("Trim"));
+            Commands.Add(new Command("SplitText")); // TODO: Returns an array
+            Commands.Add(new Command("Trim", Trim));
             Commands.Add(new Command("Truncate"));
 
 
 
 
-            Commands.Add(new Command("Not", Not, 1, 1));
+            Commands.Add(new Command("Not", Not));
 
         }
 
@@ -219,7 +219,7 @@ namespace TWXP
         }
 
         /// <summary>
-        /// Mathmatical Operator cmd.Multiply - Performs mathematical division  on a variable.
+        /// Mathmatical Operator cmd.Divide - Performs mathematical division  on a variable.
         /// </summary>
         /// <param name="a">The variable to be divided.</param>
         /// <param name="b">The amount to divide the variable by.</param>
@@ -299,9 +299,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsEquil(Param a, double b, double c)
+        internal static void IsEquil(Param a, Param b, Param c)
         {
-            a.Update(b == c);
+            a.Update((double)b == (double)c);
         }
 
         /// <summary>
@@ -310,9 +310,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsNotEquil(Param a, double b, double c)
+        internal static void IsNotEquil(Param a, Param b, Param c)
         {
-            a.Update(b != c);
+            a.Update((double)b != (double)c);
         }
 
         /// <summary>
@@ -321,9 +321,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsGreater(Param a, double b, double c)
+        internal static void IsGreater(Param a, IsGreater b, IsGreater c)
         {
-            a.Update(b > c);
+            a.Update((double)b > (double)c);
         }
 
         /// <summary>
@@ -332,9 +332,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsGeaterEquil(Param a, double b, double c)
+        internal static void IsGeaterEquil(Param a, Param b, Param c)
         {
-            a.Update(b >= c);
+            a.Update((double)b >= (double)c);
         }
 
         /// <summary>
@@ -343,9 +343,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsLesser(TScript script, params Param[] param)
+        internal static void IsLesser(Param a, Param b, Param c)
         {
-            param[0].Update((double)param[1] < (double)param[2]);
+            a.Update((double)b >= (double)c);
         }
 
         /// <summary>
@@ -354,9 +354,9 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsLesserEquil(Param a, double b, double c)
+        internal static void IsLesserEquil(Param a, Param b, Param c)
         {
-            a.Update(b <= c);
+            a.Update((double)b <= (double)c);
         }
 #endregion
 #region Terminal commands
@@ -421,7 +421,7 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to hold the line of text entered by the user.</param>
         /// <param name="prompt">The text to display above the input prompt.</param>
-        internal static void GetInput(Param var, string prompt)
+        internal static void GetInput(Param var, Param prompt)
         {
             var.Update(GetInput(prompt));
         }
@@ -851,7 +851,7 @@ namespace TWXP
         /// <param name="text">The text to be formatted.</param>
         /// <param name="var">The paramater to hold the formatted string.</param>
         /// <param name="format">The format to be applied (CURRENCY, NUMBER, DATETIMETOSTR, STRTODATETIME).</param>
-        internal static void Format(string text, Param var, string format)
+        internal static void Format(Param text, Param var, Param format)
         {
             var.Update(Format(text, format));
         }
@@ -883,9 +883,9 @@ namespace TWXP
         /// </summary>
         /// <param name="text">The text to be tested for its length.</param>
         /// <param name="var">The paramater to hold the character code.</param>
-        internal static void GetLength(string text, Param var)
+        internal static void GetLength(Param text, Param var)
         {
-            var.Update(text.Length);
+            var.Update(((string)text).Length);
         }
     
         /// <summary>
@@ -895,9 +895,9 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="start">The position of the first character to be copied.</param>
         /// <param name="end">The position of the last character to be copied.</param>
-        internal static void GetText(string text, Param var, int start, int end)
+        internal static void GetText(Param text, Param var, Param start, Param end)
         {
-            var.Update(text.Substring(start, end-start));
+            var.Update(((string)text).Substring((int)start, (int)end-(int)start));
         }
     
         /// <summary>
@@ -907,24 +907,24 @@ namespace TWXP
         /// <param name="var">The paramater to hold the value</param>
         /// <param name="index">The index of the word to be copied.</param>
         /// <param name="default">The default value id no waor is found.</param>
-        internal static void GetWord(string text, Param var, int index, string defaulttext = "")
+        internal static void GetWord(TScript script, params Param[] param)
         {
-            var.Update(GetWord(text, index, defaulttext));
+            param[0].Update(GetWord(param[1], param[2], param[3]));
         }
     
-        internal static string GetWord(string text, int index, string defaulttext = "")
+        public static string GetWord(Param text, Param index, Param defaulttext = "")
         {
             string[] s = text.Split(" ");
-            if (index > s.Length) return default;
-            else return s[index];
+            if ((int)index > ((string)s).Length) return default;
+            else return s[(int)index];
         }
     
         /// <summary>
         /// Command cmd.GetWordCount - Counts the words in a string.
         /// </summary>
-        /// <param name="text">The line of text to copy a value from.</param>
-        /// <param name="var">The paramater to hold the value</param>
-        internal static void GetWordCount(string text, Param var)
+        /// <param name="text">The line of text to count words in.</param>
+        /// <param name="var">The paramater to hold the number of words in the string</param>
+        internal static void GetWordCount(Param text, Param var)
         {
             var.Update(GetWordCount(text));
         }
@@ -933,8 +933,9 @@ namespace TWXP
         /// 
         /// </summary>
         /// <param name="text"></param>
-        /// <returns></returns>
-        internal static int GetWordCount(string text)
+        /// <param name="text">The line of text to count words in.</param>
+        /// <returns>The number of words in the string.</returns>
+        public static int GetWordCount(string text)
         {
             return text.Split(" ").Length;
         }
@@ -945,9 +946,9 @@ namespace TWXP
         /// <param name="text">The line of text to copy a value from.</param>
         /// <param name="var">The paramater to hold the position.</param>
         /// <param name="value">The value to search for.</param>
-        internal static void GetWordPos(string text, Param var, string value)
+        internal static void GetWordPos(Param text, Param var, Param value)
         {
-            var.Update(text.IndexOf(value));
+            var.Update(((string)text).IndexOf(value));
         }
     
         /// <summary>
@@ -965,7 +966,7 @@ namespace TWXP
         /// <param name="text1">The value to form the first part of the merged value.</param>
         /// <param name="text2">The value to form the second part of the merged value.</param>
         /// <param name="var">The paramater to hold the merged strings.</param>
-        internal static void MergeText(string text1, string text2, Param var)
+        internal static void MergeText(Param text1, Param text2, Param var)
         {
             var.Update(text1 + text2);
         }
@@ -975,9 +976,9 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
         /// <param name="length">The desired length of the result.</param>
-        internal static void PadLeft(Param var, int length)
+        internal static void PadLeft(Param var, Param length)
         {
-            var.Update(((string)var).PadLeft(length));
+            var.Update(((string)var).PadLeft((int)length));
         }
 
         /// <summary>
@@ -985,9 +986,9 @@ namespace TWXP
         /// </summary>
         /// <param name="var">The paramater to be padded.</param>
         /// <param name="length">The desired length of the result.</param>
-        internal static void PadRight(Param var, int length)
+        internal static void PadRight(Param var, Param length)
         {
-            var.Update(((string)var).PadRight(length));
+            var.Update(((string)var).PadRight((int)length));
         }
     
         /// <summary>
@@ -999,7 +1000,7 @@ namespace TWXP
         internal static void SplitText(string text, Param[] vars, string delims = null)
         {
             //TODO:
-            if (delims == null) _ = " \t";
+            if (delims == null) delims = " \t";
             //vars = (Param[])text.Split(delims.ToCharArray());
         }
     
@@ -1008,7 +1009,7 @@ namespace TWXP
         /// </summary>
         /// <param name="var">A paramater containing a text value to have certain characters or sub-strings to be removed.</param>
         /// <param name="text">The character or sub-string to strip from "var".</param>
-        internal static void StripText(Param var, string text)
+        internal static void StripText(Param var, Param text)
         {
             var.Update(((string)var).Replace(text,""));
         }
