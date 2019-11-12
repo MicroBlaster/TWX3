@@ -128,7 +128,7 @@ namespace TWXP
             Commands.Add(new Command("CutLengths"));
             Commands.Add(new Command("Format"));
             Commands.Add(new Command("GetDirList"));
-            Commands.Add(new Command("GetWordCount",1));
+            Commands.Add(new Command("GetWordCount", GetWordCount, 1));
             Commands.Add(new Command("MakeDir"));
             Commands.Add(new Command("PadLeft", PadLeft));
             Commands.Add(new Command("PadRight", PadRight));
@@ -321,7 +321,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsGreater(Param a, IsGreater b, IsGreater c)
+        internal static void IsGreater(Param a, Param b, Param c)
         {
             a.Update((double)b > (double)c);
         }
@@ -332,7 +332,7 @@ namespace TWXP
         /// <param name="a">A variable to hold the result of the comparison.</param>
         /// <param name="b">"Left" hand operator to be compared.</param>
         /// <param name="c">"Right" hand operator to be compared.</param>
-        internal static void IsGeaterEquil(Param a, Param b, Param c)
+        internal static void IsGreaterEquil(Param a, Param b, Param c)
         {
             a.Update((double)b >= (double)c);
         }
@@ -912,10 +912,10 @@ namespace TWXP
             param[0].Update(GetWord(param[1], param[2], param[3]));
         }
     
-        public static string GetWord(Param text, Param index, Param defaulttext = "")
+        public static string GetWord(Param text, Param index, Param defaulttext = null)
         {
-            string[] s = text.Split(" ");
-            if ((int)index > ((string)s).Length) return default;
+            string[] s = ((string)text).Split(" ");
+            if ((int)index > s.Length) return default;
             else return s[(int)index];
         }
     
@@ -968,7 +968,7 @@ namespace TWXP
         /// <param name="var">The paramater to hold the merged strings.</param>
         internal static void MergeText(Param text1, Param text2, Param var)
         {
-            var.Update(text1 + text2);
+            var.Update((string)text1 + text2);
         }
 
         /// <summary>

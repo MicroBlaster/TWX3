@@ -260,7 +260,7 @@ namespace TWXP
             public byte ScriptID { get; private set; }
             public uint CodeLine { get; private set; }
             public uint CmdIndex { get; private set; }
-            public Command CmdRef { get; private set; }
+            internal Command CmdRef { get; private set; }
             //public Script Script { get; private set; }
             public List<Param> Param { get; private set; }
             private TScript script;
